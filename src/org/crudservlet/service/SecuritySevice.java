@@ -1,0 +1,109 @@
+package org.crudservlet.service;
+
+import org.crudservlet.dao.AccountSessionDAO;
+import org.crudservlet.dao.UserAccountDAO;
+import org.crudservlet.model.AccountSession;
+import org.crudservlet.model.SecurityContextStatusCodeType;
+import org.crudservlet.model.UserAccount;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+import static org.crudservlet.model.Configures.MAX_INACTIVE_SESSION_INTERVAL;
+import static org.crudservlet.model.SecurityContextStatusCodeType.S00000;
+import static org.crudservlet.model.SecurityContextStatusCodeType.S00001;
+
+public class SecuritySevice {
+
+    private Logger logger = Logger.getLogger(SecuritySevice.class.getName());
+
+    public boolean isActiveSession(String sessionId) throws SQLException, ClassNotFoundException {
+        logger.info("start");
+
+        boolean result = true;
+
+//        try {
+        AccountSessionDAO accountSessionDAO = new AccountSessionDAO();
+        AccountSession accountSession = accountSessionDAO.getAccountSessionBySessionId(sessionId);
+        if (accountSession != null) {
+            logger.info("differentTime:" + (new Date().getTime() - accountSession.getLastEventDateTime().getTime()) / 1000);
+        }
+        if (sessionId == null) {
+            logger.info("session.getId() == null");
+            result = false;
+        } else if (accountSession == null) {
+            logger.info("accountSession == null");
+            result = false;
+        } else if (
+                Integer.valueOf(MAX_INACTIVE_SESSION_INTERVAL.getValue())
+                        < ((new Date().getTime() - accountSession.getLastEventDateTime().getTime()) / 1000)
+        ) {
+            logger.info("MAX_INACTIVE_SESSION_INTERVAL <");
+            result = false;
+        } else {
+            accountSession.setLastEventDateTime(new Date());
+            accountSessionDAO.updateLastEventDate(accountSession);
+        }
+//        } catch (Exception e) {
+//            result = false;
+//            e.printStackTrace();
+//        }
+        logger.info(":" + result);
+        return result;
+    }
+
+    public SecurityContext login(String account, String password) throws ClassNotFoundException, SQLException {
+        logger.info("start");
+
+        String sessionId = null;
+        SecurityContextStatusCodeType statusCode;
+        SecurityContext securityContext = new SecurityContext();
+//        try {
+        UserAccount userAccount = new UserAccountDAO().getUserAccountByAccount(account);
+
+        if (userAccount != null && userAccount.getPassword().equals(password)) {
+            sessionId = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+            AccountSessionDAO accountSessionDAO = new AccountSessionDAO();
+            accountSessionDAO.create(new AccountSession(
+                    0,
+                    sessionId,
+                    new Date(),
+                    new Date(),
+                    userAccount.getId()
+            ));
+            statusCode = S00000;
+        } else {
+            sessionId = null;
+            statusCode = S00001;
+        }
+        securityContext.setAccount(account);
+        securityContext.setPassword(password);
+        securityContext.setSessionId(sessionId);
+        securityContext.setStatusCode(statusCode);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        logger.info("securityContext: " + securityContext);
+        return securityContext;
+    }
+
+    public boolean logout(String sessionId) throws SQLException {
+        logger.info("start");
+
+        boolean result = false;
+
+//        try {
+        new AccountSessionDAO().delete(sessionId);
+//        } catch (Exception e) {
+//            result=false;
+//            e.printStackTrace();
+//        }
+
+        return result;
+    }
+}

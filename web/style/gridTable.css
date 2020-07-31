@@ -1,0 +1,81 @@
+.gridTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.gridTable[data-display='none'] {
+    display: none;
+}
+
+.gridTable td {
+    border: 1px solid #ddd;
+    padding: 5px 5px;
+}
+
+.filterTable td {
+    padding-left: 3px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    background-color: #fff;
+}
+
+.filterTable td input[type='text'] {
+    height: 20px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.filterTable td select {
+    height: 23px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.headerTable td {
+    text-align: center;
+    background-color: #fcfcfc;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.leftColumn td {
+    width: 100%;
+}
+
+.gridTable tr[data-display='none'] {
+    display: none;
+}
+
+.gridTable tr[data-nth-child='odd'] {
+    background-color: #f2f2f2;
+}
+
+.gridTable tr[data-nth-child='even'] {
+    background-color: #fff;
+}
+
+.gridTable td[data-display='none'] {
+    display: none;
+}
+
+.gridTable tr[data-checked='true'] {
+    background-color: rgb(75, 151, 175);
+    color: white;
+}
+
+.gridTable tr[data-checked-current='true'] {
+    border: 2px dotted #fff;
+}
+
+.gridTable td[data-sort-direction='asc']::after {
+    content: ' ↑';
+}
+
+.gridTable td[data-sort-direction='desc']::after {
+    content: ' ↓';
+}

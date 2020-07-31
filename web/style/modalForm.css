@@ -1,0 +1,87 @@
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modalFormTopBar {
+    height: 30px;
+    width: 100%;
+    background-color: #f1f1f1;
+    display: inline-block;
+}
+
+.modalFormTopBar .title {
+    float: left;
+    height: 100%;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 30px;
+    background-color: #f1f1f1;
+    padding-left: 5px;
+}
+
+.modalFormTopBar .button {
+    float: right;
+    display: inline-block;
+}
+
+.modalFormTopBar .button button {
+    background-color: #f1f1f100;
+    border: 0px;
+    height: 100%;
+    min-width: 30px;
+    float: left;
+    font-size: 30px;
+    display: inline-block;
+}
+
+.modalFormTopBar .button button:hover {
+    color: red;
+    /*cursor: pointer;*/
+}
+
+.modalFormTopBar .button button:focus {
+    outline: none;
+}
+
+.modal input[type='text'],
+input[type='password'],
+input[type='date'],
+select {
+    height: 30px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Segoe UI;
+}
+
+.modal textarea {
+    width: 200px;
+    resize: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Segoe UI;
+}
+
+.modalFormBottomButtonBar {
+    background-color: #fff;
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+}

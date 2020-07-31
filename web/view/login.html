@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/CRUDServlet/style/body.css"/>
+    <link rel="stylesheet" type="text/css" href="/CRUDServlet/style/login.css"/>
+    <link rel="stylesheet" type="text/css" href="/CRUDServlet/style/button.css"/>
+    <link rel="stylesheet" type="text/css" href="/CRUDServlet/style/modalForm.css"/>
+</head>
+<body>
+<div class="header">
+    AS Name
+</div>
+<div class="login" style="padding: 15px 15px; border: solid 1px #ddd;width:200px">
+    <table style="font-size:medium;">
+        <tr>
+            <td style="text-align:right;">Логин:</td>
+            <td style="width: 100%;">
+                <input
+                        style="width: 100%; font-size:medium; padding:5px;"
+                        name="account"
+                        type="text"
+                        required
+                        minlength="5"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                        autofocus
+                />
+            </td>
+        </tr>
+        <tr>
+            <td>Пароль:</td>
+            <td>
+                <input
+                        style="width: 100%; font-size:medium; padding:5px;"
+                        name="password"
+                        type="password"
+                        required
+                        size="10"
+                        minlength="5"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                />
+            </td>
+        </tr>
+    </table>
+    <div>
+        <button id="ok" style="margin-top:5px; width:100%; font-size:medium;">Вход</button>
+    </div>
+</div>
+<div class="footer">
+    EAA © (2020)
+</div>
+<script src="/CRUDServlet/script/system.js"></script>
+<script src="/CRUDServlet/script/login.js"></script>
+<script src="/CRUDServlet/script/errorForm.js"></script>
+<script src="/CRUDServlet/script/md5.js"></script>
+</body>
+</html>

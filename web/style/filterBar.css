@@ -1,0 +1,8 @@
+.filterBar input[type=text], input[type=password], input[type=date], select {
+    height: 30px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Segoe UI;
+}

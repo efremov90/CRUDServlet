@@ -1,0 +1,107 @@
+<div
+        class="form"
+        id="requests"
+        style="margin-left:10px; width: 99%; height:80%;" data-display="none"
+>
+    <div class="titleMenuBar">
+        Заявки
+    </div>
+    <div class="buttonBar">
+        <button id="clearFilter">Очистить</button>
+        <button id="search">Поиск</button>
+        <button id="createRequest">Создать</button>
+        <button id="cancelRequest">Отменить</button>
+    </div>
+    <div class="buttonBar">
+        Дата заявки с: <input type="date" name="fromRequestDate" autofocus/> по:
+        <input type="date" name="toRequestDate"/>
+    </div>
+    <div
+            class="content"
+            style="width: 98%; height:100%; overflow:auto;"
+    >
+        <table class="gridTable" id="requests">
+            <thead>
+            <tr class="filterTable">
+                <td data-field="requestId" data-display="none">
+                    <input type="text"/>
+                </td>
+                <td data-field="createDate">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientName">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientType" data-display="none">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientTypeDescription">
+                    <select name="clientType" required>
+                        <option value="ALL">Все</option>
+                        <option value="ВСП">ВСП</option>
+                        <option value="УС">УС</option>
+                    </select>
+                </td>
+                <td data-field="comment">
+                    <input type="text"/>
+                </td>
+                <td data-field="requestStatus" data-display="none">
+                    <input type="text"/>
+                </td>
+                <td data-field="requestStatusDescription">
+                    <select name="requestStatus" required>
+                        <option value="ALL">Все</option>
+                        <option value="Отменена">Отменена</option>
+                        <option value="Создана">Создана</option>
+                    </select>
+                </td>
+                <td data-field="lastDateTimeChangeRequestStatus">
+                    <input type="text"/>
+                </td>
+            </tr>
+            <tr class="headerTable">
+                <td data-field="requestId" data-display="none"></td>
+                <td
+                        data-field="createDate"
+                        data-type="date"
+                        style="min-width:90px; max-width:90px;"
+                >
+                    Дата заявки
+                </td>
+                <td data-field="clientName" style="min-width:140px; max-width:140px;">
+                    Наименование клиента
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td
+                        data-field="clientTypeDescription"
+                        style="min-width:70px; max-width:70px;"
+                >
+                    Тип клиента
+                </td>
+                <td data-field="comment" style="min-width:140px; max-width:140px;">
+                    Комментарий
+                </td>
+                <td data-field="requestStatus" data-display="none"></td>
+                <td
+                        data-field="requestStatusDescription"
+                        style="min-width:80px; max-width:80px;"
+                >
+                    Статус
+                </td>
+                <td
+                        data-field="lastDateTimeChangeRequestStatus"
+                        data-type="dateTime"
+                        style="min-width:130px; max-width:130px;"
+                >
+                    Время последнего изменения статуса
+                </td>
+                <td
+                        data-field="lastColumn"
+                        style="width: 100%; background-color: #fff; border: none;cursor: auto;"
+                />
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

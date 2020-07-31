@@ -1,0 +1,36 @@
+<div class="form" id="createRequest" data-title="Создание заявки" data-display="none">
+    <table>
+        <tr>
+            <td style="text-align:right;">Объект:</td>
+            <td>
+                <input
+                        name="objectCode"
+                        type="text"
+                        required
+                        size="10"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                        autofocus
+                />
+                <button id="choiceObject"
+                        class="choice"
+                        title="Выбрать"
+                >
+                    ...
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>Комментарий:</td>
+            <td>
+            <textarea
+                    name="comment"
+                    required
+                    rows="3"
+                    maxlength="255"
+                    style="width:250px;"
+            ></textarea>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,32 @@
+package org.crudservlet.model;
+
+import org.crudservlet.service.ConfigureService;
+
+import java.sql.SQLException;
+
+public enum Configures {
+
+    /*Максимальное время неактивной сессии в секундах*/
+    MAX_INACTIVE_SESSION_INTERVAL("maxInactiveSessionInterval", "45");
+
+    private String name;
+    private String value;
+
+    Configures(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() throws ClassNotFoundException, SQLException {
+        String value = ConfigureService.getConfigureValueByName(this.name);
+        if (value != null) {
+            return value;
+        } else {
+            return this.value;
+        }
+    }
+}

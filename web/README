@@ -1,0 +1,37 @@
+1. Idea + Tomcat + Maven https://www.youtube.com/watch?v=B_j7zoaok9o
+https://javarush.ru/groups/posts/305-sozdanie-prosteyshego-web-proekta-v-intellij-idea-enterprise-edition-poshagovo-s-kartinkami
+2. tomcat устанавливал по инструкции https://www.youtube.com/watch?v=8lh3jElhcDs
+Предварительно скачал jre 1.8 с сайта oracle (уже там регистрировался для скачивания jdk). В переменных среды добавил
+переменную JRE_HOME.
+Tomact поместил по такому пути C:\Program Files\Tomcat\apache-tomcat-9.0.34
+После распаковки скорректировао файл \conf\server.xml: http/1.1 connector port сделал 8081
+После скорректировал файл \conf\tomcat-users.xml. в соответствии с
+https://askdev.ru/q/kakoy-login-i-parol-po-umolchaniyu-v-tomcat-33893/
+2.1 также есть инструкция через установщик Tomcat https://metanit.com/java/javaee/2.1.php
+2.2 если при запуске возникает ошибка, что порт уже занят - решение:
+https://fooobar.com/questions/38062/tomcat-server-error-port-8080-already-in-use
+3. Установка MySQL https://metanit.com/sql/mysql/1.1.php
+Выбирал тип установки Developer Default
+На этапе Check Requirements при отсутствии требуемых компонентов нужно выбирать последовательно каждый и жать Execute.
+Остались два: для питона и визуал студии, т.к. их нет у меня и не используются, устанавливать не нужно эти компоненты.
+4. При настройке в Idea подключения к MySQL м.б. ошибка с тайм-зоной - решение
+https://fooobar.com/questions/18398777/server-returns-invalid-timezone-go-to-advanced-tab-and-set-servertimezone-property-manually
+4. При создании module web нужно выбирать org.jetbrains.idea.maven.model.MavenArchetype, первый раз похожий другой
+выбрал
+5. При конфигурировании Tomcat в Idea
+порт: 8080
+deployment->application context: /module-web, иначе если оставить /, то перезапишет папку root, в которой находится описание tomcat
+6. dependency spring добавил в корневой pom, при добавлении в module-web библиоетка не хотела подгружаться
+7. При ошибке Error configuring application listener of class org.springframework.web.context.ContextLoaderListener
+помогло https://fooobar.com/questions/26844/javalangclassnotfoundexception-orgspringframeworkwebcontextcontextloaderlistener
+ctrl+f idea
+
+1. JRE в настройке запуска Tomcat должна совпадать с JDK проекта, иначе будет ошибка
+Error instantiating servlet class...
+... has been compiled by a more recent version of the Java Runtime (class file version 57.0), this version of the Java
+Runtime only recognizes class file versions up to 52.0 (unable to load class
+
+2. Установка MySQL
+https://metanit.com/sql/mysql/1.1.php
+login: root password: admin
+login: crud password: Crud1234

@@ -1,0 +1,27 @@
+.navigatorBar {
+    overflow: hidden;
+    /*position: relative;*/
+    top: 0px;
+    /*width: 100%;*/
+    background-color: #4caf50;
+}
+
+.navigatorBar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    line-height: 45px;
+    height: 45px;
+    padding: 0px 5px;
+    text-decoration: none;
+    /*border-right: solid 1px #000;*/
+}
+
+.navigatorBar a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4caf50;
+}

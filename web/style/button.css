@@ -1,0 +1,44 @@
+button {
+    height: 30px;
+    margin-right: 5px;
+    color: #262626;
+    min-width: 80px;
+    text-align: center;
+    border: 1px solid #c0c0c0;
+    background: #f5f5f5;
+    font-weight: 400;
+}
+
+button.choice {
+    height: 20px;
+    min-width: 25px;
+    border-radius: 2px;
+}
+
+button:hover {
+    background: #e6e6fa;
+}
+
+button:active {
+    background: #c0c0c0;
+}
+
+button:disabled {
+    color: #8d8d8d;
+    background-color: #f5f5f5;
+}
+
+.buttonBar {
+    /*z-index: 97;*/
+    width: 100%;
+    background-color: #fff;
+    padding-bottom: 5px;
+}
+
+.buttonBar button [data-permission-display='none'] {
+    display: none;
+}
+
+.buttonBar button {
+    display: inline-block;
+}

@@ -1,0 +1,103 @@
+<div
+        class="form"
+        id="editClient"
+        data-title="Создание клиента"
+        data-display="none"
+>
+    <div class="buttonBar">
+        <select id="clientType">
+            <option value="SELFSERVICE">УС</option>
+            <option value="DOPOFFICE">ВСП</option>
+        </select>
+    </div>
+    <table id="SELFSERVICE" data-display="none">
+        <tr>
+            <td style="text-align:right;">Код:</td>
+            <td>
+                <input
+                        data-field="clientCode"
+                        type="text"
+                        required
+                        size="10"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                        autofocus
+                />
+            </td>
+        </tr>
+        <tr>
+            <td>Наименование:</td>
+            <td>
+        <textarea
+                data-field="clientName"
+                rows="2"
+                required
+                maxlength="50"
+                style="width:250px;"
+        ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Адрес:</td>
+            <td>
+                <textarea data-field="address" rows="3" maxlength="150" style="width:250px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Тип банкомата:</td>
+            <td>
+                <select data-field="atmtype" required>
+                    <option value="ATM">Банкомат</option>
+                    <option value="TERMINAL">Терминал</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Дата закрытия:</td>
+            <td>
+                <input data-field="closeDate" type="date"/>
+            </td>
+        </tr>
+    </table>
+    <table id="DOPOFFICE" data-display="none">
+        <tr>
+            <td style="text-align:right;">Код:</td>
+            <td>
+                <input
+                        data-field="clientCode"
+                        type="text"
+                        required
+                        size="10"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                        autofocus
+                />
+            </td>
+        </tr>
+        <tr>
+            <td>Наименование:</td>
+            <td>
+        <textarea
+                data-field="clientName"
+                rows="2"
+                required
+                maxlength="50"
+                style="width:250px;"
+        ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Адрес:</td>
+            <td>
+                <textarea data-field="address" rows="3" maxlength="150" style="width:250px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Дата закрытия:</td>
+            <td>
+                <input data-field="closeDate" type="date"/>
+            </td>
+        </tr>
+    </table>
+
+</div>

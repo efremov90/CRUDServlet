@@ -1,0 +1,12 @@
+{
+	"client": {
+		"clientCode": "10000001",
+		"clientName": "Банкомат 10000001",
+		"clientType": "SELFSERVICE",
+		"clientTypeDescription": "УС",
+		"ATMType": "ATM",
+		"ATMTypeDescription": "Банкомат",
+		"address": "г. Москва, ул. Первая, д. 1",
+		"closeDate": ""
+	}
+}

@@ -1,0 +1,178 @@
+<div class="form" id="clients" style="width:99%; height:80%;" data-display="none">
+    <div class="titleMenuBar">
+        Клиенты
+    </div>
+    <div class="buttonBar">
+        <button id="clearFilter">Очистить</button>
+        <button id="search">Поиск</button>
+        <button id="createClient">Создать</button>
+        <button id="editClient">Редактировать</button>
+    </div>
+    <div class="buttonBar">
+        <select id="clientType" required>
+            <option value="ALL">Все</option>
+            <option value="SELFSERVICE">Банкомат</option>
+            <option value="DOPOFFICE">ВСП</option>
+        </select>
+    </div>
+    <div
+            class="content"
+            style="width: 98%; height:100%; overflow:auto;"
+    >
+        <table class="gridTable" id="ALL">
+            <thead>
+            <tr class="filterTable">
+                <td data-field="clientCode">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientName">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="clientTypeDescription">
+                    <input type="text"/>
+                </td>
+                <td data-field="address">
+                    <input type="text"/>
+                </td>
+                <td data-field="closeDate">
+                    <input type="text"/>
+                </td>
+            </tr>
+            <tr class="headerTable">
+                <td
+                        data-field="clientCode"
+                        style="min-width:70px; max-width:70px;"
+                >
+                    Код
+                </td>
+                <td data-field="clientName" style="min-width:120px; max-width:120px;">
+                    Наименование клиента
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="clientTypeDescription" style="min-width:70px; max-width:70px;">
+                    Тип клиента
+                </td>
+                <td data-field="address" style="min-width:200px; max-width:200px;">
+                    Адрес
+                </td>
+                <td
+                        data-field="closeDate"
+                        data-type="date"
+                        style="min-width:100px; max-width:100px;"
+                >
+                    Дата закрытия
+                </td>
+                <td
+                        data-field="lastColumn"
+                        style="width: 100%; background-color: #fff; border: none;cursor: auto;"
+                />
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <table class="gridTable" id="DOPOFFICE">
+            <thead>
+            <tr class="filterTable">
+                <td data-field="clientCode">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientName">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="address">
+                    <input type="text"/>
+                </td>
+                <td data-field="closeDate">
+                    <input type="text"/>
+                </td>
+            </tr>
+            <tr class="headerTable">
+                <td
+                        data-field="clientCode"
+                        style="min-width:70px; max-width:70px;"
+                >
+                    Код
+                </td>
+                <td data-field="clientName" style="min-width:120px; max-width:120px;">
+                    Наименование клиента
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="address" style="min-width:200px; max-width:200px;">
+                    Адрес
+                </td>
+                <td
+                        data-field="closeDate"
+                        data-type="date"
+                        style="min-width:100px; max-width:100px;"
+                >
+                    Дата закрытия
+                </td>
+                <td
+                        data-field="lastColumn"
+                        style="width: 100%; background-color: #fff; border: none;cursor: auto;"
+                />
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <table class="gridTable" id="SELFSERVICE">
+            <thead>
+            <tr class="filterTable">
+                <td data-field="clientCode">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientName">
+                    <input type="text"/>
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="atmtype" data-display="none">
+                    <input type="text"/>
+                </td>
+                <td data-field="atmtypeDescription">
+                    <input type="text"/>
+                </td>
+                <td data-field="address">
+                    <input type="text"/>
+                </td>
+                <td data-field="closeDate">
+                    <input type="text"/>
+                </td>
+            </tr>
+            <tr class="headerTable">
+                <td
+                        data-field="clientCode"
+                        style="min-width:70px; max-width:70px;"
+                >
+                    Код
+                </td>
+                <td data-field="clientName" style="min-width:120px; max-width:120px;">
+                    Наименование клиента
+                </td>
+                <td data-field="clientType" data-display="none"></td>
+                <td data-field="atmtype" data-display="none"></td>
+                <td data-field="atmtypeDescription" style="min-width:80px; max-width:80px;">
+                    Тип банкомата
+                </td>
+                <td data-field="address" style="min-width:200px; max-width:200px;">
+                    Адрес
+                </td>
+                <td
+                        data-field="closeDate"
+                        data-type="date"
+                        style="min-width:100px; max-width:100px;"
+                >
+                    Дата закрытия
+                </td>
+                <td
+                        data-field="lastColumn"
+                        style="width: 100%; background-color: #fff; border: none;cursor: auto;"
+                />
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

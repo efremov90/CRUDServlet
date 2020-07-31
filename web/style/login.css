@@ -1,0 +1,13 @@
+.login {
+    margin: 10% auto 15% auto;
+}
+
+.login input[type='text'],
+input[type='password'] {
+    height: 30px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Segoe UI;
+}
