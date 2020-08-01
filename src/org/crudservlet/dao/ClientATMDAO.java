@@ -26,8 +26,8 @@ public class ClientATMDAO {
         String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
                 "VALUES (?, ?, ?, ?, ?); ";
         logger.info(client.toString());
-        PreparedStatement st = conn.prepareStatement(sql);
 
+        PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, client.getClientCode());
         st.setString(2, client.getClientName());
         st.setInt(3, 2);
