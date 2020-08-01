@@ -141,7 +141,7 @@ public class RequestService {
         return result;
     }
 
-    public boolean cancel(String requestUUID, int userAccountId) throws Exception {
+    public boolean cancel(String requestUUID, int userAccountId, String comment) throws Exception {
         logger.info("start");
 
         boolean result = false;
@@ -151,7 +151,7 @@ public class RequestService {
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
                     REQUESTS_CREATE.name()));
-        if (getRequestByUUID(requestUUID) == null)
+        if (getRequestIdByUUID(requestUUID) == null)
             throw new Exception(String.format("Заявка с UUID %s отсутствует.",
                     requestUUID));
 
@@ -165,6 +165,7 @@ public class RequestService {
         RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
         requestStatusHistory.setRequestId(request.getId());
         requestStatusHistory.setStatus(CANCELED);
+        requestStatusHistory.setComment(comment);
         requestStatusHistory.setEventDateTime(request.getCreateDateTime());
         requestStatusHistory.setUserId(userAccountId);
         new RequestStatusHistoryDAO().create(requestStatusHistory);
