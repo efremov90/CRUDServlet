@@ -2,6 +2,7 @@ package org.crudservlet.service;
 
 import org.crudservlet.dao.ClientATMDAO;
 import org.crudservlet.dao.RequestDAO;
+import org.crudservlet.dao.RequestStatusHistoryDAO;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.*;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 
 import static org.crudservlet.model.Permissions.CLIENTS_CREATE;
 import static org.crudservlet.model.Permissions.REQUESTS_CREATE;
+import static org.crudservlet.model.RequestStatusType.CANCELED;
 import static org.crudservlet.model.RequestStatusType.CREATED;
 
 public class RequestService {
@@ -28,12 +30,34 @@ public class RequestService {
     public void validateExistsRequest(String requestUUID) throws Exception {
         logger.info("start");
 //        try {
-        if (getRequestByUUID(requestUUID) != null)
+        if (getRequestIdByUUID(requestUUID) != null)
             throw new Exception(String.format("Уже есть заявка с UUID %s.",
                     requestUUID));
 /*        } catch (Exception e) {
             e.printStackTrace();
         }*/
+    }
+
+    public Integer getRequestIdByUUID(String requestUUID) throws SQLException {
+        logger.info("start");
+
+        Integer id = null;
+//        try {
+        String sql = "SELECT ID  " +
+                "FROM REQUESTS r " +
+                "WHERE REQUEST_UUID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, requestUUID);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            id = rs.getInt("id");
+        }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        return id;
     }
 
     public Request getRequestById(int id) throws SQLException {
@@ -50,8 +74,10 @@ public class RequestService {
         Request request = null;
 //        try {
         String sql = "SELECT " +
-                "* " +
-                "FROM REQUESTS " +
+                "r.ID, r.REQUEST_UUID, r.CREATE_DATE, r.CREATE_DATETIME, r.CLIENT_CODE, r.COMMENT, r. STATUS, " +
+                "rsh.EVENT_DATETIME, rsh.USER_ACCOUNT_ID " +
+                "FROM REQUESTS r " +
+                "LEFT JOIN REQUEST_STATUS_HISTORY rsh ON r.ID = rsh.REQUEST_ID AND rsh.IS_LAST_STATUS = 1 " +
                 "WHERE 1=1 " +
                 (requestId != -1 ? " AND ID = " + requestId : "") +
                 (requestUUID != null ? " AND REQUEST_UUID = " + "'" + requestUUID + "'" : "");
@@ -68,8 +94,8 @@ public class RequestService {
             request.setClientCode(rs.getNString("client_code"));
             request.setComment(rs.getNString("comment"));
             request.setRequestStatus(RequestStatusType.valueOf(rs.getNString("status")));
-            request.setLastDateTimeChangeRequestStatus(Timestamp.valueOf(rs.getNString("last_datetime_change_request_status")));
-            request.setLastUserAccountIdChangeRequestStatus(rs.getInt("last_user_account_id_change_request_status"));
+            request.setLastDateTimeChangeRequestStatus(Timestamp.valueOf(rs.getNString("event_datetime")));
+            request.setLastUserAccountIdChangeRequestStatus(rs.getInt("user_account_id"));
         }
 //        } catch (SQLException e) {
 //            e.printStackTrace();
@@ -90,8 +116,23 @@ public class RequestService {
         if (getRequestByUUID(request.getRequestUUID()) != null)
             throw new Exception(String.format("Уже есть заявка с UUID %s.",
                     request.getRequestUUID()));
+
+        conn.setAutoCommit(false);
         request.setRequestStatus(CREATED);
+        request.setLastDateTimeChangeRequestStatus(new java.util.Date());
         result = new RequestDAO().create(request);
+
+        Integer requestId = getRequestIdByUUID(request.getRequestUUID());
+
+        RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
+        requestStatusHistory.setRequestId(requestId);
+        requestStatusHistory.setStatus(CREATED);
+        requestStatusHistory.setEventDateTime(request.getCreateDateTime());
+        requestStatusHistory.setUserId(userAccountId);
+        new RequestStatusHistoryDAO().create(requestStatusHistory);
+
+        conn.commit();
+        conn.setAutoCommit(true);
 /*        } catch (Exception e) {
             result=false;
             e.printStackTrace();
@@ -113,6 +154,23 @@ public class RequestService {
         if (getRequestByUUID(requestUUID) == null)
             throw new Exception(String.format("Заявка с UUID %s отсутствует.",
                     requestUUID));
+
+        Request request = new RequestService().getRequestByUUID(requestUUID);
+
+        conn.setAutoCommit(false);
+        request.setRequestStatus(CANCELED);
+        request.setLastDateTimeChangeRequestStatus(new java.util.Date());
+        result = new RequestDAO().edit(request);
+
+        RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
+        requestStatusHistory.setRequestId(request.getId());
+        requestStatusHistory.setStatus(CANCELED);
+        requestStatusHistory.setEventDateTime(request.getCreateDateTime());
+        requestStatusHistory.setUserId(userAccountId);
+        new RequestStatusHistoryDAO().create(requestStatusHistory);
+
+        conn.commit();
+        conn.setAutoCommit(true);
         //result = new RequestDAO().create(request);
 /*        } catch (Exception e) {
             result=false;

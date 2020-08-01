@@ -1,20 +1,21 @@
 package org.crudservlet.utils;
 
+import org.crudservlet.model.Request;
+import org.crudservlet.service.RequestService;
+
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.util.UUID;
+
 public class DemoTest {
-    public static void main(String[] args) {
-        /*ClientATMDAO clientATMDAO = new ClientATMDAO();
-        System.out.println(clientATMDAO.getClientByCode("1001").getClass());
-        System.out.println(clientATMDAO.getClientByCode("1001").getClass().getName());
-        Arrays.stream(clientATMDAO.getClientByCode("1001").getClass().getFields()).forEach(x-> System.out.println(x));
-        for (Field field : clientATMDAO.getClientByCode("1001").getClass().getFields()) {
-            System.out.println(field.getClass());
-        }
-        Class c = clientATMDAO.getClientByCode("1001").getClass();
-        Field[] publicFields = c.getFields();
-        for (Field field : publicFields) {
-            Class fieldType = field.getType();
-            System.out.println("Имя: " + field.getName());
-            System.out.println("Тип: " + fieldType.getName());
-        }*/
+    public static void main(String[] args) throws Exception {
+        Request request = new Request();
+        request.setRequestUUID(UUID.randomUUID().toString());
+        request.setCreateDate(Date.valueOf(LocalDate.now()));
+        request.setCreateDateTime(new java.util.Date());
+        request.setClientCode("1001");
+        request.setComment("Комментарий");
+        new RequestService().create(request, 2);
     }
 }

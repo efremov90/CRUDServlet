@@ -21,7 +21,7 @@ public class RequestStatusHistoryDAO {
 
         boolean result = false;
 //        try {
-        String sql = "UPDATE REQUESTS_STATUS_HISTORY " +
+        String sql = "UPDATE REQUEST_STATUS_HISTORY " +
                 "SET IS_LAST_STATUS = 0 " +
                 "WHERE REQUEST_ID = ? AND IS_LAST_STATUS = 1";
 
@@ -29,7 +29,9 @@ public class RequestStatusHistoryDAO {
         st.setInt(1, requestStatusHistory.getRequestId());
         st.executeUpdate();
 
-        sql = "INSERT REQUESTS_STATUS_HISTORY (REQUEST_ID, STATUS, COMMENT, IS_LAST_STATUS, EVENT_DATETIME, USER_ACCOUNT_ID) " +
+//        int a = 1 / 0;
+
+        sql = "INSERT REQUEST_STATUS_HISTORY (REQUEST_ID, STATUS, COMMENT, IS_LAST_STATUS, EVENT_DATETIME, USER_ACCOUNT_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?); ";
         logger.info(requestStatusHistory.toString());
         st = conn.prepareStatement(sql);
