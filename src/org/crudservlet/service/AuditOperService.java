@@ -3,6 +3,7 @@ package org.crudservlet.service;
 import org.crudservlet.dao.AuditDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.AuditOper;
+import org.crudservlet.model.AuditOperType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +22,7 @@ public class AuditOperService {
         conn = MySQLConnection.getConnection();
     }
 
-    public AuditOper getAuditOperByCode(String operCode) throws SQLException {
+    public AuditOper getAuditOperByCode(AuditOperType type) throws SQLException {
         logger.info("start");
 
         AuditOper auditOper = new AuditOper();
@@ -29,15 +30,15 @@ public class AuditOperService {
         String sql = "SELECT " +
                 "* " +
                 "FROM AUDIT_OPER " +
-                "WHERE OPER_CODE = ?";
+                "WHERE CODE = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, operCode);
+        st.setString(1, type.getCode());
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
             auditOper.setId(rs.getInt("Id"));
-            auditOper.setOperCode(rs.getNString("OperCode"));
+            auditOper.setOperCode(rs.getNString("code"));
             auditOper.setDescription(rs.getNString("Description"));
         }
 //        } catch (SQLException e) {

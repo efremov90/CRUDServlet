@@ -118,6 +118,7 @@ public class RequestService {
                     request.getRequestUUID()));
 
         conn.setAutoCommit(false);
+
         request.setRequestStatus(CREATED);
         request.setLastDateTimeChangeRequestStatus(new java.util.Date());
         result = new RequestDAO().create(request);
@@ -127,9 +128,24 @@ public class RequestService {
         RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
         requestStatusHistory.setRequestId(requestId);
         requestStatusHistory.setStatus(CREATED);
-        requestStatusHistory.setEventDateTime(request.getCreateDateTime());
+        requestStatusHistory.setEventDateTime(request.getLastDateTimeChangeRequestStatus());
         requestStatusHistory.setUserId(userAccountId);
         new RequestStatusHistoryDAO().create(requestStatusHistory);
+
+        new AuditService().create(
+                AuditOperType.CREATE_REQUEST,
+                userAccountId,
+                request.getCreateDateTime(),
+                String.format("UUID заявки: %s \n" +
+                                "Дата создания: %s \n" +
+                                "Код клиента: %s \n" +
+                                "Комментарий: %s",
+                        request.getRequestUUID(),
+                        request.getCreateDate(),
+                        request.getClientCode(),
+                        request.getComment()),
+                requestId
+        );
 
         conn.commit();
         conn.setAutoCommit(true);
@@ -166,9 +182,18 @@ public class RequestService {
         requestStatusHistory.setRequestId(request.getId());
         requestStatusHistory.setStatus(CANCELED);
         requestStatusHistory.setComment(comment);
-        requestStatusHistory.setEventDateTime(request.getCreateDateTime());
+        requestStatusHistory.setEventDateTime(request.getLastDateTimeChangeRequestStatus());
         requestStatusHistory.setUserId(userAccountId);
         new RequestStatusHistoryDAO().create(requestStatusHistory);
+
+        new AuditService().create(
+                AuditOperType.CANCEL_REQUEST,
+                userAccountId,
+                requestStatusHistory.getEventDateTime(),
+                String.format("Комментарий: %s",
+                        requestStatusHistory.getComment()),
+                request.getId()
+        );
 
         conn.commit();
         conn.setAutoCommit(true);

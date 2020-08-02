@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Audit {
     private int Id;
-    private String AuditOperId;
+    private int AuditOperId;
     private int UserAccountId;
     private Date EventDateTime;
     private String Description;
@@ -21,11 +21,11 @@ public class Audit {
         Id = id;
     }
 
-    public String getAuditOperId() {
+    public int getAuditOperId() {
         return AuditOperId;
     }
 
-    public void setAuditOperId(String auditOperId) {
+    public void setAuditOperId(int auditOperId) {
         AuditOperId = auditOperId;
     }
 
