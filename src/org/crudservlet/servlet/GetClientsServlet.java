@@ -50,8 +50,6 @@ public class GetClientsServlet extends HttpServlet {
                                 clientDTO.setClientType(x.getClientType().name());
                                 clientDTO.setClientTypeDescription(x.getClientType().getDescription());
                                 clientDTO.setAddress(x.getAddress());
-                                clientDTO.setATMType(x.getAtmType() != null ? x.getAtmType().name() : null);
-                                clientDTO.setATMTypeDescription(x.getAtmType() != null ? x.getAtmType().getDescrition() : null);
                                 clientDTO.setCloseDate(x.getCloseDate() != null ?
                                         new Date(x.getCloseDate().getTime()).toString() :
                                         null);

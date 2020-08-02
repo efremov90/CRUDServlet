@@ -23,24 +23,21 @@ public class ClientATMDAO {
 
         boolean result = false;
 //        try {
-        String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
-                "VALUES (?, ?, ?, ?, ?); ";
-        logger.info(client.toString());
+        conn.setAutoCommit(false);
+
+        new ClientDAO().create(client);
+        Integer clientId = MySQLConnection.getLastInsertId();
+
+        String sql = "INSERT ATMS (CLIENT_ID, ATM_TYPE) " +
+                "VALUES (?, ?); ";
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, client.getClientCode());
-        st.setString(2, client.getClientName());
-        st.setInt(3, 2);
-        st.setString(4, client.getAddress());
-        st.setDate(5, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
-        st.executeUpdate();
-
-        sql = "INSERT ATMS (CLIENT_ID, ATM_TYPE) " +
-                "VALUES (last_insert_id(), ?); ";
-        st = conn.prepareStatement(sql);
-
-        st.setString(1, client.getAtmType().name());
+        st.setInt(1, clientId);
+        st.setString(2, client.getAtmType().name());
         result = st.executeUpdate() > 0;
+
+        conn.commit();
+        conn.setAutoCommit(true);
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/
@@ -53,20 +50,21 @@ public class ClientATMDAO {
 
         boolean result = false;
 //        try {
+        conn.setAutoCommit(false);
+
+        new ClientDAO().edit(client);
+
         String sql = "UPDATE CLIENTS c, ATMS a " +
-                "SET c.CLIENT_NAME = ? , " +
-                "c.ADDRESS = ? , " +
-                "c.CLOSE_DATE = ? , " +
-                "a.ATM_TYPE = ? " +
+                "SET a.ATM_TYPE = ? " +
                 "WHERE c.ID=a.CLIENT_ID AND c.CLIENT_CODE = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, client.getClientName());
-        st.setString(2, client.getAddress());
-        st.setDate(3, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
-        st.setString(4, client.getAtmType().name());
-        st.setString(5, client.getClientCode());
+        st.setString(1, client.getAtmType().name());
+        st.setString(2, client.getClientCode());
         result = st.executeUpdate() > 0;
+
+        conn.commit();
+        conn.setAutoCommit(true);
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

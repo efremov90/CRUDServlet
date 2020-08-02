@@ -87,14 +87,13 @@ public class ClientDopofficeService {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            client = new ClientDopoffice(
-                    rs.getInt("id"),
-                    rs.getNString("client_code"),
-                    rs.getNString("client_name"),
-                    rs.getNString("address"),
-                    rs.getDate("close_date") != null ?
-                            new java.util.Date(rs.getDate("close_date").getTime()) : null
-            );
+            client = new ClientDopoffice();
+            client.setId(rs.getInt("id"));
+            client.setClientCode(rs.getNString("client_code"));
+            client.setClientName(rs.getNString("client_name"));
+            client.setAddress(rs.getNString("address"));
+            client.setCloseDate(rs.getDate("close_date") != null ?
+                    new java.util.Date(rs.getDate("close_date").getTime()) : null);
         }
 //        } catch (Exception e) {
 //            e.printStackTrace();

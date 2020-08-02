@@ -122,7 +122,7 @@ public class RequestService {
         request.setLastDateTimeChangeRequestStatus(new java.util.Date());
         result = new RequestDAO().create(request);
 
-        Integer requestId = getRequestIdByUUID(request.getRequestUUID());
+        Integer requestId = MySQLConnection.getLastInsertId();
 
         RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
         requestStatusHistory.setRequestId(requestId);

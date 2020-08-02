@@ -7,8 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static org.crudservlet.model.Permissions.CLIENTS_CREATE;
-
 public class ClientService {
 
     private Connection conn;
@@ -31,6 +29,29 @@ public class ClientService {
         }*/
     }
 
+    public boolean create(Client client) throws SQLException {
+        logger.info("start");
+
+        boolean result = false;
+//        try {
+        String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
+                "VALUES (?, ?, ?, ?, ?); ";
+        logger.info(client.toString());
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, client.getClientCode());
+        st.setString(2, client.getClientName());
+        st.setInt(3, 2);
+        st.setString(4, client.getAddress());
+        st.setDate(5, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
+        st.executeUpdate();
+/*        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        logger.info(":" + result);
+        return result;
+    }
+
     public Client getClient(String clientCode) throws SQLException {
         logger.info("start");
 
@@ -48,17 +69,14 @@ public class ClientService {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            client = new Client(
-                    rs.getInt("id"),
-                    rs.getNString("client_code"),
-                    rs.getNString("client_name"),
-                    ClientTypeType.valueOf(rs.getNString("type")),
-                    rs.getNString("atm_type") != null ?
-                            ATMTypeType.valueOf(rs.getNString("atm_type")) : null,
-                    rs.getNString("address"),
-                    rs.getDate("close_date") != null ?
-                            new java.util.Date(rs.getDate("close_date").getTime()) : null
-            );
+            client = new Client();
+            client.setId(rs.getInt("id"));
+            client.setClientCode(rs.getNString("client_code"));
+            client.setClientName(rs.getNString("client_name"));
+            client.setClientType(ClientTypeType.valueOf(rs.getNString("type")));
+            client.setAddress(rs.getNString("address"));
+            client.setCloseDate(rs.getDate("close_date") != null ?
+                    new java.util.Date(rs.getDate("close_date").getTime()) : null);
         }
 //        } catch (SQLException e) {
 //            e.printStackTrace();
@@ -83,17 +101,14 @@ public class ClientService {
         ResultSet rs = st.executeQuery(sql);
 
         while (rs.next()) {
-            Client client = new Client(
-                    rs.getInt("id"),
-                    rs.getNString("client_code"),
-                    rs.getNString("client_name"),
-                    ClientTypeType.valueOf(rs.getNString("type")),
-                    rs.getNString("atm_type") != null ?
-                            ATMTypeType.valueOf(rs.getNString("atm_type")) : null,
-                    rs.getNString("address"),
-                    rs.getDate("close_date") != null ?
-                            new java.util.Date(rs.getDate("close_date").getTime()) : null
-            );
+            Client client = new Client();
+            client.setId(rs.getInt("id"));
+            client.setClientCode(rs.getNString("client_code"));
+            client.setClientName(rs.getNString("client_name"));
+            client.setClientType(ClientTypeType.valueOf(rs.getNString("type")));
+            client.setAddress(rs.getNString("address"));
+            client.setCloseDate(rs.getDate("close_date") != null ?
+                    new java.util.Date(rs.getDate("close_date").getTime()) : null);
             clients.add(client);
         }
 //        } catch (SQLException e) {

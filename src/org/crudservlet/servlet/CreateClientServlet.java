@@ -44,27 +44,27 @@ public class CreateClientServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             CreateClientRequestDTO createClientDTO = mapper.readValue(req.getReader(), CreateClientRequestDTO.class);
             if (createClientDTO.getDopoffice() != null) {
-                ClientDopofficeDTO client = createClientDTO.getDopoffice();
-                new ClientDopofficeService().create(new ClientDopoffice(
-                                client.getId(),
-                                client.getClientCode(),
-                                client.getClientName(),
-                                client.getAddress(),
-                                (client.getCloseDate() != null && client.getCloseDate() != "") ?
-                                        Date.valueOf(client.getCloseDate()) : null
-                        ),
+                ClientDopofficeDTO clientDTO = createClientDTO.getDopoffice();
+                ClientDopoffice client = new ClientDopoffice();
+                client.setId(clientDTO.getId());
+                client.setClientCode(clientDTO.getClientCode());
+                client.setClientName(clientDTO.getClientName());
+                client.setAddress(clientDTO.getAddress());
+                client.setCloseDate((clientDTO.getCloseDate() != null && clientDTO.getCloseDate() != "") ?
+                        Date.valueOf(clientDTO.getCloseDate()) : null);
+                new ClientDopofficeService().edit(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
             } else if (createClientDTO.getSelfservice() != null) {
-                ClientATMDTO client = createClientDTO.getSelfservice();
-                new ClientATMService().create(new ClientATM(
-                                client.getId(),
-                                client.getClientCode(),
-                                client.getClientName(),
-                                ATMTypeType.valueOf(client.getATMType()),
-                                client.getAddress(),
-                                (client.getCloseDate() != null && client.getCloseDate() != "") ?
-                                        Date.valueOf(client.getCloseDate()) : null
-                        ),
+                ClientATMDTO clientDTO = createClientDTO.getSelfservice();
+                ClientATM client = new ClientATM();
+                client.setId(clientDTO.getId());
+                client.setClientCode(clientDTO.getClientCode());
+                client.setClientName(clientDTO.getClientName());
+                client.setAtmType(ATMTypeType.valueOf(clientDTO.getATMType()));
+                client.setAddress(clientDTO.getAddress());
+                client.setCloseDate((clientDTO.getCloseDate() != null && clientDTO.getCloseDate() != "") ?
+                        Date.valueOf(clientDTO.getCloseDate()) : null);
+                new ClientATMService().edit(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
             }
         } catch (Exception e) {

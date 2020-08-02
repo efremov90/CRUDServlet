@@ -5,17 +5,12 @@ import java.util.Date;
 public class Audit {
     private int Id;
     private String AuditOperId;
+    private int UserAccountId;
     private Date EventDateTime;
+    private String Description;
     private String Content;
 
     public Audit() {
-    }
-
-    public Audit(int id, String auditOperId, Date eventDateTime, String content) {
-        Id = id;
-        AuditOperId = auditOperId;
-        EventDateTime = eventDateTime;
-        Content = content;
     }
 
     public int getId() {
@@ -34,12 +29,28 @@ public class Audit {
         AuditOperId = auditOperId;
     }
 
+    public int getUserAccountId() {
+        return UserAccountId;
+    }
+
+    public void setUserAccountId(int userAccountId) {
+        UserAccountId = userAccountId;
+    }
+
     public Date getEventDateTime() {
         return EventDateTime;
     }
 
     public void setEventDateTime(Date eventDateTime) {
         EventDateTime = eventDateTime;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 
     public String getContent() {

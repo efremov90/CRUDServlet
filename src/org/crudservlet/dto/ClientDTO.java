@@ -9,8 +9,6 @@ public class ClientDTO {
     private String ClientTypeDescription;
     private String Address;
     private String CloseDate;
-    private String ATMType;
-    private String ATMTypeDescription;
 
     public ClientDTO() {
     }
@@ -71,19 +69,4 @@ public class ClientDTO {
         CloseDate = closeDate;
     }
 
-    public String getATMType() {
-        return ATMType;
-    }
-
-    public void setATMType(String ATMType) {
-        this.ATMType = ATMType;
-    }
-
-    public String getATMTypeDescription() {
-        return ATMTypeDescription;
-    }
-
-    public void setATMTypeDescription(String ATMTypeDescription) {
-        this.ATMTypeDescription = ATMTypeDescription;
-    }
 }

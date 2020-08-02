@@ -3,9 +3,7 @@ package org.crudservlet.service;
 import org.crudservlet.dao.ClientATMDAO;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
-import org.crudservlet.model.ATMTypeType;
-import org.crudservlet.model.ClientATM;
-import org.crudservlet.model.UserAccount;
+import org.crudservlet.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -86,15 +84,14 @@ public class ClientATMService {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            client = new ClientATM(
-                    rs.getInt("id"),
-                    rs.getNString("client_code"),
-                    rs.getNString("client_name"),
-                    ATMTypeType.valueOf(rs.getNString("atm_type")),
-                    rs.getNString("address"),
-                    rs.getDate("close_date") != null ?
-                            new java.util.Date(rs.getDate("close_date").getTime()) : null
-            );
+            client = new ClientATM();
+            client.setId(rs.getInt("id"));
+            client.setClientCode(rs.getNString("client_code"));
+            client.setClientName(rs.getNString("client_name"));
+            client.setAtmType(ATMTypeType.valueOf(rs.getNString("atm_type")));
+            client.setAddress(rs.getNString("address"));
+            client.setCloseDate(rs.getDate("close_date") != null ?
+                    new java.util.Date(rs.getDate("close_date").getTime()) : null);
         }
 //        } catch (Exception e) {
 //            e.printStackTrace();
