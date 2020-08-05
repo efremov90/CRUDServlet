@@ -4,6 +4,7 @@ public enum Permissions {
 
     HOME_VIEW,
     REQUESTS_VIEW,
+    REQUESTS_VIEW_REQUEST,
     REQUESTS_CREATE,
     REQUESTS_CANCEL,
     CLIENTS_VIEW,

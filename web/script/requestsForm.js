@@ -6,8 +6,12 @@ function initFormRequests(parentForm) {
     if (form) {
         let btnClearFilter = form.querySelector('.buttonBar #clearFilter');
         let btnSearch = form.querySelector('.buttonBar #search');
+        let btnViewRequest = form.querySelector('.buttonBar #viewRequest');
         let btnCreateRequest = form.querySelector('.buttonBar #createRequest');
         //alert(permissions);
+        if (!permissions.has("REQUESTS_VIEW_REQUEST")) {
+            btnViewRequest.remove();
+        }
         if (!permissions.has("REQUESTS_CREATE")) {
             btnCreateRequest.remove();
         }

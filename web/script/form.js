@@ -399,7 +399,19 @@ window.addEventListener(
 );
 
 function createModalForm(form) {
-    let modalForm = (new DOMParser()).parseFromString('<div class="modal" data-display="none"><div class="modal-content"><div class="modalFormTopBar"><div class="title" style="width:250px;"></div><div class="button"><button id="close" title="Закрыть">×</button></div></div><div style="height: 10px;"></div><div class="container"></div><div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div></div></div></div>', 'text/html').querySelector('div');
+    let modalForm = (new DOMParser()).parseFromString(
+        '<div class="modal" data-display="none">' +
+        '<div class="modal-content">' +
+        '<div class="modalFormTopBar">' +
+        '<div class="title" style="width:250px;"></div>' +
+        '<div class="button"><button id="close" title="Закрыть">×</button></div>' +
+        '</div>' +
+        '<div style="height: 10px;"></div>' +
+        '<div class="container"></div>' +
+        '<div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>', 'text/html').querySelector('div');
     let z = document.querySelectorAll('.modal').length;
     if (z) {
         z = z + 1;
@@ -438,4 +450,61 @@ function createModalChoice(form) {
     modalForm.querySelector('.container').appendChild(form);
     //alert(modalForm.innerHTML);
     return modalForm;
+}
+
+function loadItemsGridTable(r, table) {
+    //alert('loadItemsGridTable');
+    //alert(r.clients.client[1].clientCode);
+    let header = table.querySelector(
+        'thead .headerTable'
+    );
+    let columns = header.querySelectorAll('td');
+    if (r && table && header && columns) {
+        let tbody = document.createElement('tbody');
+        for (let i in r.items) {
+            //alert(i);
+            let tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            for (let j = 0; j < columns.length; j++) {
+                //alert(j);
+                if (
+                    columns[j].getAttribute('data-field') &&
+                    columns[j].getAttribute('data-field') != 'lastColumn'
+                ) {
+                    let td = document.createElement('td');
+                    td.setAttribute('data-field', columns[j].getAttribute('data-field'));
+                    if (r.items[i][columns[j].getAttribute('data-field')]) {
+                        if (columns[j].getAttribute('data-type')) {
+                            switch (columns[j].getAttribute('data-type')) {
+                                case 'date':
+                                    td.innerHTML = dateTimeJSONToView(
+                                        r.items[i][columns[j].getAttribute('data-field')], 'dd'
+                                    );
+                                    break;
+                                case 'dateTime':
+                                    td.innerHTML = dateTimeJSONToView(
+                                        r.items[i][columns[j].getAttribute('data-field')], 'mm'
+                                    );
+                                    break;
+                            }
+                            td.setAttribute(
+                                'data-value',
+                                r.items[i][columns[j].getAttribute('data-field')]
+                            );
+                        } else {
+                            td.innerHTML =
+                                r.items[i][
+                                    columns[j].getAttribute('data-field')
+                                    ];
+                        }
+                    }
+                    if (columns[j].getAttribute('data-display') == 'none') {
+                        td.setAttribute('data-display', 'none');
+                    }
+                    tr.appendChild(td);
+                }
+            }
+        }
+        GridTable.loadContent(table, tbody.innerHTML);
+    }
 }

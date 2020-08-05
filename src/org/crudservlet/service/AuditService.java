@@ -1,19 +1,13 @@
 package org.crudservlet.service;
 
 import org.crudservlet.dao.AuditDAO;
-import org.crudservlet.dao.ClientATMDAO;
-import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.model.Audit;
 import org.crudservlet.model.AuditOperType;
-import org.crudservlet.model.ClientATM;
-import org.crudservlet.model.UserAccount;
 
 import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.logging.Logger;
-
-import static org.crudservlet.model.Permissions.CLIENTS_CREATE;
 
 public class AuditService {
 

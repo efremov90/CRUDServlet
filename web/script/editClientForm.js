@@ -174,7 +174,7 @@ function initFormEditClient(parentForm, r, initForm) {
     switch (clientType) {
         case 'SELFSERVICE': {
             btnSelectClientType.value = 'SELFSERVICE';
-            elms = form.querySelectorAll('#SELFSERVICE TD [data-field]');
+            let elms = form.querySelectorAll('#SELFSERVICE TD [data-field]');
             for (let i = 0; i < elms.length; i++) {
                 switch (elms[i].tagName) {
                     case 'INPUT':
