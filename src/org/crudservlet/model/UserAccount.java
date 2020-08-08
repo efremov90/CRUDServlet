@@ -58,6 +58,10 @@ public class UserAccount {
         Password = password;
     }
 
+    public String getFullName() {
+        return FirstName + " " + LastName;
+    }
+
     @Override
     public String toString() {
         return "UserAccount{" +

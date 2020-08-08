@@ -32,8 +32,9 @@ public class RequestStatusHistoryService {
         ArrayList<RequestStatusHistory> requestStatusesHistory = new ArrayList<>();
 //        try {
         String sql = "SELECT " +
-                "* " +
-                "FROM REQUEST_STATUS_HISTORY " +
+                "rsh.*, ua.FIRST_NAME||' '||ua.LAST_NAME user_name " +
+                "FROM REQUEST_STATUS_HISTORY rsh " +
+                "INNER JOIN USER_ACCOUNT ua ON rsh.USER_ACCOUNT_ID = ua.ID " +
                 "WHERE REQUEST_ID = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
@@ -47,9 +48,9 @@ public class RequestStatusHistoryService {
             requestStatusHistory.setStatus(RequestStatusType.valueOf(rs.getNString("status")));
             requestStatusHistory.setComment(rs.getNString("comment"));
             requestStatusHistory.setLastStatus(rs.getInt("IS_LAST_STATUS") == 1 ? true : false);
-            requestStatusHistory.setEventDateTime(Timestamp.valueOf(rs.getNString("last_datetime_change_request_status")));
-            requestStatusHistory.setUserId(rs.getInt("last_user_account_id_change_request_status"));
-            rs.getNString("request_uuid");
+            requestStatusHistory.setEventDateTime(Timestamp.valueOf(rs.getNString("event_datetime")));
+            requestStatusHistory.setUserId(rs.getInt("user_account_id"));
+            requestStatusHistory.setUserName(rs.getNString("user_name"));
             requestStatusesHistory.add(requestStatusHistory);
         }
 //        } catch (SQLException e) {

@@ -242,4 +242,23 @@ public class RequestService {
 //        }
         return requests;
     }
+
+    public ArrayList<Audit> getAudits(int requestId) throws SQLException {
+        logger.info("start");
+
+//        try {
+        String sql = "INNER JOIN REQUEST_XREF_AUDIT rxa ON a.ID = rxa.AUDIT_ID " +
+                "WHERE rxa.REQUEST_ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, requestId);
+
+        ResultSet rs = st.executeQuery(sql);
+
+
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        return new AuditService().getAudits(sql);
+    }
 }

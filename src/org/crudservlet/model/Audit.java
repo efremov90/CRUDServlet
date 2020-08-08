@@ -5,7 +5,9 @@ import java.util.Date;
 public class Audit {
     private int Id;
     private int AuditOperId;
+    private AuditOperType AuditOperType;
     private int UserAccountId;
+    private String UserName;
     private Date EventDateTime;
     private String Description;
     private String Content;
@@ -29,12 +31,28 @@ public class Audit {
         AuditOperId = auditOperId;
     }
 
+    public org.crudservlet.model.AuditOperType getAuditOperType() {
+        return AuditOperType;
+    }
+
+    public void setAuditOperType(org.crudservlet.model.AuditOperType auditOperType) {
+        AuditOperType = auditOperType;
+    }
+
     public int getUserAccountId() {
         return UserAccountId;
     }
 
     public void setUserAccountId(int userAccountId) {
         UserAccountId = userAccountId;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 
     public Date getEventDateTime() {

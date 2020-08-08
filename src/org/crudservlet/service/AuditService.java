@@ -3,9 +3,12 @@ package org.crudservlet.service;
 import org.crudservlet.dao.AuditDAO;
 import org.crudservlet.model.Audit;
 import org.crudservlet.model.AuditOperType;
+import org.crudservlet.model.Request;
+import org.crudservlet.model.RequestStatusType;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -37,5 +40,37 @@ public class AuditService {
         }*/
 
         return result;
+    }
+
+    public ArrayList<Audit> getAudits(String where) throws SQLException {
+        logger.info("start");
+
+        ArrayList<Audit> audits = new ArrayList<>();
+
+        String sql = "SELECT " +
+                "a.ID, ao.AUDIT_OPER_TYPE, ua.FIRST_NAME||' '||ua.LAST_NAME user_name, " +
+                "a.EVENT_DATETIME, a.DESCRIPTION, a.CONTENT " +
+                "FROM AUDIT a " +
+                "INNER JOIN AUDIT_OPER ao ON a.AUDIT_OPER_ID = ao.id " +
+                "INNER JOIN USER_ACCOUNT ua ON a.USER_ACCOUNT_ID = ua.ID " +
+                where;
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            Audit audit = new Audit();
+            audit.setId(rs.getInt("id"));
+            audit.setAuditOperType(AuditOperType.valueOf(rs.getNString("AUDIT_OPER_TYPE")));
+            audit.setUserName(rs.getNString("user_name"));
+            audit.setEventDateTime(Timestamp.valueOf(rs.getNString("EVENT_DATETIME")));
+            audit.setDescription(rs.getNString("DESCRIPTION"));
+            audit.setContent(rs.getNString("CONTENT"));
+            audits.add(audit);
+        }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        return audits;
     }
 }

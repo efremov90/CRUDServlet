@@ -9,4 +9,8 @@ public enum RequestStatusType {
     RequestStatusType(String description) {
         Description = description;
     }
+
+    public String getDescription() {
+        return Description;
+    }
 }

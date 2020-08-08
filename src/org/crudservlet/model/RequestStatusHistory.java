@@ -11,6 +11,7 @@ public class RequestStatusHistory {
     private boolean IsLastStatus;
     private Date EventDateTime;
     private int UserId;
+    private String UserName;
 
     public RequestStatusHistory() {
     }
@@ -69,5 +70,13 @@ public class RequestStatusHistory {
 
     public void setUserId(int userId) {
         UserId = userId;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 }

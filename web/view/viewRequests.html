@@ -36,20 +36,32 @@
     <table class="tab gridTable" id="history" data-display="none">
         <thead>
         <tr class="filterTable">
-            <td data-field="eventDatetime">
+            <td data-field="status" data-display="none">
                 <input type="text"/>
             </td>
-            <td data-field="status">
-                <input type="text"/>
-            </td>
-            <td data-field="comment">
+            <td data-field="statusDescription">
                 <input type="text"/>
             </td>
             <td data-field="user">
                 <input type="text"/>
             </td>
+            <td data-field="eventDatetime">
+                <input type="text"/>
+            </td>
+            <td data-field="comment">
+                <input type="text"/>
+            </td>
         </tr>
         <tr class="headerTable">
+            <td data-field="status" data-display="none">
+                Статус
+            </td>
+            <td data-field="statusDescription" style="min-width:80px; max-width:80px;">
+                Статус
+            </td>
+            <td data-field="user" style="min-width:140px; max-width:140px;">
+                Пользователь
+            </td>
             <td
                     data-field="eventDatetime"
                     data-type="dateTime"
@@ -57,14 +69,8 @@
             >
                 Дата и время
             </td>
-            <td data-field="status" style="min-width:80px; max-width:80px;">
-                Статус
-            </td>
             <td data-field="comment" style="min-width:200px; max-width:200px;">
                 Комментарий
-            </td>
-            <td data-field="user" style="min-width:140px; max-width:140px;">
-                Пользователь
             </td>
             <td
                     data-field="lastColumn"
