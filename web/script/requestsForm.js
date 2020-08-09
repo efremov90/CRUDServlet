@@ -92,7 +92,7 @@ function initFormRequests(parentForm) {
         if (btnCancelRequest) btnCancelRequest.addEventListener(
             'click',
             function () {
-                alert('Отмена ещё не реализована.');
+                showModalCreate('cancelRequest', form);
             },
             false
         );

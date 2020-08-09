@@ -23,6 +23,7 @@ function getHTMLFileNameByIdForm(id) {
         case 'confirm':
         case 'requests':
         case 'createRequest':
+        case 'cancelRequest':
         case 'clients':
         case 'editClient':
             return 'view/' + id + '.html';
@@ -38,6 +39,7 @@ function getJSFileNameByIdForm(id) {
         case 'confirm':
         case 'requests':
         case 'createRequest':
+        case 'cancelRequest':
         case 'clients':
         case 'editClient':
             return 'script/' + id + 'Form' + '.js';
