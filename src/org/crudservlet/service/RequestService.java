@@ -11,8 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static org.crudservlet.model.Permissions.CLIENTS_CREATE;
-import static org.crudservlet.model.Permissions.REQUESTS_CREATE;
+import static org.crudservlet.model.Permissions.*;
 import static org.crudservlet.model.RequestStatusType.CANCELED;
 import static org.crudservlet.model.RequestStatusType.CREATED;
 
@@ -163,10 +162,10 @@ public class RequestService {
         boolean result = false;
 //        try {
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
-        if (!new PermissionService().isPermission(userAccountId, REQUESTS_CREATE))
+        if (!new PermissionService().isPermission(userAccountId, REQUESTS_CANCEL))
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
-                    REQUESTS_CREATE.name()));
+                    REQUESTS_CANCEL.name()));
         if (getRequestIdByUUID(requestUUID) == null)
             throw new Exception(String.format("Заявка с UUID %s отсутствует.",
                     requestUUID));

@@ -1,14 +1,13 @@
 package org.crudservlet.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dto.*;
 import org.crudservlet.model.ClientATM;
 import org.crudservlet.model.ClientDopoffice;
 import org.crudservlet.model.ClientTypeType;
-import org.crudservlet.service.ClientATMService;
-import org.crudservlet.service.ClientDopofficeService;
-import org.crudservlet.service.ClientService;
-import org.crudservlet.service.ErrorDTOService;
+import org.crudservlet.model.UserAccount;
+import org.crudservlet.service.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.logging.Logger;
+
+import static org.crudservlet.model.Permissions.REQUESTS_VIEW;
 
 @WebServlet(urlPatterns = {"/getClient"})
 public class GetClientServlet extends HttpServlet {
@@ -38,6 +39,7 @@ public class GetClientServlet extends HttpServlet {
         try {
             ObjectMapper mapper = new ObjectMapper();
             GetClientRequestDTO getClientRequestDTO = mapper.readValue(req.getReader(), GetClientRequestDTO.class);
+
             ClientTypeType clientType = new ClientService().getClient(getClientRequestDTO.getClientCode()).getClientType();
             GetClientResponseDTO getClientResponseDTO = new GetClientResponseDTO();
             switch (clientType) {

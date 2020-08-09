@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @WebServlet(urlPatterns = {"/createRequest"})
 public class CreateRequestServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 3948755746919698464L;
+    private static final long serialVersionUID = 5477656489716096957L;
 
     private Logger logger = Logger.getLogger(CreateRequestServlet.class.getName());
 

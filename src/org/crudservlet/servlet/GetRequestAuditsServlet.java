@@ -1,8 +1,11 @@
 package org.crudservlet.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dto.*;
+import org.crudservlet.model.UserAccount;
 import org.crudservlet.service.ErrorDTOService;
+import org.crudservlet.service.PermissionService;
 import org.crudservlet.service.RequestService;
 
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +18,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static org.crudservlet.model.Permissions.REQUESTS_VIEW;
 
 @WebServlet(urlPatterns = {"/getRequestAudits"})
 public class GetRequestAuditsServlet extends HttpServlet {
@@ -36,15 +41,22 @@ public class GetRequestAuditsServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             GetRequestAuditsRequestDTO getRequestAuditsRequestDTO = mapper.readValue(req.getReader(),
                     GetRequestAuditsRequestDTO.class);
+
+            UserAccount userAccount = new UserAccountDAO().getUserAccountBySessionId(req.getRequestedSessionId());
+            if (!new PermissionService().isPermission(userAccount.getId(), REQUESTS_VIEW))
+                throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                        userAccount.getAccount(),
+                        REQUESTS_VIEW.name()));
+
             ArrayList<AuditDTO> audits = new RequestService().getAudits(getRequestAuditsRequestDTO.getRequestId()).stream()
                     .map(x -> {
-                                AuditDTO auditDTO = new AuditDTO();
-                                auditDTO.setId(x.getId());
-                                auditDTO.setEvent(x.getAuditOperType().getName());
-                                auditDTO.setUser(x.getUserName());
-                                auditDTO.setEventDateTime(new Date(x.getEventDateTime().getTime()).toString());
-                                auditDTO.setDescription(x.getDescription());
-                                auditDTO.setContent(x.getContent());
+                        AuditDTO auditDTO = new AuditDTO();
+                        auditDTO.setId(x.getId());
+                        auditDTO.setEvent(x.getAuditOperType().getName());
+                        auditDTO.setUser(x.getUserName());
+                        auditDTO.setEventDateTime(new Date(x.getEventDateTime().getTime()).toString());
+                        auditDTO.setDescription(x.getDescription());
+                        auditDTO.setContent(x.getContent());
                                 return auditDTO;
                             }
                     ).collect(Collectors.toCollection(() -> new ArrayList<AuditDTO>()));

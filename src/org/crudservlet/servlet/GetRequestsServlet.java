@@ -8,6 +8,7 @@ import org.crudservlet.model.Request;
 import org.crudservlet.model.UserAccount;
 import org.crudservlet.service.ClientService;
 import org.crudservlet.service.ErrorDTOService;
+import org.crudservlet.service.PermissionService;
 import org.crudservlet.service.RequestService;
 
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static org.crudservlet.model.Permissions.REQUESTS_VIEW;
+import static org.crudservlet.model.Permissions.REQUESTS_VIEW_REQUEST;
 
 @WebServlet(urlPatterns = {"/getRequests"})
 public class GetRequestsServlet extends HttpServlet {
@@ -41,6 +45,13 @@ public class GetRequestsServlet extends HttpServlet {
         try {
             ObjectMapper mapper = new ObjectMapper();
             GetRequestsRequestDTO getRequestsRequestDTO = mapper.readValue(req.getReader(), GetRequestsRequestDTO.class);
+
+            UserAccount userAccount = new UserAccountDAO().getUserAccountBySessionId(req.getRequestedSessionId());
+            if (!new PermissionService().isPermission(userAccount.getId(), REQUESTS_VIEW))
+                throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                        userAccount.getAccount(),
+                        REQUESTS_VIEW.name()));
+
             ArrayList<RequestDTO> requests = new RequestService().getRequests(
                     (getRequestsRequestDTO.getFromCreateDate() != null && getRequestsRequestDTO.getFromCreateDate() != "") ?
                             Date.valueOf(getRequestsRequestDTO.getFromCreateDate()) : null,
@@ -52,11 +63,11 @@ public class GetRequestsServlet extends HttpServlet {
                     .map(x -> {
                                 RequestDTO requestDTO = new RequestDTO();
                                 Request request = null;
-                                Client client = null;
-                                UserAccount userAccount = null;
+                        Client client = null;
+                        UserAccount lastUserAccount = null;
                                 try {
                                     client = new ClientService().getClient(x.getClientCode());
-                                    userAccount =
+                                    lastUserAccount =
                                             new UserAccountDAO().getUserAccountById(x.getLastUserAccountIdChangeRequestStatus());
                                 } catch (SQLException | ClassNotFoundException e) {
                                     e.printStackTrace();
@@ -73,8 +84,8 @@ public class GetRequestsServlet extends HttpServlet {
                                 requestDTO.setRequestStatus(x.getRequestStatus().name());
                                 requestDTO.setRequestStatusDescription(x.getRequestStatus().getDescription());
                                 requestDTO.setLastDateTimeChangeRequestStatus(x.getRequestStatus().getDescription());
-                                requestDTO.setLastUserAccountIdChangeRequestStatus(x.getLastUserAccountIdChangeRequestStatus());
-                                requestDTO.setLastUserAccountNameChangeRequestStatus(userAccount.getFullName());
+                        requestDTO.setLastUserAccountIdChangeRequestStatus(x.getLastUserAccountIdChangeRequestStatus());
+                        requestDTO.setLastUserAccountNameChangeRequestStatus(lastUserAccount.getFullName());
                                 return requestDTO;
                             }
                     ).collect(Collectors.toCollection(() -> new ArrayList<RequestDTO>()));

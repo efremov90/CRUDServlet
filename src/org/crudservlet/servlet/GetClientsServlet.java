@@ -1,12 +1,15 @@
 package org.crudservlet.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dto.ClientDTO;
 import org.crudservlet.dto.GetClientsRequestDTO;
 import org.crudservlet.dto.GetClientsResponseDTO;
 import org.crudservlet.model.ClientTypeType;
+import org.crudservlet.model.UserAccount;
 import org.crudservlet.service.ClientService;
 import org.crudservlet.service.ErrorDTOService;
+import org.crudservlet.service.PermissionService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +21,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static org.crudservlet.model.Permissions.CLIENTS_VIEW;
+import static org.crudservlet.model.Permissions.REQUESTS_VIEW;
 
 @WebServlet(urlPatterns = {"/getClients"})
 public class GetClientsServlet extends HttpServlet {
@@ -38,15 +44,22 @@ public class GetClientsServlet extends HttpServlet {
         try {
             ObjectMapper mapper = new ObjectMapper();
             GetClientsRequestDTO getClientsRequestDTO = mapper.readValue(req.getReader(), GetClientsRequestDTO.class);
+
+            UserAccount userAccount = new UserAccountDAO().getUserAccountBySessionId(req.getRequestedSessionId());
+            if (!new PermissionService().isPermission(userAccount.getId(), CLIENTS_VIEW))
+                throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                        userAccount.getAccount(),
+                        CLIENTS_VIEW.name()));
+
             ArrayList<ClientDTO> clients = new ClientService().getClients(
                     !getClientsRequestDTO.getClientType().equals("ALL") ?
                             ClientTypeType.valueOf(getClientsRequestDTO.getClientType()) : null
             ).stream()
                     .map(x -> {
-                                ClientDTO clientDTO = new ClientDTO();
-                                clientDTO.setId(x.getId());
-                                clientDTO.setClientCode(x.getClientCode());
-                                clientDTO.setClientName(x.getClientName());
+                        ClientDTO clientDTO = new ClientDTO();
+                        clientDTO.setId(x.getId());
+                        clientDTO.setClientCode(x.getClientCode());
+                        clientDTO.setClientName(x.getClientName());
                                 clientDTO.setClientType(x.getClientType().name());
                                 clientDTO.setClientTypeDescription(x.getClientType().getDescription());
                                 clientDTO.setAddress(x.getAddress());
