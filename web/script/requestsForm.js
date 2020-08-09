@@ -92,7 +92,20 @@ function initFormRequests(parentForm) {
         if (btnCancelRequest) btnCancelRequest.addEventListener(
             'click',
             function () {
-                showModalCreate('cancelRequest', form);
+                // alert('btnCancelRequest');
+                function getRequest() {
+                    let requestId = form.querySelector('.gridTable tr[data-checked-current="true"]' +
+                        ' td[data-field="requestId"]').innerHTML;
+                    return requestId;
+                }
+
+                let requestId = getRequest();
+
+                showModalEdit('cancelRequest', form, requestId, form => {
+                    let btnSearch = form.querySelector('.buttonBar #search');
+                    btnSearch.dispatchEvent(new Event('click'));
+                });
+
             },
             false
         );

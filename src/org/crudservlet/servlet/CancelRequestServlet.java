@@ -36,7 +36,7 @@ public class CancelRequestServlet extends HttpServlet {
             new RequestService().cancel(
                     request.getRequestUUID(),
                     new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId(),
-                    ""
+                    cancelRequestRequestDTO.getComment()
             );
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,34 +2,28 @@ package org.crudservlet.model;
 
 public enum AuditOperType {
 
-    LOGIN("10001", "Вход пользователя в систему",
+    LOGIN("Вход пользователя в систему",
             "Пользователь {0}"),
     //"Пользователь {0}, время {1}, сессия {2}"),
-    LOGOUT("10002", "Выход пользователя из системы",
+    LOGOUT("Выход пользователя из системы",
             "Пользователь {0}"),
-    CREATE_CLIENT("11001", "Создание клиента",
+    CREATE_CLIENT("Создание клиента",
             "Код клиента {0}"),
-    EDIT_CLIENT("11002", "Редактирование клиента",
+    EDIT_CLIENT("Редактирование клиента",
             "Код клиента {0}"),
-    CREATE_REQUEST("12001", "Создание заявки",
+    CREATE_REQUEST("Создание заявки",
             "Id заявки {0}"),
-    CANCEL_REQUEST("12002", "Отмена заявки",
+    CANCEL_REQUEST("Отмена заявки",
             "Id заявки {0}"),
-    RUN_REPORT("13002", "Формирование отчета",
+    RUN_REPORT("Формирование отчета",
             "Тип отчета {0}");
 
-    private final String Code;
     private final String Name;
     private final String Description;
 
-    AuditOperType(String code, String name, String description) {
-        Code = code;
+    AuditOperType(String name, String description) {
         Name = name;
         Description = description;
-    }
-
-    public String getCode() {
-        return Code;
     }
 
     public String getName() {

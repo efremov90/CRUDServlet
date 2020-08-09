@@ -149,6 +149,9 @@ function showModalEdit(idForm, parentForm, contentJSON, initForm) {
                     formScript.then(
                         () => {
                             switch (idForm) {
+                                case 'cancelRequest':
+                                    initFormCancelRequest(parentForm, contentJSON, initForm);
+                                    break;
                                 case 'editClient':
                                     initFormEditClient(parentForm, contentJSON, initForm);
                                     break;

@@ -30,15 +30,15 @@ public class AuditOperService {
         String sql = "SELECT " +
                 "* " +
                 "FROM AUDIT_OPER " +
-                "WHERE CODE = ?";
+                "WHERE TYPE = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, type.getCode());
+        st.setString(1, type.name());
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
             auditOper.setId(rs.getInt("Id"));
-            auditOper.setOperCode(rs.getNString("code"));
+            auditOper.setType(rs.getNString("Type"));
             auditOper.setDescription(rs.getNString("Description"));
         }
 //        } catch (SQLException e) {

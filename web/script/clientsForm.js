@@ -204,6 +204,53 @@ function initFormClients(parentForm) {
             },
             false
         );
+        if (btnEditClient) btnEditClient.addEventListener(
+            'click',
+            function () {
+                function getClient() {
+                    let clientCode = form.querySelector('.gridTable[data-display="block"]' +
+                        ' tr[data-checked-current="true"]' +
+                        ' td[data-field="clientCode"]').innerHTML;
+                    return clientCode;
+                }
+
+                let clientCode = getClient();
+
+                let client = {
+                    clientCode: clientCode
+                };
+
+                //alert('Сохранение ещё не реализовано');
+                let json = JSON.stringify(client);
+                //alert(json);
+                fetch(url + "/getClient", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8"
+                    },
+                    body: json
+                }).then(response => {
+                    if (response.ok) {
+                        let json = response.json();
+                        return json;
+                    } else {
+                        showModalError(form, function () {
+                            initFormError(form, "Ошибка сервера.");
+                        });
+                    }
+                })
+                    .then(client => {
+                        /*alert(client.selfservice);
+                        alert(client.selfservice.id);*/
+                        showModalEdit('editClient', form, client, form => {
+                            let btnSearch = form.querySelector('.buttonBar #search');
+                            btnSearch.dispatchEvent(new Event('click'));
+                        });
+                    })
+
+            },
+            false
+        );
 
         function loadGridTable(r, nameTable) {
             //alert('loadSELFSERVICEGridTable');

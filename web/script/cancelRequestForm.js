@@ -1,4 +1,4 @@
-function initFormCancelRequest(parentForm) {
+function initFormCancelRequest(parentForm, requestId, initForm) {
     //alert('initFormCancelRequest');
     let modal = parentForm.querySelector('.modal');
     let form = parentForm.querySelector('.form#cancelRequest');
@@ -12,6 +12,7 @@ function initFormCancelRequest(parentForm) {
         let btnClose = modal.querySelector('#close');
         let btnOK = modal.querySelector('#ok');
         let btnCancel = modal.querySelector('#cancel');
+        form.querySelector('[data-field="comment"]').value = "Причина по умолчанию";
 
         form.setAttribute('data-display', 'block');
         modal.setAttribute('data-display', 'block');
@@ -19,20 +20,39 @@ function initFormCancelRequest(parentForm) {
         //Инициализация кнопок
         btnClose.addEventListener(
             'click',
-            close,
+            function () {
+                modal.remove();
+            },
             false
         );
         btnOK.addEventListener(
             'click',
             function () {
-                alert('Сохранение ещё не реализовано');
+                // alert('btnOK');
+                let cancelRequest = {
+                    requestId: requestId,
+                    comment: form.querySelector('[data-field="comment"]').value
+                }
+                let json = JSON.stringify(cancelRequest);
+                let req = new HttpRequestCRUD();
+                req.setFetch(url + '/cancelRequest', json);
+                req.setForm(form);
+                let request = req.fetchJSON();
+                request.then(
+                    () => {
+                        if (req.getStatus()) {
+                            modal.remove();
+                            initForm(parentForm);
+                        }
+                    }
+                );
             },
             false
         );
         btnCancel.addEventListener(
             'click',
             function () {
-                form.remove();
+                modal.remove();
             },
             false
         );

@@ -2,15 +2,15 @@ package org.crudservlet.model;
 
 public class AuditOper {
     private int Id;
-    private String OperCode;
+    private String Type;
     private String Description;
 
     public AuditOper() {
     }
 
-    public AuditOper(int id, String operCode, String description) {
+    public AuditOper(int id, String type, String description) {
         Id = id;
-        OperCode = operCode;
+        Type = type;
         Description = description;
     }
 
@@ -22,12 +22,12 @@ public class AuditOper {
         Id = id;
     }
 
-    public String getOperCode() {
-        return OperCode;
+    public String getType() {
+        return Type;
     }
 
-    public void setOperCode(String operCode) {
-        OperCode = operCode;
+    public void setType(String type) {
+        Type = type;
     }
 
     public String getDescription() {
