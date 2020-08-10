@@ -12,6 +12,7 @@ import org.crudservlet.model.ClientDopoffice;
 import org.crudservlet.service.ClientATMService;
 import org.crudservlet.service.ClientDopofficeService;
 import org.crudservlet.service.ErrorDTOService;
+import org.crudservlet.service.ResultDTOService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,6 +55,7 @@ public class EditClientServlet extends HttpServlet {
                         Date.valueOf(clientDTO.getCloseDate()) : null);
                 new ClientDopofficeService().edit(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
+                ResultDTOService.writer(resp, "0", null);
             } else if (editClientDTO.getSelfservice() != null) {
                 ClientATMDTO clientDTO = editClientDTO.getSelfservice();
                 ClientATM client = new ClientATM();
@@ -66,6 +68,7 @@ public class EditClientServlet extends HttpServlet {
                         Date.valueOf(clientDTO.getCloseDate()) : null);
                 new ClientATMService().edit(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
+                ResultDTOService.writer(resp, "0", null);
             }
         } catch (Exception e) {
             e.printStackTrace();

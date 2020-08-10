@@ -292,9 +292,17 @@ function initFormClientsChoice(parentForm, ok) {
         if (btnCreateClient) btnCreateClient.remove();
         if (btnEditClient) btnEditClient.remove();
 
+        let ALLTable = form.querySelector('.gridTable#ALL');
         let SELFSERVICETable = form.querySelector('.gridTable#SELFSERVICE');
         let DOPOFFICETable = form.querySelector('.gridTable#DOPOFFICE');
 
+        ALLTable.addEventListener(
+            GridTable.ev_UPDATE_STATE_CHECKED,
+            function () {
+                updateStateButton(this);
+            },
+            false
+        );
         SELFSERVICETable.addEventListener(
             GridTable.ev_UPDATE_STATE_CHECKED,
             function () {
@@ -350,7 +358,7 @@ function initFormClientsChoice(parentForm, ok) {
             'click',
             function () {
                 ok(parentForm, getClient());
-                close();
+                modal.remove();
             },
             false
         );

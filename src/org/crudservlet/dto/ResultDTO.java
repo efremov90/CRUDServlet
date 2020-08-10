@@ -7,6 +7,11 @@ public class ResultDTO {
     public ResultDTO() {
     }
 
+    public ResultDTO(String code, String message) {
+        Code = code;
+        Message = message;
+    }
+
     public String getCode() {
         return Code;
     }

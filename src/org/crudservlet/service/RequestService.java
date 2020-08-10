@@ -212,13 +212,15 @@ public class RequestService {
         ArrayList<Request> requests = new ArrayList<>();
 //        try {
         String sql = "SELECT " +
-                "* " +
-                "FROM REQUESTS " +
+                "r.ID, r.REQUEST_UUID, r.CREATE_DATE, r.CREATE_DATETIME, r.CLIENT_CODE, r.COMMENT, r. STATUS, " +
+                "rsh.EVENT_DATETIME, rsh.USER_ACCOUNT_ID " +
+                "FROM REQUESTS r " +
+                "LEFT JOIN REQUEST_STATUS_HISTORY rsh ON r.ID = rsh.REQUEST_ID AND rsh.IS_LAST_STATUS = 1 " +
                 "WHERE 1=1 " +
-                (fromCreateDate != null ? " AND CREATE_DATE >= " + fromCreateDate : "") +
-                (toCreateDate != null ? " AND CREATE_DATE <= " + "'" + toCreateDate + "'" : "") +
-                (clientCode != null ? " AND CLIENT_CODE = " + "'" + clientCode + "'" : "") +
-                (requestStatus != null ? " AND STATUS = " + "'" + requestStatus.name() + "'" : "");
+                (fromCreateDate != null ? " AND r.CREATE_DATE >= " + fromCreateDate : "") +
+                (toCreateDate != null ? " AND r.CREATE_DATE <= " + "'" + toCreateDate + "'" : "") +
+                (clientCode != null ? " AND r.CLIENT_CODE = " + "'" + clientCode + "'" : "") +
+                (requestStatus != null ? " AND r.STATUS = " + "'" + requestStatus.name() + "'" : "");
 
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(sql);
@@ -232,8 +234,8 @@ public class RequestService {
             request.setClientCode(rs.getNString("client_code"));
             request.setComment(rs.getNString("comment"));
             request.setRequestStatus(RequestStatusType.valueOf(rs.getNString("status")));
-            request.setLastDateTimeChangeRequestStatus(Timestamp.valueOf(rs.getNString("last_datetime_change_request_status")));
-            request.setLastUserAccountIdChangeRequestStatus(rs.getInt("last_user_account_id_change_request_status"));
+            request.setLastDateTimeChangeRequestStatus(Timestamp.valueOf(rs.getNString("EVENT_DATETIME")));
+            request.setLastUserAccountIdChangeRequestStatus(rs.getInt("USER_ACCOUNT_ID"));
             requests.add(request);
         }
 //        } catch (SQLException e) {

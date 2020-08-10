@@ -80,7 +80,27 @@ function initFormRequests(parentForm) {
             },
             false
         );
-        btnSearch.addEventListener('click', loadRequests, false);
+        btnSearch.addEventListener('click', function () {
+            let search = {
+                fromCreateDate: btnFromRequestDate.value,
+                toCreateDate: btnToRequestDate.value
+            };
+
+            //alert('Сохранение ещё не реализовано');
+            let json = JSON.stringify(search);
+            //alert(json);
+            let req = new HttpRequestCRUD();
+            req.setFetch(url + "/getRequests", json);
+            req.setForm(form);
+            let request = req.fetchJSON();
+            request.then(
+                () => {
+                    if (req.getStatus()) {
+                        loadRequestsGridTable(req.getData());
+                    }
+                }
+            );
+        }, false);
         if (btnCreateRequest) btnCreateRequest.addEventListener(
             'click',
             function () {

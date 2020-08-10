@@ -53,7 +53,29 @@ function initFormCreateRequest(parentForm) {
         btnOK.addEventListener(
             'click',
             function () {
-                alert('Сохранение ещё не реализовано');
+                //alert('btnOK');
+                let createRequest = {
+                    request: {
+                        requestId: 0,
+                        clientCode: form.querySelector('[data-field="clientCode"]').value,
+                        comment: form.querySelector('[data-field="comment"]').value,
+                        lastUserAccountIdChangeRequestStatus: 0
+                    }
+                }
+                //alert('JSON');
+                let json = JSON.stringify(createRequest);
+                let req = new HttpRequestCRUD();
+                req.setFetch(url + '/createRequest', json);
+                req.setForm(form);
+                let request = req.fetchJSON();
+                request.then(
+                    () => {
+                        if (req.getStatus()) {
+                            modal.remove();
+                            initForm(parentForm);
+                        }
+                    }
+                );
             },
             false
         );
@@ -66,7 +88,7 @@ function initFormCreateRequest(parentForm) {
             'click',
             function () {
                 showModalChoice('clients', modal, (form, chosenObject) => {
-                        form.querySelector('input[name="objectCode"]').value = chosenObject;
+                    form.querySelector('input[data-field="clientCode"]').value = chosenObject;
                     }
                 );
             },

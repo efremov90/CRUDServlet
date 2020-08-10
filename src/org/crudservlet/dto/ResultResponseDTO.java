@@ -1,16 +1,20 @@
 package org.crudservlet.dto;
 
 public class ResultResponseDTO {
-    ResultDTO resultDTO;
+    ResultDTO Result;
 
     public ResultResponseDTO() {
     }
 
-    public ResultDTO getResultDTO() {
-        return resultDTO;
+    public ResultResponseDTO(ResultDTO result) {
+        Result = result;
     }
 
-    public void setResultDTO(ResultDTO resultDTO) {
-        this.resultDTO = resultDTO;
+    public ResultDTO getResult() {
+        return Result;
+    }
+
+    public void setResult(ResultDTO result) {
+        Result = result;
     }
 }

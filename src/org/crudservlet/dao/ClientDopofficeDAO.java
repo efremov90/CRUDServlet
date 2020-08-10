@@ -24,7 +24,7 @@ public class ClientDopofficeDAO {
 //        try {
         logger.info(client.toString());
 
-        new ClientDAO().create(client);
+        result = new ClientDAO().create(client);
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
