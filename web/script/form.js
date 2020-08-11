@@ -63,16 +63,6 @@ function showModalCreate(idForm, parentForm, initForm) {
             form.setAttribute('data-display', 'block');
         } else {
 
-
-            //let formHTML = loadHTML(fileNameHTML);
-
-            /*formHTML.then(
-                contentHTML => {
-                    parentForm.appendChild(createModalForm(contentHTML));
-                    //alert('createModal');
-                }
-            );*/
-
             let req = new HttpRequestCRUD();
             req.setURL(fileNameHTML);
             req.setContentType("text/html;charset=utf-8");
@@ -94,22 +84,13 @@ function showModalCreate(idForm, parentForm, initForm) {
                         () => {
                             switch (idForm) {
                                 case 'createRequest':
-                                    initFormCreateRequest(parentForm);
+                                    initFormCreateRequest(parentForm, initForm);
                                     break;
                                 case 'createClient':
                                     initFormCreateClient('create', parentForm, initForm);
                                     break;
                             }
                         });
-
-                    /*                    let formScript = loadScript(fileNameJS);
-                                        formScript.then(
-                                            script => {
-                                                switch (idForm) {
-                                                    case 'createRequest': initFormCreateRequest(parentForm); break;
-                                                    case 'createClient': initFormCreateClient('create',parentForm, initForm); break;
-                                                }
-                                            });*/
                 }
             );
         }
@@ -284,10 +265,6 @@ function hideAllForms(parentForm) {
     for (let i = 0; i < forms.length; i++) {
         forms[i].setAttribute('data-display', 'none');
     }
-}
-
-function closeModalForm(form) {
-    form.remove();
 }
 
 function initSideBar() {

@@ -63,8 +63,8 @@ public class GetRequestsServlet extends HttpServlet {
                     .map(x -> {
                                 RequestDTO requestDTO = new RequestDTO();
                                 Request request = null;
-                        Client client = null;
-                        UserAccount lastUserAccount = null;
+                                Client client = null;
+                                UserAccount lastUserAccount = null;
                                 try {
                                     client = new ClientService().getClient(x.getClientCode());
                                     lastUserAccount =
@@ -75,17 +75,18 @@ public class GetRequestsServlet extends HttpServlet {
                                 requestDTO.setRequestId(x.getId());
                                 requestDTO.setRequestUUID(x.getRequestUUID());
                                 requestDTO.setCreateDate(new Date(x.getCreateDate().getTime()).toString());
-                                requestDTO.setCreateDatetime(new Date(x.getCreateDate().getTime()).toString());
+                                requestDTO.setCreateDatetime(new Date(x.getCreateDateTime().getTime()).toString());
                                 requestDTO.setClientCode(x.getClientCode());
                                 requestDTO.setClientName(client.getClientName());
                                 requestDTO.setClientType(client.getClientType().name());
                                 requestDTO.setClientTypeDescription(client.getClientType().getDescription());
                                 requestDTO.setComment(x.getComment());
                                 requestDTO.setRequestStatus(x.getRequestStatus().name());
+                                requestDTO.setCommentRequestStatus(x.getCommentRequestStatus());
                                 requestDTO.setRequestStatusDescription(x.getRequestStatus().getDescription());
-                                requestDTO.setLastDateTimeChangeRequestStatus(x.getRequestStatus().getDescription());
-                        requestDTO.setLastUserAccountIdChangeRequestStatus(x.getLastUserAccountIdChangeRequestStatus());
-                        requestDTO.setLastUserAccountNameChangeRequestStatus(lastUserAccount.getFullName());
+                                requestDTO.setLastDateTimeChangeRequestStatus(x.getLastDateTimeChangeRequestStatus().toString());
+                                requestDTO.setLastUserAccountIdChangeRequestStatus(x.getLastUserAccountIdChangeRequestStatus());
+                                requestDTO.setLastUserNameChangeRequestStatus(lastUserAccount.getFullName());
                                 return requestDTO;
                             }
                     ).collect(Collectors.toCollection(() -> new ArrayList<RequestDTO>()));

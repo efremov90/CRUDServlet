@@ -33,7 +33,7 @@ public class ClientDAO {
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, client.getClientCode());
         st.setString(2, client.getClientName());
-        st.setInt(3, 2);
+        st.setInt(3, client.getClientType().getCode());
         st.setString(4, client.getAddress());
         st.setDate(5, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
         result = st.executeUpdate() > 0;

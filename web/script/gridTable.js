@@ -85,6 +85,63 @@ class GridTable {
         }
     }
 
+    //Заполнение таблицы
+    static loadGridTable(t, r) {
+        let table = t;
+        let header = table.querySelector(
+            'thead .headerTable'
+        );
+        let columns = header.querySelectorAll('td');
+        if (r && table && header && columns) {
+            let tbody = document.createElement('tbody');
+            for (let i in r.items) {
+                //alert(i);
+                let tr = document.createElement('tr');
+                tbody.appendChild(tr);
+                for (let j = 0; j < columns.length; j++) {
+                    //alert(j);
+                    if (
+                        columns[j].getAttribute('data-field') &&
+                        columns[j].getAttribute('data-field') != 'lastColumn'
+                    ) {
+                        let td = document.createElement('td');
+                        td.setAttribute('data-field', columns[j].getAttribute('data-field'));
+                        if (r.items[i][columns[j].getAttribute('data-field')]) {
+                            if (columns[j].getAttribute('data-type')) {
+                                switch (columns[j].getAttribute('data-type')) {
+                                    case 'date':
+                                        td.innerHTML = dateTimeJSONToView(
+                                            r.items[i][columns[j].getAttribute('data-field')], 'dd'
+                                        );
+                                        break;
+                                    case 'dateTime':
+                                        td.innerHTML = dateTimeJSONToView(
+                                            r.items[i][columns[j].getAttribute('data-field')], 'mm'
+                                        );
+                                        break;
+                                }
+                                td.setAttribute(
+                                    'data-value',
+                                    r.items[i][columns[j].getAttribute('data-field')]
+                                );
+                            } else {
+                                td.innerHTML =
+                                    r.items[i][
+                                        columns[j].getAttribute('data-field')
+                                        ];
+                            }
+                        }
+                        if (columns[j].getAttribute('data-display') == 'none') {
+                            td.setAttribute('data-display', 'none');
+                        }
+                        tr.appendChild(td);
+                    }
+                }
+            }
+            GridTable.loadContent(table, tbody.innerHTML);
+        }
+    }
+
     //Загрузка данных
     static loadContent(t, data) {
         let content = t.querySelector('TBODY');
@@ -299,22 +356,8 @@ class GridTable {
         //alert('clearCheckedItem');
         let trs = t.querySelectorAll('TBODY TR');
         for (let i = 0; i < trs.length; i++) {
-            /*alert(
-              i +
-                ':' +
-                trs[i].getAttribute(GridTable.d_CHECKED) +
-                ', ' +
-                trs[i].getAttribute(GridTable.d_CHECKED_CURRENT)
-            );*/
             trs[i].removeAttribute(GridTable.d_CHECKED);
             trs[i].removeAttribute(GridTable.d_CHECKED_CURRENT);
-            /*alert(
-              i +
-                ':' +
-                trs[i].getAttribute(GridTable.d_CHECKED) +
-                ', ' +
-                trs[i].getAttribute(GridTable.d_CHECKED_CURRENT)
-            );*/
         }
         //t.setAttribute(GridTable.d_FOCUS, 'false');
         t.removeAttribute(GridTable.d_FOCUS);
@@ -382,16 +425,6 @@ class GridTable {
                 break;
             }
         }
-        //alert(c);
-        //Установить направление сортировки
-        /*if (td.getAttribute(GridTable.d_SORT_DIRECTION) == 'desc') {
-            dir = 'asc';
-        } else if (td.getAttribute(GridTable.d_SORT_DIRECTION) == 'asc') {
-            dir = 'desc';
-        } else {
-            //если сортировка ещё не задана, то сначала asc
-            dir = 'asc';
-        }*/
         GridTable.clearSortDirection(td);
         td.setAttribute(GridTable.d_SORT_DIRECTION, dir);
         /*Цикл, который будет продолжаться до тех пор, пока

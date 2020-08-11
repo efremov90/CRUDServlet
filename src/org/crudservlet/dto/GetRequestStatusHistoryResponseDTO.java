@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class GetRequestStatusHistoryResponseDTO {
 
-    private ArrayList<RequestStatusHistoryDTO> RequestStatusHistory;
+    private ArrayList<RequestStatusHistoryDTO> Items;
 
     public GetRequestStatusHistoryResponseDTO() {
     }
 
-    public ArrayList<RequestStatusHistoryDTO> getRequestStatusHistory() {
-        return RequestStatusHistory;
+    public ArrayList<RequestStatusHistoryDTO> getItems() {
+        return Items;
     }
 
-    public void setRequestStatusHistory(ArrayList<RequestStatusHistoryDTO> requestStatusHistory) {
-        RequestStatusHistory = requestStatusHistory;
+    public void setItems(ArrayList<RequestStatusHistoryDTO> items) {
+        Items = items;
     }
 }

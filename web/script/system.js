@@ -148,41 +148,6 @@ class HttpRequestCRUD {
     }
 }
 
-function loadHTML(src) {
-    if (src) {
-        return new Promise(function (resolve, reject) {
-
-            let xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    let txt = this.responseXML;
-                    let contentHTML = txt.querySelector('div');
-                    //alert(contentHTML);
-                    resolve(contentHTML);
-                }
-            };
-
-            xhttp.open('GET', src, true);
-            xhttp.responseType = 'document';
-            xhttp.send();
-
-        });
-    }
-}
-
-function loadScript(src) {
-    if (src) {
-        return new Promise(function (resolve, reject) {
-            let script = document.createElement('script');
-            script.src = src;
-            script.type = 'text/javascript';
-            script.onload = () => resolve(script);
-            script.onerror = () => reject(new Error('Ошибка загрузки скрипта ${src}'));
-            document.head.append(script);
-        });
-    }
-}
-
 function formatDate(milliseconds) {
     let d = new Date(milliseconds);
     let month;
@@ -253,25 +218,6 @@ function dateTimeJSONToView(dtString, round) {
         }
     } else {
         return '';
-    }
-}
-
-function loadJSON(src) {
-    if (src) {
-        return new Promise(function (resolve, reject) {
-
-            let xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    let contentJSON = JSON.parse(this.responseText);
-                    resolve(contentJSON);
-                }
-            };
-
-            xhttp.open('GET', src, true);
-            xhttp.send();
-
-        });
     }
 }
 

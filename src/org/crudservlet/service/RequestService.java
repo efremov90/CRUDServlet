@@ -78,8 +78,8 @@ public class RequestService {
                 "FROM REQUESTS r " +
                 "LEFT JOIN REQUEST_STATUS_HISTORY rsh ON r.ID = rsh.REQUEST_ID AND rsh.IS_LAST_STATUS = 1 " +
                 "WHERE 1=1 " +
-                (requestId != -1 ? " AND ID = " + requestId : "") +
-                (requestUUID != null ? " AND REQUEST_UUID = " + "'" + requestUUID + "'" : "");
+                (requestId != -1 ? " AND r.ID = " + requestId : "") +
+                (requestUUID != null ? " AND r.REQUEST_UUID = " + "'" + requestUUID + "'" : "");
 
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(sql);
@@ -115,6 +115,9 @@ public class RequestService {
         if (getRequestByUUID(request.getRequestUUID()) != null)
             throw new Exception(String.format("Уже есть заявка с UUID %s.",
                     request.getRequestUUID()));
+        if (new ClientService().getClient(request.getClientCode()) == null)
+            throw new Exception(String.format("Не найден клиент с кодом %s.",
+                    request.getClientCode()));
 
         conn.setAutoCommit(false);
 
@@ -213,11 +216,11 @@ public class RequestService {
 //        try {
         String sql = "SELECT " +
                 "r.ID, r.REQUEST_UUID, r.CREATE_DATE, r.CREATE_DATETIME, r.CLIENT_CODE, r.COMMENT, r. STATUS, " +
-                "rsh.EVENT_DATETIME, rsh.USER_ACCOUNT_ID " +
+                "rsh.COMMENT COMMENT_STATUS, rsh.EVENT_DATETIME, rsh.USER_ACCOUNT_ID " +
                 "FROM REQUESTS r " +
                 "LEFT JOIN REQUEST_STATUS_HISTORY rsh ON r.ID = rsh.REQUEST_ID AND rsh.IS_LAST_STATUS = 1 " +
                 "WHERE 1=1 " +
-                (fromCreateDate != null ? " AND r.CREATE_DATE >= " + fromCreateDate : "") +
+                (fromCreateDate != null ? " AND r.CREATE_DATE >= " + "'" + fromCreateDate + "'" : "") +
                 (toCreateDate != null ? " AND r.CREATE_DATE <= " + "'" + toCreateDate + "'" : "") +
                 (clientCode != null ? " AND r.CLIENT_CODE = " + "'" + clientCode + "'" : "") +
                 (requestStatus != null ? " AND r.STATUS = " + "'" + requestStatus.name() + "'" : "");
@@ -234,6 +237,7 @@ public class RequestService {
             request.setClientCode(rs.getNString("client_code"));
             request.setComment(rs.getNString("comment"));
             request.setRequestStatus(RequestStatusType.valueOf(rs.getNString("status")));
+            request.setCommentRequestStatus(rs.getNString("COMMENT_STATUS"));
             request.setLastDateTimeChangeRequestStatus(Timestamp.valueOf(rs.getNString("EVENT_DATETIME")));
             request.setLastUserAccountIdChangeRequestStatus(rs.getInt("USER_ACCOUNT_ID"));
             requests.add(request);

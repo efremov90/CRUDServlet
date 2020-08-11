@@ -61,7 +61,7 @@ public class GetRequestAuditsServlet extends HttpServlet {
                             }
                     ).collect(Collectors.toCollection(() -> new ArrayList<AuditDTO>()));
             AuditsResponseDTO auditsResponseDTO = new AuditsResponseDTO();
-            auditsResponseDTO.setAudits(audits);
+            auditsResponseDTO.setItems(audits);
             resp.setContentType("application/json;charset=UTF-8");
             PrintWriter out = resp.getWriter();
             out.println(mapper.writeValueAsString(auditsResponseDTO));

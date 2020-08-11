@@ -31,9 +31,10 @@ function initFormRequests(parentForm) {
         btnToRequestDate.value = formatDate(curDate);
         btnToRequestDate.max = formatDate(curDate);
 
-        form.setAttribute('data-display', 'block');
-
         let requestTable = form.querySelector('.gridTable#requests');
+        requestTable.querySelector(".headerTable TD[data-field='requestId']").setAttribute('data-sort-direction', 'desc');
+
+        form.setAttribute('data-display', 'block');
 
         //Инициализация таблицы
         GridTable.init(requestTable);
@@ -96,7 +97,7 @@ function initFormRequests(parentForm) {
             request.then(
                 () => {
                     if (req.getStatus()) {
-                        loadRequestsGridTable(req.getData());
+                        GridTable.loadGridTable(requestTable, req.getData());
                     }
                 }
             );
@@ -105,7 +106,10 @@ function initFormRequests(parentForm) {
             'click',
             function () {
                 //alert('click btnCreateRequest');
-                showModalCreate('createRequest', form);
+                showModalCreate('createRequest', form, form => {
+                    let btnSearch = form.querySelector('.buttonBar #search');
+                    btnSearch.dispatchEvent(new Event('click'));
+                });
             },
             false
         );
@@ -129,72 +133,5 @@ function initFormRequests(parentForm) {
             },
             false
         );
-    }
-
-    function loadRequests() {
-        let promise = loadJSON('file/requests.txt');
-        promise.then(
-            contentJSON => {
-                loadRequestsGridTable(contentJSON);
-            }
-        );
-    }
-
-    function loadRequestsGridTable(r) {
-        //alert('loadRequestsGrid');
-        //alert(r.requests.request[1].requestId);
-        let table = form.querySelector('.gridTable#requests');
-        let header = table.querySelector(
-            'thead .headerTable'
-        );
-        let columns = header.querySelectorAll('td');
-        if (r && table && header && columns) {
-            let tbody = document.createElement('tbody');
-            for (let i in r.requests.request) {
-                //alert(i);
-                let tr = document.createElement('tr');
-                tbody.appendChild(tr);
-                for (let j = 0; j < columns.length; j++) {
-                    //alert(j);
-                    if (
-                        columns[j].getAttribute('data-field') &&
-                        columns[j].getAttribute('data-field') != 'lastColumn'
-                    ) {
-                        let td = document.createElement('td');
-                        td.setAttribute('data-field', columns[j].getAttribute('data-field'));
-                        if (r.requests.request[i][columns[j].getAttribute('data-field')]) {
-                            if (columns[j].getAttribute('data-type')) {
-                                switch (columns[j].getAttribute('data-type')) {
-                                    case 'date':
-                                        td.innerHTML = dateTimeJSONToView(
-                                            r.requests.request[i][columns[j].getAttribute('data-field')], 'dd'
-                                        );
-                                        break;
-                                    case 'dateTime':
-                                        td.innerHTML = dateTimeJSONToView(
-                                            r.requests.request[i][columns[j].getAttribute('data-field')], 'mm'
-                                        );
-                                        break;
-                                }
-                                td.setAttribute(
-                                    'data-value',
-                                    r.requests.request[i][columns[j].getAttribute('data-field')]
-                                );
-                            } else {
-                                td.innerHTML =
-                                    r.requests.request[i][
-                                        columns[j].getAttribute('data-field')
-                                        ];
-                            }
-                        }
-                        if (columns[j].getAttribute('data-display') == 'none') {
-                            td.setAttribute('data-display', 'none');
-                        }
-                        tr.appendChild(td);
-                    }
-                }
-            }
-            GridTable.loadContent(table, tbody.innerHTML);
-        }
     }
 }

@@ -7,6 +7,8 @@ public class ClientDTO {
     private String ClientName;
     private String ClientType;
     private String ClientTypeDescription;
+    private String AtmType;
+    private String AtmTypeDescription;
     private String Address;
     private String CloseDate;
 
@@ -51,6 +53,22 @@ public class ClientDTO {
 
     public void setClientTypeDescription(String clientTypeDescription) {
         ClientTypeDescription = clientTypeDescription;
+    }
+
+    public String getAtmType() {
+        return AtmType;
+    }
+
+    public void setAtmType(String atmType) {
+        AtmType = atmType;
+    }
+
+    public String getAtmTypeDescription() {
+        return AtmTypeDescription;
+    }
+
+    public void setAtmTypeDescription(String atmTypeDescription) {
+        AtmTypeDescription = atmTypeDescription;
     }
 
     public String getAddress() {

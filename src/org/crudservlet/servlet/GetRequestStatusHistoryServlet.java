@@ -62,7 +62,7 @@ public class GetRequestStatusHistoryServlet extends HttpServlet {
                                     }
                             ).collect(Collectors.toCollection(() -> new ArrayList<RequestStatusHistoryDTO>()));
             GetRequestStatusHistoryResponseDTO getRequestStatusHistoryResponseDTO = new GetRequestStatusHistoryResponseDTO();
-            getRequestStatusHistoryResponseDTO.setRequestStatusHistory(requestStatusHistory);
+            getRequestStatusHistoryResponseDTO.setItems(requestStatusHistory);
             resp.setContentType("application/json;charset=UTF-8");
             PrintWriter out = resp.getWriter();
             out.println(mapper.writeValueAsString(getRequestStatusHistoryResponseDTO));

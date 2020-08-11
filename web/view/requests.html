@@ -56,7 +56,13 @@
                         <option value="Создана">Создана</option>
                     </select>
                 </td>
+                <td data-field="commentRequestStatus">
+                    <input type="text"/>
+                </td>
                 <td data-field="lastDateTimeChangeRequestStatus">
+                    <input type="text"/>
+                </td>
+                <td data-field="lastUserNameChangeRequestStatus">
                     <input type="text"/>
                 </td>
             </tr>
@@ -89,12 +95,21 @@
                 >
                     Статус
                 </td>
+                <td data-field="commentRequestStatus" style="min-width:140px; max-width:140px;">
+                    Комментарий к статусу
+                </td>
                 <td
                         data-field="lastDateTimeChangeRequestStatus"
                         data-type="dateTime"
                         style="min-width:130px; max-width:130px;"
                 >
                     Время последнего изменения статуса
+                </td>
+                <td
+                        data-field="lastUserNameChangeRequestStatus"
+                        style="min-width:190px; max-width:190px;"
+                >
+                    Последний пользователь, изменивший статус
                 </td>
                 <td
                         data-field="lastColumn"

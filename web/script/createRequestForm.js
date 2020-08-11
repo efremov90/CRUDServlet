@@ -2,7 +2,7 @@ function choiceObjectFormCreateRequest(elm) {
     elm.value = getClientFormChoiceClient();
 }
 
-function initFormCreateRequest(parentForm) {
+function initFormCreateRequest(parentForm, initForm) {
     //alert('initFormCreateRequest');
     let modal = parentForm.querySelector('.modal');
     let form = parentForm.querySelector('.form#createRequest');

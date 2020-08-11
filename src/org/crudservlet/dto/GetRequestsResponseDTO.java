@@ -4,17 +4,20 @@ import java.util.ArrayList;
 
 public class GetRequestsResponseDTO {
 
-    private ArrayList<RequestDTO> Requests;
+    private ArrayList<RequestDTO> Items;
 
-    public GetRequestsResponseDTO(ArrayList<RequestDTO> requests) {
-        Requests = requests;
+    public GetRequestsResponseDTO() {
     }
 
-    public ArrayList<RequestDTO> getRequests() {
-        return Requests;
+    public GetRequestsResponseDTO(ArrayList<RequestDTO> items) {
+        Items = items;
     }
 
-    public void setRequests(ArrayList<RequestDTO> requests) {
-        Requests = requests;
+    public ArrayList<RequestDTO> getItems() {
+        return Items;
+    }
+
+    public void setItems(ArrayList<RequestDTO> items) {
+        Items = items;
     }
 }

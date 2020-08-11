@@ -13,9 +13,10 @@ public class RequestDTO {
     private String Comment;
     private String RequestStatus;
     private String RequestStatusDescription;
+    private String CommentRequestStatus;
     private String LastDateTimeChangeRequestStatus;
     private int LastUserAccountIdChangeRequestStatus;
-    private String LastUserAccountNameChangeRequestStatus;
+    private String LastUserNameChangeRequestStatus;
 
     public RequestDTO() {
     }
@@ -108,6 +109,14 @@ public class RequestDTO {
         RequestStatusDescription = requestStatusDescription;
     }
 
+    public String getCommentRequestStatus() {
+        return CommentRequestStatus;
+    }
+
+    public void setCommentRequestStatus(String commentRequestStatus) {
+        CommentRequestStatus = commentRequestStatus;
+    }
+
     public String getLastDateTimeChangeRequestStatus() {
         return LastDateTimeChangeRequestStatus;
     }
@@ -124,11 +133,11 @@ public class RequestDTO {
         LastUserAccountIdChangeRequestStatus = lastUserAccountIdChangeRequestStatus;
     }
 
-    public String getLastUserAccountNameChangeRequestStatus() {
-        return LastUserAccountNameChangeRequestStatus;
+    public String getLastUserNameChangeRequestStatus() {
+        return LastUserNameChangeRequestStatus;
     }
 
-    public void setLastUserAccountNameChangeRequestStatus(String lastUserAccountNameChangeRequestStatus) {
-        LastUserAccountNameChangeRequestStatus = lastUserAccountNameChangeRequestStatus;
+    public void setLastUserNameChangeRequestStatus(String lastUserNameChangeRequestStatus) {
+        LastUserNameChangeRequestStatus = lastUserNameChangeRequestStatus;
     }
 }

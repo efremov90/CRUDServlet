@@ -4,16 +4,20 @@ import java.util.ArrayList;
 
 public class AuditsResponseDTO {
 
-    private ArrayList<AuditDTO> Audits;
+    private ArrayList<AuditDTO> Items;
 
     public AuditsResponseDTO() {
     }
 
-    public ArrayList<AuditDTO> getAudits() {
-        return Audits;
+    public AuditsResponseDTO(ArrayList<AuditDTO> items) {
+        Items = items;
     }
 
-    public void setAudits(ArrayList<AuditDTO> audits) {
-        Audits = audits;
+    public ArrayList<AuditDTO> getItems() {
+        return Items;
+    }
+
+    public void setItems(ArrayList<AuditDTO> items) {
+        Items = items;
     }
 }

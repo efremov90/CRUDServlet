@@ -229,9 +229,4 @@ function initFormEditClient(parentForm, r, initForm) {
     }
 
     initFormCreateClient('edit', parentForm, initForm);
-
-    /*form.querySelector('table#' + btnSelectClientType.value).setAttribute(
-        'data-display',
-        'block'
-    );*/
 }

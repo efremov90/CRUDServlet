@@ -1,13 +1,19 @@
 package org.crudservlet.model;
 
 public enum ClientTypeType {
-    SELFSERVICE("УС"),
-    DOPOFFICE("ВСП");
+    DOPOFFICE(1, "ВСП"),
+    SELFSERVICE(2, "УС");
 
+    private final int Code;
     private final String Description;
 
-    ClientTypeType(String description) {
+    ClientTypeType(int code, String description) {
+        Code = code;
         Description = description;
+    }
+
+    public int getCode() {
+        return Code;
     }
 
     public String getDescription() {

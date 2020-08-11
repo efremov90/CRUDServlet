@@ -67,7 +67,7 @@ public class GetRequestServlet extends HttpServlet {
             requestDTO.setRequestStatusDescription(request.getRequestStatus().getDescription());
             requestDTO.setLastDateTimeChangeRequestStatus(request.getRequestStatus().getDescription());
             requestDTO.setLastUserAccountIdChangeRequestStatus(request.getLastUserAccountIdChangeRequestStatus());
-            requestDTO.setLastUserAccountNameChangeRequestStatus(lastUserAccount.getFullName());
+            requestDTO.setLastUserNameChangeRequestStatus(lastUserAccount.getFullName());
             GetRequestResponseDTO getRequestResponseDTO = new GetRequestResponseDTO();
             getRequestResponseDTO.setRequest(requestDTO);
             resp.setContentType("application/json;charset=UTF-8");

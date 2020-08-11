@@ -5,8 +5,10 @@ import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dto.ClientDTO;
 import org.crudservlet.dto.GetClientsRequestDTO;
 import org.crudservlet.dto.GetClientsResponseDTO;
+import org.crudservlet.model.ClientATM;
 import org.crudservlet.model.ClientTypeType;
 import org.crudservlet.model.UserAccount;
+import org.crudservlet.service.ClientATMService;
 import org.crudservlet.service.ClientService;
 import org.crudservlet.service.ErrorDTOService;
 import org.crudservlet.service.PermissionService;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -56,12 +59,22 @@ public class GetClientsServlet extends HttpServlet {
                             ClientTypeType.valueOf(getClientsRequestDTO.getClientType()) : null
             ).stream()
                     .map(x -> {
-                        ClientDTO clientDTO = new ClientDTO();
-                        clientDTO.setId(x.getId());
-                        clientDTO.setClientCode(x.getClientCode());
-                        clientDTO.setClientName(x.getClientName());
+                                ClientDTO clientDTO = new ClientDTO();
+                                clientDTO.setId(x.getId());
+                                clientDTO.setClientCode(x.getClientCode());
+                                clientDTO.setClientName(x.getClientName());
                                 clientDTO.setClientType(x.getClientType().name());
                                 clientDTO.setClientTypeDescription(x.getClientType().getDescription());
+                                if (x.getClientType().equals(ClientTypeType.SELFSERVICE)) {
+                                    ClientATM clientATM = null;
+                                    try {
+                                        clientATM = new ClientATMService().getClientByCode(x.getClientCode());
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    clientDTO.setAtmType(clientATM.getAtmType().name());
+                                    clientDTO.setAtmTypeDescription(clientATM.getAtmType().getDescrition());
+                                }
                                 clientDTO.setAddress(x.getAddress());
                                 clientDTO.setCloseDate(x.getCloseDate() != null ?
                                         new Date(x.getCloseDate().getTime()).toString() :

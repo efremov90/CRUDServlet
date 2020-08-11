@@ -124,28 +124,11 @@ function initFormClients(parentForm) {
             request.then(
                 () => {
                     if (req.getStatus()) {
-                        loadGridTable(req.getData(), btnSelectClientType.value);
+                        let table = form.querySelector('.gridTable#' + btnSelectClientType.value);
+                        GridTable.loadGridTable(table, req.getData());
                     }
                 }
             );
-            /*fetch(url + "/getClients", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8"
-                },
-                body: json
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    showModalError(form, function () {
-                        initFormError(form, "Ошибка сервера.");
-                    });
-                }
-            })
-                .then(clients => {
-                    loadGridTable(clients, btnSelectClientType.value);
-                })*/
         }, false);
         if (btnCreateClient) btnCreateClient.addEventListener(
             'click',
@@ -204,64 +187,6 @@ function initFormClients(parentForm) {
             },
             false
         );
-
-        function loadGridTable(r, nameTable) {
-            //alert('loadSELFSERVICEGridTable');
-            //alert(r.clients.client[1].clientCode);
-            let table = form.querySelector('.gridTable#' + nameTable);
-            let header = table.querySelector(
-                'thead .headerTable'
-            );
-            let columns = header.querySelectorAll('td');
-            if (r && table && header && columns) {
-                let tbody = document.createElement('tbody');
-                for (let i in r.clients) {
-                    //alert(i);
-                    let tr = document.createElement('tr');
-                    tbody.appendChild(tr);
-                    for (let j = 0; j < columns.length; j++) {
-                        //alert(j);
-                        if (
-                            columns[j].getAttribute('data-field') &&
-                            columns[j].getAttribute('data-field') != 'lastColumn'
-                        ) {
-                            let td = document.createElement('td');
-                            td.setAttribute('data-field', columns[j].getAttribute('data-field'));
-                            if (r.clients[i][columns[j].getAttribute('data-field')]) {
-                                if (columns[j].getAttribute('data-type')) {
-                                    switch (columns[j].getAttribute('data-type')) {
-                                        case 'date':
-                                            td.innerHTML = dateTimeJSONToView(
-                                                r.clients[i][columns[j].getAttribute('data-field')], 'dd'
-                                            );
-                                            break;
-                                        case 'dateTime':
-                                            td.innerHTML = dateTimeJSONToView(
-                                                r.clients[i][columns[j].getAttribute('data-field')], 'mm'
-                                            );
-                                            break;
-                                    }
-                                    td.setAttribute(
-                                        'data-value',
-                                        r.clients[i][columns[j].getAttribute('data-field')]
-                                    );
-                                } else {
-                                    td.innerHTML =
-                                        r.clients[i][
-                                            columns[j].getAttribute('data-field')
-                                            ];
-                                }
-                            }
-                            if (columns[j].getAttribute('data-display') == 'none') {
-                                td.setAttribute('data-display', 'none');
-                            }
-                            tr.appendChild(td);
-                        }
-                    }
-                }
-                GridTable.loadContent(table, tbody.innerHTML);
-            }
-        }
     }
 }
 
@@ -277,7 +202,8 @@ function initFormClientsChoice(parentForm, ok) {
     if (modal) {
 
         modal.querySelector('.modal-content').style.width = '500px';
-        modal.querySelector('.modal-content').style.maxHeight = '500px';
+        modal.querySelector('.modal-content').style.maxHeight = '100%';
+        modal.querySelector('.content').style.height = '300px';
 
         let btnClose = modal.querySelector('#close');
         let btnOK = modal.querySelector('#ok');

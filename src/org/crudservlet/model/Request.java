@@ -10,6 +10,7 @@ public class Request {
     private String ClientCode;
     private String Comment;
     private RequestStatusType RequestStatus;
+    private String CommentRequestStatus;
     private Date LastDateTimeChangeRequestStatus;
     private int LastUserAccountIdChangeRequestStatus;
 
@@ -70,6 +71,14 @@ public class Request {
 
     public void setRequestStatus(RequestStatusType requestStatus) {
         RequestStatus = requestStatus;
+    }
+
+    public String getCommentRequestStatus() {
+        return CommentRequestStatus;
+    }
+
+    public void setCommentRequestStatus(String commentRequestStatus) {
+        CommentRequestStatus = commentRequestStatus;
     }
 
     public Date getLastDateTimeChangeRequestStatus() {
