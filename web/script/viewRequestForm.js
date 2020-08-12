@@ -1,11 +1,7 @@
-function initFormRequestView(parentForm, requestId, initForm) {
+function initFormViewRequest(parentForm, requestId) {
     //alert('initFormRequestView');
     let modal = parentForm.querySelector('.modal');
     let form = parentForm.querySelector('.form#requestView');
-
-    function close() {
-        modal.remove();
-    }
 
     if (form) {
         modal.querySelector('.modal-content').style.width = '800px';
@@ -18,23 +14,23 @@ function initFormRequestView(parentForm, requestId, initForm) {
         historyTab.setAttribute('data-display', 'none');
         auditTab.setAttribute('data-display', 'none');
 
-        //alert(SELFSERVICETable);
-
         let btnClose = modal.querySelector('#close');
-        let btnRequest = modal.querySelector('.tabs#request');
-        let btnHistory = modal.querySelector('.tabs#history');
-        let btnAudit = modal.querySelector('.tabs#audit');
+        let btnRequest = modal.querySelector('.tabs #request');
+        let btnHistory = modal.querySelector('.tabs #history');
+        let btnAudit = modal.querySelector('.tabs #audit');
 
         //Инициализация таблицы
         GridTable.init(historyTab);
         GridTable.init(auditTab);
 
+        btnRequest.dispatchEvent(new Event('click'));
+
         btnRequest.addEventListener('click', function () {
-            let request_ = {
+            let dataReq = {
                 requestId: requestId
             };
 
-            let json = JSON.stringify(request_);
+            let json = JSON.stringify(dataReq);
             //alert(json);
             let req = new HttpRequestCRUD();
             req.setFetch(url + "/getRequest", json);
@@ -42,7 +38,7 @@ function initFormRequestView(parentForm, requestId, initForm) {
             let request = req.fetchJSON();
             request.then(
                 () => {
-                    let data = req.getData();
+                    let data = req.getData().request;
                     if (req.getStatus()) {
                         let elms = requestTab.querySelectorAll('TD [data-field]');
                         for (let i = 0; i < elms.length; i++) {
@@ -62,16 +58,17 @@ function initFormRequestView(parentForm, requestId, initForm) {
                             );
                         }
                     }
+                    showTab(requestTab);
                 }
             );
         }, false);
 
         btnHistory.addEventListener('click', function () {
-            let history_ = {
+            let dataReq = {
                 requestId: requestId
             };
 
-            let json = JSON.stringify(history_);
+            let json = JSON.stringify(dataReq);
             //alert(json);
             let req = new HttpRequestCRUD();
             req.setFetch(url + "/getRequestHistory", json);
@@ -80,35 +77,37 @@ function initFormRequestView(parentForm, requestId, initForm) {
             request.then(
                 () => {
                     if (req.getStatus()) {
-                        loadItemsGridTable(req.getData(), historyTab)
+                        GridTable.loadGridTable(historyTab, req.getData());
                     }
+                    showTab(historyTab);
                 }
             );
         }, false);
 
         btnAudit.addEventListener('click', function () {
-            let history_ = {
+            let dataReq = {
                 requestId: requestId
             };
 
-            let json = JSON.stringify(history_);
+            let json = JSON.stringify(dataReq);
             //alert(json);
             let req = new HttpRequestCRUD();
-            req.setFetch(url + "/getRequestAudit", json);
+            req.setFetch(url + "/getRequestAudits", json);
             req.setForm(form);
             let request = req.fetchJSON();
             request.then(
                 () => {
                     if (req.getStatus()) {
-                        loadItemsGridTable(req.getData(), auditTab)
+                        GridTable.loadGridTable(auditTab, req.getData());
                     }
+                    showTab(auditTab);
                 }
             );
         }, false);
 
         function getCurrentTab() {
             //alert('getCurrentTable');
-            let table = form.querySelector('.tab table[data-display="block"]');
+            let table = form.querySelector('table.tab[data-display="block"]');
             if (table) {
                 return table;
             } else {
@@ -119,14 +118,22 @@ function initFormRequestView(parentForm, requestId, initForm) {
         function showTab(tab) {
             let curTab = getCurrentTab();
             if (curTab) {
+                //alert('curTab');
                 curTab.setAttribute('data-display', 'none');
+                // alert(form.querySelector('.tabs #'+curTab.id));
+                form.querySelector('.tabs #' + curTab.id).removeAttribute('data-checked');
             }
             if (tab) {
+                // alert('tab');
                 tab.setAttribute('data-display', 'block');
+                // alert(form.querySelector('.tabs #'+tab.id))
+                form.querySelector('.tabs #' + tab.id).setAttribute('data-checked', 'true');
             }
         }
 
-        btnClose.addEventListener('click', close, false);
+        btnClose.addEventListener('click', function () {
+            modal.remove();
+        }, false);
 
         btnRequest.dispatchEvent(new Event('click'));
 

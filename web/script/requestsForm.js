@@ -69,6 +69,13 @@ function initFormRequests(parentForm) {
                     btnCancelRequest.removeAttribute('disabled');
                 }
             }
+            //
+            //btnViewRequest
+            if (btnViewRequest && countCheckedItems != 1) {
+                btnViewRequest.setAttribute('disabled', 'disabled');
+            } else {
+                btnViewRequest.removeAttribute('disabled');
+            }
         }
 
         updateStateButton();
@@ -129,6 +136,22 @@ function initFormRequests(parentForm) {
                     let btnSearch = form.querySelector('.buttonBar #search');
                     btnSearch.dispatchEvent(new Event('click'));
                 });
+
+            },
+            false
+        );
+        if (btnViewRequest) btnViewRequest.addEventListener(
+            'click',
+            function () {
+                function getRequest() {
+                    let requestId = form.querySelector('.gridTable tr[data-checked-current="true"]' +
+                        ' td[data-field="requestId"]').innerHTML;
+                    return requestId;
+                }
+
+                let requestId = getRequest();
+
+                showModalView('viewRequest', form, requestId)
 
             },
             false

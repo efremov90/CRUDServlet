@@ -49,7 +49,7 @@ public class GetRequestServlet extends HttpServlet {
                         userAccount.getAccount(),
                         REQUESTS_VIEW_REQUEST.name()));
 
-            Request request = new RequestService().getRequestById(getRequestRequestDTO.getId());
+            Request request = new RequestService().getRequestById(getRequestRequestDTO.getRequestId());
             UserAccount lastUserAccount =
                     new UserAccountDAO().getUserAccountById(request.getLastUserAccountIdChangeRequestStatus());
             Client client = new ClientService().getClient(request.getClientCode());
@@ -57,7 +57,7 @@ public class GetRequestServlet extends HttpServlet {
             requestDTO.setRequestId(request.getId());
             requestDTO.setRequestUUID(request.getRequestUUID());
             requestDTO.setCreateDate(new Date(request.getCreateDate().getTime()).toString());
-            requestDTO.setCreateDatetime(new Date(request.getCreateDate().getTime()).toString());
+            requestDTO.setCreateDatetime(request.getCreateDateTime().toString());
             requestDTO.setClientCode(request.getClientCode());
             requestDTO.setClientName(client.getClientName());
             requestDTO.setClientType(client.getClientType().name());

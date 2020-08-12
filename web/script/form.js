@@ -22,6 +22,7 @@ function getHTMLFileNameByIdForm(id) {
         case 'home':
         case 'confirm':
         case 'requests':
+        case 'viewRequest':
         case 'createRequest':
         case 'cancelRequest':
         case 'clients':
@@ -39,6 +40,7 @@ function getJSFileNameByIdForm(id) {
         case 'confirm':
         case 'requests':
         case 'createRequest':
+        case 'viewRequest':
         case 'cancelRequest':
         case 'clients':
         case 'editClient':
@@ -47,6 +49,50 @@ function getJSFileNameByIdForm(id) {
             return 'script/editClientForm.js';
         default:
             return null;
+    }
+}
+
+function showModalView(idForm, parentForm, contentJSON) {
+    //alert('showModalView');
+    let fileNameHTML = getHTMLFileNameByIdForm(idForm);
+    let fileNameJS = getJSFileNameByIdForm(idForm);
+    //alert(idForm+' '+' '+fileNameHTML+' '+fileNameJS);
+    if (fileNameHTML) {
+        let form = parentForm.querySelector('.modal');
+        //alert(form);
+        if (form) {
+            //alert('form id=' + activeIdItemMenu + ' уже открывалась');
+            form.setAttribute('data-display', 'block');
+        } else {
+
+            let req = new HttpRequestCRUD();
+            req.setURL(fileNameHTML);
+            req.setContentType("text/html;charset=utf-8");
+            req.setForm(parentForm);
+            let formHTML = req.fetchHTML();
+
+            formHTML.then(
+                () => {
+                    parentForm.appendChild(createModalView(req.getData()));
+                }
+            );
+
+            formHTML.then(
+                () => {
+                    req.setURL(fileNameJS);
+                    req.setForm(parentForm);
+                    let formScript = req.fetchJS();
+                    formScript.then(
+                        () => {
+                            switch (idForm) {
+                                case 'viewRequest':
+                                    initFormViewRequest(parentForm, contentJSON);
+                                    break;
+                            }
+                        });
+                }
+            );
+        }
     }
 }
 
@@ -380,6 +426,31 @@ window.addEventListener(
     false
 );
 
+function createModalView(form) {
+    let modalForm = (new DOMParser()).parseFromString(
+        '<div class="modal" data-display="none">' +
+        '<div class="modal-content">' +
+        '<div class="modalFormTopBar">' +
+        '<div class="title" style="width:250px;"></div>' +
+        '<div class="button"><button id="close" title="Закрыть">×</button></div>' +
+        '</div>' +
+        '<div style="height: 10px;"></div>' +
+        '<div class="container"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>', 'text/html').querySelector('div');
+    let z = document.querySelectorAll('.modal').length;
+    if (z) {
+        z = z + 1;
+    } else {
+        z = 1;
+    }
+    modalForm.style.zIndex = z;
+    modalForm.style.paddingTop = (z * 25) + 'px';
+    modalForm.querySelector('.container').appendChild(form);
+    return modalForm;
+}
+
 function createModalForm(form) {
     let modalForm = (new DOMParser()).parseFromString(
         '<div class="modal" data-display="none">' +
@@ -407,7 +478,19 @@ function createModalForm(form) {
 }
 
 function createModalConfirm() {
-    let modalForm = (new DOMParser()).parseFromString('<div class="modal" id="confirm" data-display="none"><div class="modal-content"><div class="modalFormTopBar"><div class="title" style="width:250px;"></div><div class="button"><button id="close" title="Закрыть">×</button></div></div><div style="height: 10px;"></div><div class="container" style="padding-left:10px; padding-right:10px;"></div><div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div></div></div></div>', 'text/html').querySelector('div');
+    let modalForm = (new DOMParser()).parseFromString(
+        '<div class="modal" id="confirm" data-display="none">' +
+        '<div class="modal-content">' +
+        '<div class="modalFormTopBar">' +
+        '<div class="title" style="width:250px;"></div>' +
+        '<div class="button"><button id="close" title="Закрыть">×</button></div>' +
+        '</div>' +
+        '<div style="height: 10px;"></div>' +
+        '<div class="container" style="padding-left:10px; padding-right:10px;"></div>' +
+        '<div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>', 'text/html').querySelector('div');
     let z = document.querySelectorAll('.modal').length;
     if (z) {
         z = z + 1;
@@ -420,7 +503,17 @@ function createModalConfirm() {
 }
 
 function createModalChoice(form) {
-    let modalForm = (new DOMParser()).parseFromString('<div class="modal" data-display="none"><div class="modal-content"><div class="modalFormTopBar"><div class="title" style="width:250px;"></div><div class="button"><button id="close" title="Закрыть">×</button></div></div><div class="container"></div><div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div></div></div></div>', 'text/html').querySelector('div');
+    let modalForm = (new DOMParser()).parseFromString(
+        '<div class="modal" data-display="none">' +
+        '<div class="modal-content">' +
+        '<div class="modalFormTopBar">' +
+        '<div class="title" style="width:250px;"></div>' +
+        '<div class="button"><button id="close" title="Закрыть">×</button></div>' +
+        '</div><div class="container"></div>' +
+        '<div class="modalFormBottomButtonBar"><button id="ok">ОK</button><button id="cancel">Отмена</button></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>', 'text/html').querySelector('div');
     let z = document.querySelectorAll('.modal').length;
     if (z) {
         z = z + 1;
@@ -432,61 +525,4 @@ function createModalChoice(form) {
     modalForm.querySelector('.container').appendChild(form);
     //alert(modalForm.innerHTML);
     return modalForm;
-}
-
-function loadItemsGridTable(r, table) {
-    //alert('loadItemsGridTable');
-    //alert(r.clients.client[1].clientCode);
-    let header = table.querySelector(
-        'thead .headerTable'
-    );
-    let columns = header.querySelectorAll('td');
-    if (r && table && header && columns) {
-        let tbody = document.createElement('tbody');
-        for (let i in r.items) {
-            //alert(i);
-            let tr = document.createElement('tr');
-            tbody.appendChild(tr);
-            for (let j = 0; j < columns.length; j++) {
-                //alert(j);
-                if (
-                    columns[j].getAttribute('data-field') &&
-                    columns[j].getAttribute('data-field') != 'lastColumn'
-                ) {
-                    let td = document.createElement('td');
-                    td.setAttribute('data-field', columns[j].getAttribute('data-field'));
-                    if (r.items[i][columns[j].getAttribute('data-field')]) {
-                        if (columns[j].getAttribute('data-type')) {
-                            switch (columns[j].getAttribute('data-type')) {
-                                case 'date':
-                                    td.innerHTML = dateTimeJSONToView(
-                                        r.items[i][columns[j].getAttribute('data-field')], 'dd'
-                                    );
-                                    break;
-                                case 'dateTime':
-                                    td.innerHTML = dateTimeJSONToView(
-                                        r.items[i][columns[j].getAttribute('data-field')], 'mm'
-                                    );
-                                    break;
-                            }
-                            td.setAttribute(
-                                'data-value',
-                                r.items[i][columns[j].getAttribute('data-field')]
-                            );
-                        } else {
-                            td.innerHTML =
-                                r.items[i][
-                                    columns[j].getAttribute('data-field')
-                                    ];
-                        }
-                    }
-                    if (columns[j].getAttribute('data-display') == 'none') {
-                        td.setAttribute('data-display', 'none');
-                    }
-                    tr.appendChild(td);
-                }
-            }
-        }
-        GridTable.loadContent(table, tbody.innerHTML);
-    }
 }

@@ -114,7 +114,6 @@ function initFormClients(parentForm) {
                 clientType: btnSelectClientType.value
             };
 
-            //alert('Сохранение ещё не реализовано');
             let json = JSON.stringify(search);
             //alert(json);
             let req = new HttpRequestCRUD();
@@ -156,8 +155,25 @@ function initFormClients(parentForm) {
                     clientCode: clientCode
                 };
 
-                //alert('Сохранение ещё не реализовано');
                 let json = JSON.stringify(client);
+                //alert(json);
+                let req = new HttpRequestCRUD();
+                req.setFetch(url + "/getClient", json);
+                req.setForm(form);
+                let request = req.fetchJSON();
+                request.then(
+                    () => {
+                        if (req.getStatus()) {
+                            showModalEdit('editClient', form, req.getData(), form => {
+                                let btnSearch = form.querySelector('.buttonBar #search');
+                                btnSearch.dispatchEvent(new Event('click'));
+                            });
+                        }
+                    }
+                );
+
+                //alert('Сохранение ещё не реализовано');
+                /*let json = JSON.stringify(client);
                 //alert(json);
                 fetch(url + "/getClient", {
                     method: "POST",
@@ -176,13 +192,11 @@ function initFormClients(parentForm) {
                     }
                 })
                     .then(client => {
-                        /*alert(client.selfservice);
-                        alert(client.selfservice.id);*/
                         showModalEdit('editClient', form, client, form => {
                             let btnSearch = form.querySelector('.buttonBar #search');
                             btnSearch.dispatchEvent(new Event('click'));
                         });
-                    })
+                    })*/
 
             },
             false

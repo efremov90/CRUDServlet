@@ -32,13 +32,12 @@ public class RequestStatusHistoryService {
         ArrayList<RequestStatusHistory> requestStatusesHistory = new ArrayList<>();
 //        try {
         String sql = "SELECT " +
-                "rsh.*, ua.FIRST_NAME||' '||ua.LAST_NAME user_name " +
+                "rsh.*, concat(ua.FIRST_NAME,' ',ua.LAST_NAME) user_name " +
                 "FROM REQUEST_STATUS_HISTORY rsh " +
                 "INNER JOIN USER_ACCOUNT ua ON rsh.USER_ACCOUNT_ID = ua.ID " +
-                "WHERE REQUEST_ID = ?";
+                "WHERE rsh.REQUEST_ID = " + requestId;
 
-        PreparedStatement st = conn.prepareStatement(sql);
-        st.setInt(1, requestId);
+        Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(sql);
 
         while (rs.next()) {

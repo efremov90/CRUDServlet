@@ -1,6 +1,7 @@
 package org.crudservlet.service;
 
 import org.crudservlet.dao.AuditDAO;
+import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.Audit;
 import org.crudservlet.model.AuditOperType;
 import org.crudservlet.model.Request;
@@ -16,6 +17,12 @@ public class AuditService {
 
     private Connection conn;
     private Logger logger = Logger.getLogger(ClientATMService.class.getName());
+
+    public AuditService() {
+        logger.info("start");
+
+        conn = MySQLConnection.getConnection();
+    }
 
     private String getDescription(AuditOperType type, Object[] args) {
         return new MessageFormat(type.getDescription()).format(args);
@@ -48,20 +55,20 @@ public class AuditService {
         ArrayList<Audit> audits = new ArrayList<>();
 
         String sql = "SELECT " +
-                "a.ID, ao.AUDIT_OPER_TYPE, ua.FIRST_NAME||' '||ua.LAST_NAME user_name, " +
+                "a.ID, ao.TYPE, concat(ua.FIRST_NAME,' ',ua.LAST_NAME) user_name, " +
                 "a.EVENT_DATETIME, a.DESCRIPTION, a.CONTENT " +
                 "FROM AUDIT a " +
                 "INNER JOIN AUDIT_OPER ao ON a.AUDIT_OPER_ID = ao.id " +
                 "INNER JOIN USER_ACCOUNT ua ON a.USER_ACCOUNT_ID = ua.ID " +
                 where;
 
-        PreparedStatement st = conn.prepareStatement(sql);
+        Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(sql);
 
         while (rs.next()) {
             Audit audit = new Audit();
             audit.setId(rs.getInt("id"));
-            audit.setAuditOperType(AuditOperType.valueOf(rs.getNString("AUDIT_OPER_TYPE")));
+            audit.setAuditOperType(AuditOperType.valueOf(rs.getNString("TYPE")));
             audit.setUserName(rs.getNString("user_name"));
             audit.setEventDateTime(Timestamp.valueOf(rs.getNString("EVENT_DATETIME")));
             audit.setDescription(rs.getNString("DESCRIPTION"));

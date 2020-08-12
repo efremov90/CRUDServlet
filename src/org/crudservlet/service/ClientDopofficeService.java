@@ -40,6 +40,7 @@ public class ClientDopofficeService {
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
+        new ClientService().validateExistsClient(client.getClientCode());
         result = new ClientDopofficeDAO().create(client);
 //        } catch (Exception e) {
 //            result=false;
@@ -60,7 +61,6 @@ public class ClientDopofficeService {
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
-        new ClientService().validateExistsClient(client.getClientCode());
         result = new ClientDopofficeDAO().edit(client);
 //        } catch (Exception e) {
 //            result=false;

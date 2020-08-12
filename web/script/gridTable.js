@@ -116,7 +116,7 @@ class GridTable {
                                         break;
                                     case 'dateTime':
                                         td.innerHTML = dateTimeJSONToView(
-                                            r.items[i][columns[j].getAttribute('data-field')], 'mm'
+                                            r.items[i][columns[j].getAttribute('data-field')], 'ss'
                                         );
                                         break;
                                 }

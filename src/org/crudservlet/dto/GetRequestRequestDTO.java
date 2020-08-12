@@ -2,16 +2,16 @@ package org.crudservlet.dto;
 
 public class GetRequestRequestDTO {
 
-    private int Id;
+    private int RequestId;
 
     public GetRequestRequestDTO() {
     }
 
-    public int getId() {
-        return Id;
+    public int getRequestId() {
+        return RequestId;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setRequestId(int requestId) {
+        RequestId = requestId;
     }
 }

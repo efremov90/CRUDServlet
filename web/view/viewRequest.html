@@ -1,22 +1,42 @@
-<div class="form" id="requestView" data-title="Просмотр заявки" data-display="none">
-    <div class="tabs"
-         style="width:50px; padding-left:10px; padding-right:10px; color:blue; cursor:pointer;">
-        <td id="request">Заявка</td>
-        <td id="history">История</td>
-        <td id="audit">Аудит</td>
-    </div>
-    <table class="tab" id="request" data-display="none">
+<div class="form" id="requestView" data-title="Просмотр заявки" data-display="none" style="padding-left: 10px;">
+    <table class="tabs">
         <tr>
-            <td style="text-align:right;">Объект:</td>
+            <td id="request">Заявка</td>
+            <td id="history">История</td>
+            <td id="audit">Аудит</td>
+        </tr>
+    </table>
+    <table class="tab" id="request">
+        <tr>
+            <td style="text-align:right;">Id заявки:</td>
             <td>
                 <input
-                        name="objectCode"
+                        data-field="requestId"
+                        type="text"
+                        disabled
+                />
+            </td>
+            <td style="text-align:right;">Дата и время создания:</td>
+            <td>
+                <input
+                        data-field="createDatetime"
+                        type="text"
+                        disabled
+                />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">Код объекта:</td>
+            <td>
+                <input
+                        data-field="clientCode"
                         type="text"
                         required
                         size="10"
                         maxlength="10"
                         pattern="[A-Za-z0-9]"
                         autofocus
+                        disabled
                 />
             </td>
         </tr>
@@ -24,8 +44,9 @@
             <td>Комментарий:</td>
             <td>
             <textarea
-                    name="comment"
+                    data-field="comment"
                     required
+                    disabled
                     rows="3"
                     maxlength="255"
                     style="width:250px;"
@@ -33,7 +54,7 @@
             </td>
         </tr>
     </table>
-    <table class="tab gridTable" id="history" data-display="none">
+    <table class="tab gridTable" id="history">
         <thead>
         <tr class="filterTable">
             <td data-field="status" data-display="none">
@@ -45,7 +66,7 @@
             <td data-field="user">
                 <input type="text"/>
             </td>
-            <td data-field="eventDatetime">
+            <td data-field="eventDateTime">
                 <input type="text"/>
             </td>
             <td data-field="comment">
@@ -59,11 +80,11 @@
             <td data-field="statusDescription" style="min-width:80px; max-width:80px;">
                 Статус
             </td>
-            <td data-field="user" style="min-width:140px; max-width:140px;">
+            <td data-field="user" style="min-width:190px; max-width:190px;">
                 Пользователь
             </td>
             <td
-                    data-field="eventDatetime"
+                    data-field="eventDateTime"
                     data-type="dateTime"
                     style="min-width:130px; max-width:130px;"
             >
@@ -80,7 +101,7 @@
         </thead>
         <tbody></tbody>
     </table>
-    <table class="tab gridTable" id="audit" data-display="none">
+    <table class="tab gridTable" id="audit">
         <thead>
         <tr class="filterTable">
             <td data-field="event">
@@ -89,10 +110,10 @@
             <td data-field="user">
                 <input type="text"/>
             </td>
-            <td data-field="eventDatetime">
+            <td data-field="eventDateTime">
                 <input type="text"/>
             </td>
-            <td data-field="desription">
+            <td data-field="description">
                 <input type="text"/>
             </td>
             <td data-field="content">
@@ -101,20 +122,20 @@
 
         </tr>
         <tr class="headerTable">
-            <td data-field="event" style="min-width:140px; max-width:140px;">
+            <td data-field="event" style="min-width:100px; max-width:100px;">
                 Событие
             </td>
             <td data-field="user" style="min-width:140px; max-width:140px;">
                 Пользователь
             </td>
             <td
-                    data-field="eventDatetime"
+                    data-field="eventDateTime"
                     data-type="dateTime"
                     style="min-width:130px; max-width:130px;"
             >
                 Дата и время
             </td>
-            <td data-field="desription" style="min-width:140px; max-width:140px;">
+            <td data-field="description" style="min-width:140px; max-width:140px;">
                 Описание
             </td>
             <td data-field="content" style="min-width:200px; max-width:200px;">
@@ -129,4 +150,5 @@
         </thead>
         <tbody></tbody>
     </table>
+    <div style="height: 10px"></div>
 </div>

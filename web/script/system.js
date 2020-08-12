@@ -207,12 +207,12 @@ function dateTimeJSONToView(dtString, round) {
             return dateTime;
         }
         let seconds;
-        if (dtJSON.getHours() < 10) {
+        if (dtJSON.getSeconds() < 10) {
             seconds = '0' + dtJSON.getSeconds().toString();
         } else {
             seconds = dtJSON.getSeconds().toString();
         }
-        dateTime = dateTime + ' ' + seconds;
+        dateTime = dateTime + ':' + seconds;
         if (round == 'ss') {
             return dateTime;
         }

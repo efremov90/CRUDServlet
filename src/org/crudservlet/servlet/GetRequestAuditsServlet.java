@@ -54,7 +54,7 @@ public class GetRequestAuditsServlet extends HttpServlet {
                         auditDTO.setId(x.getId());
                         auditDTO.setEvent(x.getAuditOperType().getName());
                         auditDTO.setUser(x.getUserName());
-                        auditDTO.setEventDateTime(new Date(x.getEventDateTime().getTime()).toString());
+                        auditDTO.setEventDateTime(x.getEventDateTime().toString());
                         auditDTO.setDescription(x.getDescription());
                         auditDTO.setContent(x.getContent());
                                 return auditDTO;

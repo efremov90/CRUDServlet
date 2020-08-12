@@ -1,9 +1,6 @@
 package org.crudservlet.service;
 
-import org.crudservlet.dao.ClientATMDAO;
-import org.crudservlet.dao.RequestDAO;
-import org.crudservlet.dao.RequestStatusHistoryDAO;
-import org.crudservlet.dao.UserAccountDAO;
+import org.crudservlet.dao.*;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.*;
 
@@ -149,6 +146,10 @@ public class RequestService {
                 requestId
         );
 
+        Integer auditId = MySQLConnection.getLastInsertId();
+
+        new RequestAuditsDAO().create(requestId, auditId);
+
         conn.commit();
         conn.setAutoCommit(true);
 /*        } catch (Exception e) {
@@ -196,6 +197,10 @@ public class RequestService {
                         requestStatusHistory.getComment()),
                 request.getId()
         );
+
+        Integer auditId = MySQLConnection.getLastInsertId();
+
+        new RequestAuditsDAO().create(request.getId(), auditId);
 
         conn.commit();
         conn.setAutoCommit(true);
@@ -253,13 +258,10 @@ public class RequestService {
 
 //        try {
         String sql = "INNER JOIN REQUEST_XREF_AUDIT rxa ON a.ID = rxa.AUDIT_ID " +
-                "WHERE rxa.REQUEST_ID = ?";
+                "WHERE rxa.REQUEST_ID = " + requestId;
 
-        PreparedStatement st = conn.prepareStatement(sql);
-        st.setInt(1, requestId);
-
-        ResultSet rs = st.executeQuery(sql);
-
+        /*PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, requestId);*/
 
 //        } catch (SQLException e) {
 //            e.printStackTrace();
