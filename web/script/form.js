@@ -316,7 +316,7 @@ function hideAllForms(parentForm) {
 function initSideBar() {
 
     let body = document.body;
-    let btnLogout = document.querySelector('.sidebar div#logout');
+    let btnLogout = document.querySelector('.sidebar #logout');
     if (btnLogout) btnLogout.addEventListener(
         'click',
         function () {
@@ -348,7 +348,16 @@ function initSideBar() {
         false
     );
 
-    let itemsMenu = document.querySelectorAll('.sidebar div:not(#logout)');
+    /*let toggler = document.getElementsByClassName("caret");
+
+    for (let i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function() {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }*/
+
+    let itemsMenu = document.querySelectorAll('.sidebar ul ul,li:not(#logout)');
     let sidebarEventPhase = 2;
     for (let i = 0; i < itemsMenu.length; i++) {
         itemsMenu[i].addEventListener(
@@ -394,7 +403,7 @@ window.addEventListener(
         let perm = getPermissions();
         perm.then(
             () => {
-                let itemsMenu = document.querySelectorAll('.sidebar div.item-mode');
+                let itemsMenu = document.querySelectorAll('.sidebar li.item-mode');
                 for (let i = 0; i < itemsMenu.length; i++) {
                     if (itemsMenu[i].id != null) {
                         let none = false;
@@ -404,7 +413,7 @@ window.addEventListener(
                         if (none) itemsMenu[i].remove();
                     }
                 }
-                let notItemsMode = document.querySelectorAll('.sidebar div.item-group-mode');
+                let notItemsMode = document.querySelectorAll('.sidebar li.item-group-mode');
                 //alert('notItemsMode:'+notItemsMode.length);
                 for (let i = 0; i < notItemsMode.length; i++) {
                     let countAllChildItemMenu = notItemsMode[i].querySelectorAll('.item-mode').length;
@@ -415,7 +424,7 @@ window.addEventListener(
                         notItemsMode[i].remove();
                     }
                 }
-                if (document.querySelector('.sidebar div.item-mode#home')) showForm(
+                if (document.querySelector('.sidebar li.item-mode#home')) showForm(
                     'home',
                     mainContainer
                 );

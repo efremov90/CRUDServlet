@@ -17,27 +17,32 @@
 </div>
 <div class="layout">
     <div class="sidebar">
-        <div id="logout">Выход</div>
-        <div id="home" class="item-mode sidebar-li-checked">Домашняя</div>
-        <div id="requests" class="item-mode">Заявки</div>
-        <div class="item-group-mode sidebar-li-symbol-close">
-            Справочники
-            <div class="sidebar-ul-nested">
-                <div id="clients" class="item-mode">Клиенты</div>
-            </div>
-        </div>
+        <ul class="firstUL">
+            <li id="logout">Выход</li>
+            <li id="home" class="item-mode sidebar-li-checked">Домашняя</li>
+            <li id="requests" class="item-mode">Заявки</li>
+            <li class="item-group-mode sidebar-li-symbol-close">Справочники
+                <ul class="sidebar-ul-nested">
+                    <li id="clients" class="item-mode">Клиенты</li>
+                </ul>
+            </li>
+            <li class="item-group-mode sidebar-li-symbol-close">Отчеты
+                <ul class="sidebar-ul-nested">
+                    <li id="reportRequests" class="item-mode">Отчет по заявкам</li>
+                </ul>
+            </li>
+        </ul>
     </div>
     <div class="main-container-content">
     </div>
-</div>
-<div class="footer">
-    EAA © (2020)
-</div>
-<script src="script/body.js"></script>
-<script src="script/system.js"></script>
-<script src="script/form.js"></script>
-<script src="script/gridTable.js"></script>
-<script src="script/confirmForm.js"></script>
-<script src="script/errorForm.js"></script>
+    <div class="footer">
+        EAA © (2020)
+    </div>
+    <script src="script/body.js"></script>
+    <script src="script/system.js"></script>
+    <script src="script/form.js"></script>
+    <script src="script/gridTable.js"></script>
+    <script src="script/confirmForm.js"></script>
+    <script src="script/errorForm.js"></script>
 </body>
 </html>
