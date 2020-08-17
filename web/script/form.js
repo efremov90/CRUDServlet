@@ -30,6 +30,9 @@ function getHTMLFileNameByIdForm(id) {
             return 'view/' + id + '.html';
         case 'createClient':
             return 'view/editClient.html';
+        case 'REPORT_REUESTS_DETAILED':
+        case 'REPORT_REUESTS_CONSOLIDATED':
+            return 'view/reports.html';
         default:
             return null;
     }
@@ -47,6 +50,9 @@ function getJSFileNameByIdForm(id) {
             return 'script/' + id + 'Form' + '.js';
         case 'createClient':
             return 'script/editClientForm.js';
+        case 'REPORT_REUESTS_DETAILED':
+        case 'REPORT_REUESTS_CONSOLIDATED':
+            return 'script/reportsForm.js';
         default:
             return null;
     }
@@ -253,13 +259,28 @@ function showForm(idForm, parentForm, initForm) {
     // alert('showForm');
     let fileNameHTML = getHTMLFileNameByIdForm(idForm);
     let fileNameJS = getJSFileNameByIdForm(idForm);
-    // alert(idForm+' '+' '+fileNameHTML+' '+fileNameJS);
+    // alert(idForm + ' ' + ' ' + fileNameHTML + ' ' + fileNameJS);
     if (fileNameHTML) {
-        let form = parentForm.querySelector('.form' + '#' + idForm);
+        let realIdForm = null;
+        switch (idForm) {
+            case 'REPORT_REUESTS_DETAILED':
+            case 'REPORT_REUESTS_CONSOLIDATED':
+                realIdForm = 'reports';
+                break;
+            default:
+                realIdForm = idForm;
+        }
+        let form = parentForm.querySelector('.form' + '#' + realIdForm);
         //alert(form);
         if (form) {
             //alert('form id=' + activeIdItemMenu + ' уже открывалась');
-            form.setAttribute('data-display', 'block');
+            switch (realIdForm) {
+                case 'reports':
+                    initFormReportsSelectType(idForm, parentForm);
+                    break;
+                default:
+                    form.setAttribute('data-display', 'block');
+            }
         } else {
 
             let req = new HttpRequestCRUD();
@@ -289,6 +310,12 @@ function showForm(idForm, parentForm, initForm) {
                                     break;
                                 case 'clients':
                                     initFormClients(parentForm);
+                                    break;
+                                case 'REPORT_REUESTS_DETAILED':
+                                    initFormReports('REPORT_REUESTS_DETAILED', parentForm);
+                                    break;
+                                case 'REPORT_REUESTS_CONSOLIDATED':
+                                    initFormReports('REPORT_REUESTS_CONSOLIDATED', parentForm);
                                     break;
                             }
                         }

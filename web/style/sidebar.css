@@ -12,6 +12,7 @@
 .sidebar .firstUL {
     padding: 0;
     margin: 0;
+    width: 300px;
 }
 
 .sidebar ul {

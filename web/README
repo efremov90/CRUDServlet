@@ -35,3 +35,13 @@ Runtime only recognizes class file versions up to 52.0 (unable to load class
 https://metanit.com/sql/mysql/1.1.php
 login: root password: admin
 login: crud password: Crud1234
+
+3. Установка JasperReport
+Скачать https://community.jaspersoft.com/project/ireport-designer/releases:
+iReport-5.6.0-windows-installer.exe
+Установить.
+Скачать поддерживаемый JRE - JRE7
+Установить JRE и прописать путь до него в C:\Program Files (x86)\Jaspersoft\iReport-5.6.0\etc\ireport.conf:
+jdkhome="C:\Program Files\Java\jre7"
+Скачать https://community.jaspersoft.com/project/jasperreports-library/releases
+jasperreports-6.13.0.jar

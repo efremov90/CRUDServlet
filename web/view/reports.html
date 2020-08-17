@@ -1,0 +1,53 @@
+<div class="form" id="reports" style="margin-left:10px; width:99%; height:80%;" data-display="none">
+    <div class="titleMenuBar">
+        Отчеты
+    </div>
+    <div class="buttonBar">
+        <button id="complete">Сформировать</button>
+    </div>
+    <div class="buttonBar">
+        Отчет: <select id="reportType" required>
+        <option value="REPORT_REUESTS_DETAILED">Отчет по заявкам (детальный)</option>
+        <option value="REPORT_REUESTS_CONSOLIDATED">Отчет по заявкам (сводный)</option>
+    </select>
+        Формат: <select id="fileType" required>
+        <option value="XSL">XSL</option>
+        <option value="PDF">PDF</option>
+    </select>
+    </div>
+    <div
+            class="content"
+            style="width: 98%; height:100%; overflow:auto;"
+    >
+        <table id="REPORT_REUESTS_DETAILED" data-display="none">
+            <tr>
+                <td>Дата создания заявки с: <input type="date" name="fromRequestDate" autofocus/> по:
+                    <input type="date" name="toRequestDate"/></td>
+            </tr>
+            <tr>
+                <td>Код объекта:<input
+                        data-field="clientCode"
+                        type="text"
+                        required
+                        size="10"
+                        maxlength="10"
+                        pattern="[A-Za-z0-9]"
+                        autofocus
+                />
+                    <button id="choiceObject"
+                            class="choice"
+                            title="Выбрать"
+                    >
+                        ...
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <table id="REPORT_REUESTS_CONSOLIDATED" data-display="none">
+            <tr>
+                <td>Дата создания заявки с: <input type="date" name="fromRequestDate" autofocus/> по:
+                    <input type="date" name="toRequestDate"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
