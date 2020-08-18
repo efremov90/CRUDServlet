@@ -30,8 +30,8 @@ function getHTMLFileNameByIdForm(id) {
             return 'view/' + id + '.html';
         case 'createClient':
             return 'view/editClient.html';
-        case 'REPORT_REUESTS_DETAILED':
-        case 'REPORT_REUESTS_CONSOLIDATED':
+        case 'REPORT_REQUESTS_DETAILED':
+        case 'REPORT_REQUESTS_CONSOLIDATED':
             return 'view/reports.html';
         default:
             return null;
@@ -50,8 +50,8 @@ function getJSFileNameByIdForm(id) {
             return 'script/' + id + 'Form' + '.js';
         case 'createClient':
             return 'script/editClientForm.js';
-        case 'REPORT_REUESTS_DETAILED':
-        case 'REPORT_REUESTS_CONSOLIDATED':
+        case 'REPORT_REQUESTS_DETAILED':
+        case 'REPORT_REQUESTS_CONSOLIDATED':
             return 'script/reportsForm.js';
         default:
             return null;
@@ -263,8 +263,8 @@ function showForm(idForm, parentForm, initForm) {
     if (fileNameHTML) {
         let realIdForm = null;
         switch (idForm) {
-            case 'REPORT_REUESTS_DETAILED':
-            case 'REPORT_REUESTS_CONSOLIDATED':
+            case 'REPORT_REQUESTS_DETAILED':
+            case 'REPORT_REQUESTS_CONSOLIDATED':
                 realIdForm = 'reports';
                 break;
             default:
@@ -312,10 +312,10 @@ function showForm(idForm, parentForm, initForm) {
                                     initFormClients(parentForm);
                                     break;
                                 case 'REPORT_REUESTS_DETAILED':
-                                    initFormReports('REPORT_REUESTS_DETAILED', parentForm);
+                                    initFormReports('REPORT_REQUESTS_DETAILED', parentForm);
                                     break;
                                 case 'REPORT_REUESTS_CONSOLIDATED':
-                                    initFormReports('REPORT_REUESTS_CONSOLIDATED', parentForm);
+                                    initFormReports('REPORT_REQUESTS_CONSOLIDATED', parentForm);
                                     break;
                             }
                         }

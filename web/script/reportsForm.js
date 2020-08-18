@@ -27,8 +27,8 @@ function initFormReports(reportType, parentForm) {
         );
         btnSelectReportType.value = reportType;
 
-        let REPORT_REUESTS_DETAILED_Table = form.querySelector('table#REPORT_REUESTS_DETAILED');
-        let REPORT_REUESTS_CONSOLIDATED_Table = form.querySelector('table#REPORT_REUESTS_CONSOLIDATED');
+        let REPORT_REUESTS_DETAILED_Table = form.querySelector('table#REPORT_REQUESTS_DETAILED');
+        let REPORT_REUESTS_CONSOLIDATED_Table = form.querySelector('table#REPORT_REQUESTS_CONSOLIDATED');
 
         REPORT_REUESTS_DETAILED_Table.setAttribute('data-display', 'none');
         REPORT_REUESTS_CONSOLIDATED_Table.setAttribute('data-display', 'none');
@@ -62,6 +62,15 @@ function initFormReports(reportType, parentForm) {
             },
             false
         );
+
+        btnComplete.addEventListener(
+            'click',
+            function () {
+                // cross_download('file/file.pdf','1.pdf');
+                //location.href = "file/file.pdf";
+            },
+            false
+        )
     }
 }
 

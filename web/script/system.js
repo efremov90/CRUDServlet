@@ -258,3 +258,26 @@ function deleteCookie(name) {
         'max-age': -1
     })
 }
+
+function cross_download(url, fileName) {
+    let req = new XMLHttpRequest();
+    req.open("GET", url, true);
+    req.responseType = "blob";
+    let __fileName = fileName;
+    req.onload = function (event) {
+        let blob = req.response;
+        let contentType = req.getResponseHeader("content-type");
+        if (window.navigator.msSaveOrOpenBlob) {
+            // Internet Explorer
+            window.navigator.msSaveOrOpenBlob(new Blob([blob], {type: contentType}), fileName);
+        } else {
+            let link = document.createElement('a');
+            document.body.appendChild(link);
+            link.download = __fileName;
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+            document.body.removeChild(link); //remove the link when done
+        }
+    };
+    req.send();
+}
