@@ -3,3 +3,4 @@
 /web/WEB-INF/lib/
 /web/WEB-INF/views_old/
 *.class
+*.pdf

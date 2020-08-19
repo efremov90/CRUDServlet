@@ -2,16 +2,16 @@ package org.crudservlet.dto;
 
 public class CheckReportRequestDTO {
 
-    String CheckUUID;
+    String ReportId;
 
     public CheckReportRequestDTO() {
     }
 
-    public String getCheckUUID() {
-        return CheckUUID;
+    public String getReportId() {
+        return ReportId;
     }
 
-    public void setCheckUUID(String checkUUID) {
-        CheckUUID = checkUUID;
+    public void setReportId(String reportId) {
+        ReportId = reportId;
     }
 }

@@ -16,7 +16,7 @@ public enum AuditOperType {
     CANCEL_REQUEST("Отмена заявки",
             "Id заявки {0}"),
     RUN_REPORT("Формирование отчета",
-            "Тип отчета {0}");
+            "Id отчета {0}");
 
     private final String Name;
     private final String Description;
