@@ -58,7 +58,7 @@ public class ReportDAO {
                 "STATUS = ?, " +
                 "COMMENT = ?, " +
                 "CONTENT = ?, " +
-                "WHERE REPORT_ID = ?";
+                "WHERE ID = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1,
@@ -68,6 +68,26 @@ public class ReportDAO {
         st.setString(3, report.getComment());
         st.setBlob(4, report.getContent());
         st.setInt(5, report.getId());
+        result = st.executeUpdate() > 0;
+/*        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        logger.info(":" + result);
+        return result;
+    }
+
+    public boolean setTaskId(int reportId, int taskId) throws SQLException {
+        logger.info("start");
+
+        boolean result = false;
+//        try {
+        String sql = "UPDATE REPORTS " +
+                "SET TASK_ID = ? " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, taskId);
+        st.setInt(2, reportId);
         result = st.executeUpdate() > 0;
 /*        } catch (SQLException e) {
             e.printStackTrace();

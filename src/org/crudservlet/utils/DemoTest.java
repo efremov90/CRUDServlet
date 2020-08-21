@@ -16,7 +16,7 @@ public class DemoTest {
     public static void main(String[] args) throws Exception {
 
         //Заявка
-        Request request = new Request();
+        /*Request request = new Request();
         String uuid = UUID.randomUUID().toString();
         request.setRequestUUID(uuid);
         request.setCreateDate(Date.valueOf(LocalDate.now()));
@@ -24,7 +24,7 @@ public class DemoTest {
         request.setClientCode("1001");
         request.setComment("Комментарий");
         new RequestService().create(request, 2);
-        new RequestService().cancel(uuid, 2, "Причина отмены");
+        new RequestService().cancel(uuid, 2, "Причина отмены");*/
 
         //Клиент
         /*ClientATM client = new ClientATM();
@@ -34,6 +34,8 @@ public class DemoTest {
         client.setAddress("A 2005");
         client.setCloseDate(null);
         new ClientATMService().edit(client, 2);*/
+
+//        Request r = ;
 
     }
 }

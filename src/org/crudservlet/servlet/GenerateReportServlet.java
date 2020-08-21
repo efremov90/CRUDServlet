@@ -2,9 +2,7 @@ package org.crudservlet.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.AccountSessionDAO;
-import org.crudservlet.dto.ClientATMDTO;
-import org.crudservlet.dto.ClientDopofficeDTO;
-import org.crudservlet.dto.CreateClientRequestDTO;
+import org.crudservlet.dto.*;
 import org.crudservlet.model.ATMTypeType;
 import org.crudservlet.model.ClientATM;
 import org.crudservlet.model.ClientDopoffice;
@@ -21,10 +19,10 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.logging.Logger;
 
-@WebServlet(urlPatterns = {"/createClient"})
+@WebServlet(urlPatterns = {"/generateReport"})
 public class GenerateReportServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 4357593548284637767L;
+    private static final long serialVersionUID = 1746775186141528314L;
 
     private Logger logger = Logger.getLogger(GenerateReportServlet.class.getName());
 
@@ -39,21 +37,21 @@ public class GenerateReportServlet extends HttpServlet {
         logger.info("start");
         try {
             ObjectMapper mapper = new ObjectMapper();
-            CreateClientRequestDTO createClientDTO = mapper.readValue(req.getReader(), CreateClientRequestDTO.class);
-            if (createClientDTO.getDopoffice() != null) {
-                ClientDopofficeDTO clientDTO = createClientDTO.getDopoffice();
+            GenerateReportRequestDTO generateReportRequestDTO = mapper.readValue(req.getReader(), GenerateReportRequestDTO.class);
+            if (generateReportRequestDTO.getReportRequestsDetailed() != null) {
+                ReportRequestsDetailedDTO reportRequestsDetailedDTO = generateReportRequestDTO.getReportRequestsDetailed();
                 ClientDopoffice client = new ClientDopoffice();
-                client.setId(clientDTO.getId());
+                /*client.setId(clientDTO.getId());
                 client.setClientCode(clientDTO.getClientCode());
                 client.setClientName(clientDTO.getClientName());
                 client.setAddress(clientDTO.getAddress());
                 client.setCloseDate((clientDTO.getCloseDate() != null && clientDTO.getCloseDate() != "") ?
-                        Date.valueOf(clientDTO.getCloseDate()) : null);
+                        Date.valueOf(clientDTO.getCloseDate()) : null);*/
                 new ClientDopofficeService().create(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
                 ResultDTOService.writer(resp, "0", null);
-            } else if (createClientDTO.getSelfservice() != null) {
-                ClientATMDTO clientDTO = createClientDTO.getSelfservice();
+            } else if (generateReportRequestDTO.getReportRequestsConsolidated() != null) {
+                /*ClientATMDTO clientDTO = createClientDTO.getSelfservice();
                 ClientATM client = new ClientATM();
                 client.setId(clientDTO.getId());
                 client.setClientCode(clientDTO.getClientCode());
@@ -64,7 +62,7 @@ public class GenerateReportServlet extends HttpServlet {
                         Date.valueOf(clientDTO.getCloseDate()) : null);
                 new ClientATMService().create(client,
                         new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
-                ResultDTOService.writer(resp, "0", null);
+                ResultDTOService.writer(resp, "0", null);*/
             }
         } catch (Exception e) {
             e.printStackTrace();

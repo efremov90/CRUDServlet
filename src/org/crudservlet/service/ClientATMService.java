@@ -37,7 +37,28 @@ public class ClientATMService {
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
         new ClientService().validateExistsClient(client.getClientCode());
+
+        conn.setAutoCommit(false);
+
         result = new ClientATMDAO().create(client);
+
+        new AuditService().create(
+                AuditOperType.CREATE_CLIENT,
+                userAccountId,
+                new java.util.Date(),
+                String.format("Наименование клиента: %s \n" +
+                                "Адрес: %s \n" +
+                                "Тип банкомата: %s \n" +
+                                "Дата закрытия: %s",
+                        client.getClientName(),
+                        client.getAddress(),
+                        client.getAtmType().getDescrition(),
+                        client.getCloseDate()),
+                client.getClientCode()
+        );
+
+        conn.commit();
+        conn.setAutoCommit(true);
 /*        } catch (Exception e) {
             result=false;
             e.printStackTrace();
@@ -57,7 +78,40 @@ public class ClientATMService {
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
+
+        ClientATM currentClient = new ClientATMService().getClientByCode(client.getClientCode());
+
+        conn.setAutoCommit(false);
+
         result = new ClientATMDAO().edit(client);
+
+        new AuditService().create(
+                AuditOperType.EDIT_CLIENT,
+                userAccountId,
+                new java.util.Date(),
+                String.format("Предыдущее состояние:" +
+                                "Наименование клиента: %s \n" +
+                                "Адрес: %s \n" +
+                                "Тип банкомата: %s \n" +
+                                "Дата закрытия: %s",
+                        client.getClientName(),
+                        client.getAddress(),
+                        client.getAtmType().getDescrition(),
+                        client.getCloseDate()) + "\n" +
+                        String.format("Новое состояние:" +
+                                        "Наименование клиента: %s \n" +
+                                        "Адрес: %s \n" +
+                                        "Тип банкомата: %s \n" +
+                                        "Дата закрытия: %s",
+                                currentClient.getClientName(),
+                                currentClient.getAddress(),
+                                currentClient.getAtmType().getDescrition(),
+                                currentClient.getCloseDate()),
+                client.getClientCode()
+        );
+
+        conn.commit();
+        conn.setAutoCommit(true);
         /*} catch (Exception e) {
             result=false;
             e.printStackTrace();

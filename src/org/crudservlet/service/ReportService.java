@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import static org.crudservlet.model.ReportStatusType.*;
+import static org.crudservlet.model.TaskType.REPORT;
 
 public class ReportService {
 
@@ -29,11 +30,17 @@ public class ReportService {
         conn.setAutoCommit(false);
 
         report.setStatus(CREATED);
-        report.setStartDateTime(new java.util.Date());
         report.setUserAccountId(userAccountId);
         result = new ReportDAO().create(report);
 
         Integer reportId = MySQLConnection.getLastInsertId();
+
+        Task task = new Task();
+        task.setType(REPORT);
+        task.setEntityId(reportId);
+        task.setCreateDateTime(new java.util.Date());
+        task.setStatus(TaskStatusType.CREATED);
+        task.setUserAccountId(userAccountId);
 
         new AuditService().create(
                 AuditOperType.RUN_REPORT,
@@ -41,7 +48,8 @@ public class ReportService {
                 report.getStartDateTime(),
                 String.format("Тип отчета: %s \n" +
                                 "Параметры формирования: %s \n",
-                        report.getStatus().getDescription(),
+                        report.getType().getDescription(),
+                        report.getTaskId(),
                         report.getParameters()),
                 reportId
         );
@@ -64,13 +72,9 @@ public class ReportService {
 
         Report report = new Report();
 
-        report.setId(reportId);
-        report.setStatus(CREATED);
-        result = new ReportDAO().edit(report);
-
         String sql = "UPDATE REPORTS " +
                 "SET STATUS = ? " +
-                "WHERE REPORT_ID = ?";
+                "WHERE ID = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, STARTED.name());
@@ -99,13 +103,13 @@ public class ReportService {
                 "SET FINISH_DATETIME = ?, " +
                 "STATUS = ?, " +
                 "CONTENT = ?, " +
-                "WHERE REPORT_ID = ?";
+                "WHERE ID = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, new Timestamp(new java.util.Date().getTime()).toString());
         st.setString(2, FINISH.name());
-        st.setBlob(4, content);
-        st.setInt(5, reportId);
+        st.setBlob(3, content);
+        st.setInt(4, reportId);
         result = st.executeUpdate() > 0;
 
 /*        } catch (Exception e) {

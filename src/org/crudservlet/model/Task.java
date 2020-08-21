@@ -3,18 +3,18 @@ package org.crudservlet.model;
 import java.sql.Blob;
 import java.util.Date;
 
-public class Report {
+public class Task {
 
     private int Id;
-    private ReportType Type;
+    private TaskType Type;
+    private int EntityId;
+    private Date CreateDateTime;
+    private Date PlannedStartDateTime;
     private Date StartDateTime;
     private Date FinishDateTime;
-    private ReportStatusType Status;
+    private TaskStatusType Status;
     private String Comment;
-    private Blob Content;
-    private String Parameters;
     private int UserAccountId;
-    private int TaskId;
 
     public int getId() {
         return Id;
@@ -24,12 +24,36 @@ public class Report {
         Id = id;
     }
 
-    public ReportType getType() {
+    public TaskType getType() {
         return Type;
     }
 
-    public void setType(ReportType type) {
+    public void setType(TaskType type) {
         Type = type;
+    }
+
+    public int getEntityId() {
+        return EntityId;
+    }
+
+    public void setEntityId(int entityId) {
+        EntityId = entityId;
+    }
+
+    public Date getCreateDateTime() {
+        return CreateDateTime;
+    }
+
+    public void setCreateDateTime(Date createDateTime) {
+        CreateDateTime = createDateTime;
+    }
+
+    public Date getPlannedStartDateTime() {
+        return PlannedStartDateTime;
+    }
+
+    public void setPlannedStartDateTime(Date plannedStartDateTime) {
+        PlannedStartDateTime = plannedStartDateTime;
     }
 
     public Date getStartDateTime() {
@@ -48,11 +72,11 @@ public class Report {
         FinishDateTime = finishDateTime;
     }
 
-    public ReportStatusType getStatus() {
+    public TaskStatusType getStatus() {
         return Status;
     }
 
-    public void setStatus(ReportStatusType status) {
+    public void setStatus(TaskStatusType status) {
         Status = status;
     }
 
@@ -64,35 +88,11 @@ public class Report {
         Comment = comment;
     }
 
-    public Blob getContent() {
-        return Content;
-    }
-
-    public void setContent(Blob content) {
-        Content = content;
-    }
-
-    public String getParameters() {
-        return Parameters;
-    }
-
-    public void setParameters(String parameters) {
-        Parameters = parameters;
-    }
-
     public int getUserAccountId() {
         return UserAccountId;
     }
 
     public void setUserAccountId(int userAccountId) {
         UserAccountId = userAccountId;
-    }
-
-    public int getTaskId() {
-        return TaskId;
-    }
-
-    public void setTaskId(int taskId) {
-        TaskId = taskId;
     }
 }

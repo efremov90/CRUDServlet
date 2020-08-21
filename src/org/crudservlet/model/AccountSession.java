@@ -12,14 +12,6 @@ public class AccountSession {
     public AccountSession() {
     }
 
-    public AccountSession(int id, String sessionId, Date createDateTime, Date lastEventDateTime, int userAccountId) {
-        Id = id;
-        SessionId = sessionId;
-        CreateDateTime = createDateTime;
-        LastEventDateTime = lastEventDateTime;
-        UserAccountId = userAccountId;
-    }
-
     public int getId() {
         return Id;
     }

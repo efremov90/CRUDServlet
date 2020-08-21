@@ -4,10 +4,7 @@ import org.crudservlet.dao.ClientATMDAO;
 import org.crudservlet.dao.ClientDopofficeDAO;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
-import org.crudservlet.model.ATMTypeType;
-import org.crudservlet.model.ClientATM;
-import org.crudservlet.model.ClientDopoffice;
-import org.crudservlet.model.UserAccount;
+import org.crudservlet.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,7 +38,26 @@ public class ClientDopofficeService {
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
         new ClientService().validateExistsClient(client.getClientCode());
+
+        conn.setAutoCommit(false);
+
         result = new ClientDopofficeDAO().create(client);
+
+        new AuditService().create(
+                AuditOperType.CREATE_CLIENT,
+                userAccountId,
+                new java.util.Date(),
+                String.format("Наименование клиента: %s \n" +
+                                "Адрес: %s \n" +
+                                "Дата закрытия: %s",
+                        client.getClientName(),
+                        client.getAddress(),
+                        client.getCloseDate()),
+                client.getClientCode()
+        );
+
+        conn.commit();
+        conn.setAutoCommit(true);
 //        } catch (Exception e) {
 //            result=false;
 //            e.printStackTrace();
@@ -61,7 +77,36 @@ public class ClientDopofficeService {
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
                     CLIENTS_CREATE.name()));
+
+        ClientDopoffice currentClient = new ClientDopofficeService().getClientByCode(client.getClientCode());
+
+        conn.setAutoCommit(false);
+
         result = new ClientDopofficeDAO().edit(client);
+
+        new AuditService().create(
+                AuditOperType.EDIT_CLIENT,
+                userAccountId,
+                new java.util.Date(),
+                String.format("Предыдущее состояние:" +
+                                "Наименование клиента: %s \n" +
+                                "Адрес: %s \n" +
+                                "Дата закрытия: %s",
+                        client.getClientName(),
+                        client.getAddress(),
+                        client.getCloseDate()) + "\n" +
+                        String.format("Новое состояние:" +
+                                        "Наименование клиента: %s \n" +
+                                        "Адрес: %s \n" +
+                                        "Дата закрытия: %s",
+                                currentClient.getClientName(),
+                                currentClient.getAddress(),
+                                currentClient.getCloseDate()),
+                client.getClientCode()
+        );
+
+        conn.commit();
+        conn.setAutoCommit(true);
 //        } catch (Exception e) {
 //            result=false;
 //            e.printStackTrace();

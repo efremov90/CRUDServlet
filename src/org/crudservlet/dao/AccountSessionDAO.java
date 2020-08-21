@@ -92,13 +92,11 @@ public class AccountSessionDAO {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            accountSession = new AccountSession(
-                    rs.getInt("id"),
-                    rs.getNString("session_id"),
-                    Timestamp.valueOf(rs.getNString("create_datetime")),
-                    Timestamp.valueOf(rs.getNString("last_event_datetime")),
-                    rs.getInt("user_account_id")
-            );
+            accountSession.setId(rs.getInt("id"));
+            accountSession.setSessionId(rs.getNString("session_id"));
+            accountSession.setCreateDateTime(Timestamp.valueOf(rs.getNString("create_datetime")));
+            accountSession.setLastEventDateTime(Timestamp.valueOf(rs.getNString("last_event_datetime")));
+            accountSession.setUserAccountId(rs.getInt("user_account_id"));
         }
 //        } catch (SQLException e) {
 //            e.printStackTrace();
