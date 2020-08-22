@@ -81,6 +81,7 @@ public class SecuritySevice {
 
             AccountSession accountSession = new AccountSession();
 
+            accountSession.setId(0);
             accountSession.setSessionId(sessionId);
             accountSession.setCreateDateTime(new Date());
             accountSession.setLastEventDateTime(accountSession.getCreateDateTime());

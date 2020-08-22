@@ -24,10 +24,10 @@ import java.util.logging.Logger;
 
 import static org.crudservlet.model.Permissions.REQUESTS_VIEW_REQUEST;
 
-@WebServlet(urlPatterns = {"/getRequest"})
+@WebServlet(urlPatterns = {"/getReport"})
 public class GetReportServlet extends HttpServlet {
 
-    private static final long serialVersionUID = -1576522104507426405L;
+    private static final long serialVersionUID = 5199753893008181253L;
 
     private Logger logger = Logger.getLogger(GetReportServlet.class.getName());
 

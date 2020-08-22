@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 @WebServlet(urlPatterns = {"/generateReport"})
 public class GenerateReportServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1746775186141528314L;
+    private static final long serialVersionUID = 3532825651179359130L;
 
     private Logger logger = Logger.getLogger(GenerateReportServlet.class.getName());
 
