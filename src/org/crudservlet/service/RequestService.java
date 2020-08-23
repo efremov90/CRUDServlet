@@ -112,6 +112,8 @@ public class RequestService {
         if (getRequestByUUID(request.getRequestUUID()) != null)
             throw new Exception(String.format("Уже есть заявка с UUID %s.",
                     request.getRequestUUID()));
+        if (request.getClientCode() == null || request.getClientCode() == "")
+            throw new Exception(String.format("Не задан код клиента."));
         if (new ClientService().getClient(request.getClientCode()) == null)
             throw new Exception(String.format("Не найден клиент с кодом %s.",
                     request.getClientCode()));

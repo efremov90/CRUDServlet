@@ -363,9 +363,9 @@ function initSideBar() {
                             if (response.ok) {
                                 location.reload();
                             } else {
-                                showModalError(form, function () {
-                                    initFormError(form, "Ошибка сервера.");
-                                });
+                                let errorForm = new ModalError();
+                                errorForm.setErrorMessage("Ошибка сервера.");
+                                errorForm.show(form);
                             }
                         }
                     )

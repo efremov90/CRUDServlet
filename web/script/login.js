@@ -26,9 +26,9 @@ function initFormLogin() {
                 else if (/[^A-Za-z0-9]+/.test(inputPassword.value)) text_error = "Пароль должен состоять из" +
                     " символов 'A-Za-z0-9'."
                 if (text_error) {
-                    showModalError(form, function () {
-                        initFormError(form, text_error);
-                    });
+                    let errorForm = new ModalError();
+                    errorForm.setErrorMessage(text_error);
+                    errorForm.show(form);
                     return;
                 }
                 let account = inputAccount.value;
@@ -48,13 +48,13 @@ function initFormLogin() {
                     location.reload();
                 } else {
                     if (response.status == 401 || getCookie("AUTH_STATUS_CODE") == "S00001") {
-                        showModalError(form, function () {
-                            initFormError(form, "Неверный логин или пароль.");
-                        });
+                        let errorForm = new ModalError();
+                        errorForm.setErrorMessage("Неверный логин или пароль.");
+                        errorForm.show(form);
                     } else {
-                        showModalError(form, function () {
-                            initFormError(form, "Ошибка аутентификации.");
-                        });
+                        let errorForm = new ModalError();
+                        errorForm.setErrorMessage("Ошибка аутентификации.");
+                        errorForm.show(form);
                     }
                 }
             },

@@ -18,7 +18,7 @@ public class ClientATMDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientATM client) throws SQLException {
+    public boolean create(ClientATM client) throws Exception {
         logger.info("start");
 
         boolean result = false;

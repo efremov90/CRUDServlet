@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import static org.crudservlet.model.Permissions.CLIENTS_EDIT;
+
 public class ClientService {
 
     private Connection conn;
@@ -29,7 +31,7 @@ public class ClientService {
         }*/
     }
 
-    public boolean create(Client client) throws SQLException {
+    public boolean create(Client client) throws Exception {
         logger.info("start");
 
         boolean result = false;

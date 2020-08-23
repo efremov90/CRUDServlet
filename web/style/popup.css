@@ -1,0 +1,24 @@
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+}
+
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid #c0c0c0;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 100%;
+    margin-left: -80px;
+}
+
+.popup .show {
+    visibility: visible;
+}

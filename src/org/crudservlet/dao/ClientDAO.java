@@ -21,7 +21,7 @@ public class ClientDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Client client) throws SQLException {
+    public boolean create(Client client) throws Exception {
         logger.info("start");
 
         boolean result = false;
@@ -29,6 +29,11 @@ public class ClientDAO {
         String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
                 "VALUES (?, ?, ?, ?, ?); ";
         logger.info(client.toString());
+
+        if (client.getClientCode() == null || client.getClientCode() == "")
+            throw new Exception(String.format("Не задан код клиента."));
+        if (client.getClientName() == null || client.getClientName() == "")
+            throw new Exception(String.format("Не задано наименование клиента."));
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, client.getClientCode());

@@ -17,7 +17,7 @@ public class ClientDopofficeDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientDopoffice client) throws SQLException {
+    public boolean create(ClientDopoffice client) throws Exception {
         logger.info("start");
 
         boolean result = false;
