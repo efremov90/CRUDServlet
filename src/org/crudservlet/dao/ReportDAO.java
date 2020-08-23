@@ -3,6 +3,7 @@ package org.crudservlet.dao;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.Report;
 import org.crudservlet.model.ReportStatusType;
+import org.crudservlet.model.ReportType;
 import org.crudservlet.model.Request;
 import org.h2.command.ddl.CreateDomain;
 
@@ -48,34 +49,6 @@ public class ReportDAO {
         return result;
     }
 
-    public boolean edit(Report report) throws SQLException {
-        logger.info("start");
-
-        boolean result = false;
-//        try {
-        String sql = "UPDATE REPORTS " +
-                "SET FINISH_DATETIME = ?, " +
-                "STATUS = ?, " +
-                "COMMENT = ?, " +
-                "CONTENT = ?, " +
-                "WHERE ID = ?";
-
-        PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1,
-                report.getFinishDateTime() != null ? new Timestamp(report.getFinishDateTime().getTime()).toString() :
-                        null);
-        st.setString(2, report.getStatus().name());
-        st.setString(3, report.getComment());
-        st.setBlob(4, report.getContent());
-        st.setInt(5, report.getId());
-        result = st.executeUpdate() > 0;
-/*        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-        logger.info(":" + result);
-        return result;
-    }
-
     public boolean setTaskId(int reportId, int taskId) throws SQLException {
         logger.info("start");
 
@@ -94,5 +67,50 @@ public class ReportDAO {
         }*/
         logger.info(":" + result);
         return result;
+    }
+
+    public ReportType getType(int reportId) throws SQLException {
+        logger.info("start");
+
+        ReportType result = null;
+//        try {
+        String sql = "SELECT TYPE  " +
+                "FROM REPORTS r " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, reportId);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            result = ReportType.valueOf(rs.getString("TYPE"));
+        }
+/*        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        logger.info(":" + result);
+        return result;
+    }
+
+    public ReportStatusType getReportStatus(int reportId) throws SQLException {
+        logger.info("start");
+
+        ReportStatusType reportStatusType = null;
+//        try {
+        String sql = "SELECT STATUS  " +
+                "FROM REPORTS r " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, reportId);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            reportStatusType = ReportStatusType.valueOf(rs.getString("STATUS"));
+        }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        return reportStatusType;
     }
 }

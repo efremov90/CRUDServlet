@@ -77,7 +77,7 @@ public class ClientATMService {
         if (!new PermissionService().isPermission(userAccountId, CLIENTS_EDIT))
             throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
                     userAccount.getAccount(),
-                    CLIENTS_CREATE.name()));
+                    CLIENTS_EDIT.name()));
 
         ClientATM currentClient = new ClientATMService().getClientByCode(client.getClientCode());
 
@@ -89,24 +89,24 @@ public class ClientATMService {
                 AuditOperType.EDIT_CLIENT,
                 userAccountId,
                 new java.util.Date(),
-                String.format("Предыдущее состояние:" +
+                String.format("Предыдущее состояние:\n" +
                                 "Наименование клиента: %s \n" +
                                 "Адрес: %s \n" +
                                 "Тип банкомата: %s \n" +
                                 "Дата закрытия: %s",
-                        client.getClientName(),
-                        client.getAddress(),
-                        client.getAtmType().getDescrition(),
-                        client.getCloseDate()) + "\n" +
-                        String.format("Новое состояние:" +
+                        currentClient.getClientName(),
+                        currentClient.getAddress(),
+                        currentClient.getAtmType().getDescrition(),
+                        currentClient.getCloseDate() != null ? currentClient.getCloseDate().toString() : "") + "\n" +
+                        String.format("Новое состояние:\n" +
                                         "Наименование клиента: %s \n" +
                                         "Адрес: %s \n" +
                                         "Тип банкомата: %s \n" +
                                         "Дата закрытия: %s",
-                                currentClient.getClientName(),
-                                currentClient.getAddress(),
-                                currentClient.getAtmType().getDescrition(),
-                                currentClient.getCloseDate()),
+                                client.getClientName(),
+                                client.getAddress(),
+                                client.getAtmType().getDescrition(),
+                                client.getCloseDate() != null ? client.getCloseDate().toString() : ""),
                 client.getClientCode()
         );
 

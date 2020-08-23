@@ -140,7 +140,7 @@ public class RequestService {
                                 "Код клиента: %s \n" +
                                 "Комментарий: %s",
                         request.getRequestUUID(),
-                        request.getCreateDate(),
+                        request.getCreateDate().toString(),
                         request.getClientCode(),
                         request.getComment()),
                 requestId

@@ -8,6 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import static org.crudservlet.model.Permissions.REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED;
+import static org.crudservlet.model.Permissions.REPORT_GENERATE_REQUESTS_DETAILED;
 import static org.crudservlet.model.ReportStatusType.*;
 import static org.crudservlet.model.TaskType.REPORT;
 
@@ -22,18 +24,21 @@ public class ReportService {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Report report, int userAccountId) throws Exception {
+    public Integer create(Report report, int userAccountId) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
+
         conn.setAutoCommit(false);
 
         report.setStatus(CREATED);
         report.setUserAccountId(userAccountId);
-        result = new ReportDAO().create(report);
+        new ReportDAO().create(report);
 
         Integer reportId = MySQLConnection.getLastInsertId();
+
+        result = reportId;
 
         Task task = new Task();
         task.setType(REPORT);
@@ -120,33 +125,31 @@ public class ReportService {
         return result;
     }
 
-    public ReportStatusType getReportStatus(int reportId) throws SQLException {
-        logger.info("start");
-
-        ReportStatusType reportStatusType = null;
-//        try {
-        String sql = "SELECT STATUS  " +
-                "FROM REPORTS r " +
-                "WHERE ID = ?";
-
-        PreparedStatement st = conn.prepareStatement(sql);
-        st.setInt(1, reportId);
-        ResultSet rs = st.executeQuery();
-
-        if (rs.next()) {
-            reportStatusType = ReportStatusType.valueOf(rs.getString("STATUS"));
-        }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-        return reportStatusType;
-    }
-
-    public Blob getContent(int reportId) throws SQLException {
+    public Blob getContent(int reportId, String type, int userAccountId) throws Exception {
         logger.info("start");
 
         Blob content = null;
 //        try {
+
+        UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
+
+        ReportType reportType = new ReportDAO().getType(reportId);
+
+        switch (reportType) {
+            case REPORT_REQUESTS_DETAILED:
+                if (!new PermissionService().isPermission(userAccountId, REPORT_GENERATE_REQUESTS_DETAILED))
+                    throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                            userAccount.getAccount(),
+                            REPORT_GENERATE_REQUESTS_DETAILED.name()));
+                break;
+            case REPORT_REQUESTS_CONSOLIDATED:
+                if (!new PermissionService().isPermission(userAccountId, REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED))
+                    throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                            userAccount.getAccount(),
+                            REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED.name()));
+                break;
+        }
+
         String sql = "SELECT CONTENT  " +
                 "FROM REPORTS r " +
                 "WHERE ID = ?";

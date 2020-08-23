@@ -92,6 +92,7 @@ public class AccountSessionDAO {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
+            accountSession = new AccountSession();
             accountSession.setId(rs.getInt("id"));
             accountSession.setSessionId(rs.getNString("session_id"));
             accountSession.setCreateDateTime(Timestamp.valueOf(rs.getNString("create_datetime")));

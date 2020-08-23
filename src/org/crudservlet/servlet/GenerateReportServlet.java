@@ -3,20 +3,14 @@ package org.crudservlet.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.AccountSessionDAO;
 import org.crudservlet.dto.*;
-import org.crudservlet.model.ATMTypeType;
-import org.crudservlet.model.ClientATM;
-import org.crudservlet.model.ClientDopoffice;
-import org.crudservlet.service.ClientATMService;
-import org.crudservlet.service.ClientDopofficeService;
-import org.crudservlet.service.ErrorDTOService;
-import org.crudservlet.service.ResultDTOService;
+import org.crudservlet.service.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
+import java.io.PrintWriter;
 import java.util.logging.Logger;
 
 @WebServlet(urlPatterns = {"/generateReport"})
@@ -38,32 +32,28 @@ public class GenerateReportServlet extends HttpServlet {
         try {
             ObjectMapper mapper = new ObjectMapper();
             GenerateReportRequestDTO generateReportRequestDTO = mapper.readValue(req.getReader(), GenerateReportRequestDTO.class);
+            GenerateReportResponseDTO generateReportResponseDTO = new GenerateReportResponseDTO();
             if (generateReportRequestDTO.getReportRequestsDetailed() != null) {
                 ReportRequestsDetailedDTO reportRequestsDetailedDTO = generateReportRequestDTO.getReportRequestsDetailed();
-                ClientDopoffice client = new ClientDopoffice();
-                /*client.setId(clientDTO.getId());
-                client.setClientCode(clientDTO.getClientCode());
-                client.setClientName(clientDTO.getClientName());
-                client.setAddress(clientDTO.getAddress());
-                client.setCloseDate((clientDTO.getCloseDate() != null && clientDTO.getCloseDate() != "") ?
-                        Date.valueOf(clientDTO.getCloseDate()) : null);*/
-                new ClientDopofficeService().create(client,
-                        new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
-                ResultDTOService.writer(resp, "0", null);
+                Integer reportId =
+                        new ReportRequestsDetailedService().create(
+                                reportRequestsDetailedDTO,
+                                new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId()
+                        );
+                generateReportResponseDTO.setReportId(reportId);
             } else if (generateReportRequestDTO.getReportRequestsConsolidated() != null) {
-                /*ClientATMDTO clientDTO = createClientDTO.getSelfservice();
-                ClientATM client = new ClientATM();
-                client.setId(clientDTO.getId());
-                client.setClientCode(clientDTO.getClientCode());
-                client.setClientName(clientDTO.getClientName());
-                client.setAtmType(ATMTypeType.valueOf(clientDTO.getATMType()));
-                client.setAddress(clientDTO.getAddress());
-                client.setCloseDate((clientDTO.getCloseDate() != null && clientDTO.getCloseDate() != "") ?
-                        Date.valueOf(clientDTO.getCloseDate()) : null);
-                new ClientATMService().create(client,
-                        new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId());
-                ResultDTOService.writer(resp, "0", null);*/
+                ReportRequestsConsolidatedDTO reportRequestsConsolidatedDTO = generateReportRequestDTO.getReportRequestsConsolidated();
+                Integer reportId =
+                        new ReportRequestsConsolidatedService().create(
+                                reportRequestsConsolidatedDTO,
+                                new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId()
+                        );
+                generateReportResponseDTO.setReportId(reportId);
             }
+            resp.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.println(mapper.writeValueAsString(generateReportResponseDTO));
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
             ErrorDTOService.writer(resp, e);

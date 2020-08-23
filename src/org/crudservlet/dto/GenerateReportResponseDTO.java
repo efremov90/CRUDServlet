@@ -2,16 +2,16 @@ package org.crudservlet.dto;
 
 public class GenerateReportResponseDTO {
 
-    private String ReportId;
+    private int ReportId;
 
     public GenerateReportResponseDTO() {
     }
 
-    public String getReportId() {
+    public int getReportId() {
         return ReportId;
     }
 
-    public void setReportId(String reportId) {
+    public void setReportId(int reportId) {
         ReportId = reportId;
     }
 }

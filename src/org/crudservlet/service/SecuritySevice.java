@@ -130,7 +130,7 @@ public class SecuritySevice {
         new AccountSessionDAO().delete(sessionId);
 
         new AuditService().create(
-                AuditOperType.LOGIN,
+                AuditOperType.LOGOUT,
                 accountSession.getUserAccountId(),
                 new Date(),
                 "",

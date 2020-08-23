@@ -2,16 +2,25 @@ package org.crudservlet.dto;
 
 public class GetReportRequestDTO {
 
-    String ReportId;
+    int ReportId;
+    String Format;
 
     public GetReportRequestDTO() {
     }
 
-    public String getReportId() {
+    public int getReportId() {
         return ReportId;
     }
 
-    public void setReportId(String reportId) {
+    public void setReportId(int reportId) {
         ReportId = reportId;
+    }
+
+    public String getFormat() {
+        return Format;
+    }
+
+    public void setFormat(String format) {
+        Format = format;
     }
 }

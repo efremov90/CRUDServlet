@@ -311,10 +311,10 @@ function showForm(idForm, parentForm, initForm) {
                                 case 'clients':
                                     initFormClients(parentForm);
                                     break;
-                                case 'REPORT_REUESTS_DETAILED':
+                                case 'REPORT_REQUESTS_DETAILED':
                                     initFormReports('REPORT_REQUESTS_DETAILED', parentForm);
                                     break;
-                                case 'REPORT_REUESTS_CONSOLIDATED':
+                                case 'REPORT_REQUESTS_CONSOLIDATED':
                                     initFormReports('REPORT_REQUESTS_CONSOLIDATED', parentForm);
                                     break;
                             }
@@ -437,6 +437,8 @@ window.addEventListener(
                         //if (itemsMenu[i].id=="home" && !permissions.has("HOME_VIEW")) none=true;
                         if (itemsMenu[i].id == "requests" && !permissions.has("REQUESTS_VIEW")) none = true;
                         if (itemsMenu[i].id == "clients" && !permissions.has("CLIENTS_VIEW")) none = true;
+                        if (itemsMenu[i].id == "REPORT_REQUESTS_DETAILED" && !permissions.has("REPORT_GENERATE_REQUESTS_DETAILED")) none = true;
+                        if (itemsMenu[i].id == "REPORT_REQUESTS_CONSOLIDATED" && !permissions.has("REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED")) none = true;
                         if (none) itemsMenu[i].remove();
                     }
                 }

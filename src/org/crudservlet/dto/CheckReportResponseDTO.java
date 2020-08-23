@@ -1,10 +1,10 @@
 package org.crudservlet.dto;
 
-public class CheckReportResultDTO {
+public class CheckReportResponseDTO {
 
     String Status;
 
-    public CheckReportResultDTO() {
+    public CheckReportResponseDTO() {
     }
 
     public String getStatus() {
