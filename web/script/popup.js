@@ -2,7 +2,7 @@ class Popup {
     constructor() {
         let modalForm = (new DOMParser()).parseFromString(
             '<div class="popup" id="popup" data-display="none">' +
-            '<div class="modal-content">' +
+            '<div class="popup-content">' +
             '<div class="container">' +
             '<button id="inBackground">В фоне</button>' +
             '<button id="load">Загрузить</button>' +
@@ -21,10 +21,11 @@ class Popup {
         this.form = modalForm;
         let formLet = this.form;
 
-        this.form.querySelector('.modal-content').style.width = '80px';
+        // this.form.querySelector('.popup-content').style.width = '80px';
 
         let btnInBackground = this.form.querySelector('#inBackground');
         let btnLoad = this.form.querySelector('#load');
+        btnLoad.setAttribute('data-display', 'none')
 
         //Инициализация кнопок
         btnInBackground.addEventListener(

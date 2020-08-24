@@ -14,14 +14,6 @@ function initFormReports(reportType, parentForm) {
     let form = parentForm.querySelector('.form#reports');
     if (form) {
         let btnComplete = form.querySelector('.buttonBar #complete');
-        /*let btnCreateClient = form.querySelector('.buttonBar #createClient');
-        if (!permissions.has("CLIENTS_CREATE")) {
-            btnCreateClient.remove();
-        }
-        let btnEditClient = form.querySelector('.buttonBar #editClient');
-        if (!permissions.has("CLIENTS_EDIT")) {
-            btnEditClient.remove();
-        }*/
         let btnSelectReportType = form.querySelector(
             '.buttonBar select#reportType'
         );
@@ -32,6 +24,15 @@ function initFormReports(reportType, parentForm) {
 
         REPORT_REUESTS_DETAILED_Table.setAttribute('data-display', 'none');
         REPORT_REUESTS_CONSOLIDATED_Table.setAttribute('data-display', 'none');
+
+        if (!permissions.has("REPORT_GENERATE_REQUESTS_DETAILED")) {
+            REPORT_REUESTS_DETAILED_Table.remove();
+            btnSelectReportType.querySelector('[value="REPORT_REQUESTS_DETAILED"]').remove();
+        }
+        if (!permissions.has("REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED")) {
+            REPORT_REUESTS_CONSOLIDATED_Table.remove();
+            btnSelectReportType.querySelector('[value="REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED"]').remove();
+        }
 
         form.querySelector('table#' + btnSelectReportType.value).setAttribute('data-display', 'block');
 
@@ -66,8 +67,63 @@ function initFormReports(reportType, parentForm) {
         btnComplete.addEventListener(
             'click',
             function () {
-                // cross_download('file/file.pdf','1.pdf');
-                //location.href = "file/file.pdf";
+                //alert('btnOK');
+                let text_error = null;
+                switch (btnSelectReportType.value) {
+                    case 'REPORT_REQUESTS_DETAILED':
+                        if (!(REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="fromCreateDate"]').value)) text_error = "Введите дату создания."
+                        else if (!(REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="toCreateDate"]').value)) text_error = "Введите дату создания."
+                        else if (!(REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="clientCode"]').value)) text_error = "Введите код клиента."
+                        break;
+                    case 'REPORT_REQUESTS_CONSOLIDATED':
+                        if (!REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="fromCreateDate"]').value) text_error = "Введите дату" +
+                            " создания."
+                        else if (!REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="toCreateDate"]').value) text_error = "Введите дату создания."
+                        break;
+                }
+                if (text_error) {
+                    // alert('text_error');
+                    let errorForm = new ModalError();
+                    errorForm.setErrorMessage(text_error);
+                    errorForm.show(form);
+                    return;
+                }
+                let generateReport = null;
+                switch (btnSelectReportType.value) {
+                    case 'REPORT_REQUESTS_DETAILED':
+                        generateReport = {
+                            reportRequestsDetailed: {
+                                fromCreateDate: REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="fromCreateDate"]').value,
+                                toCreateDate: REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="toCreateDate"]').value,
+                                clientCode: REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="clientCode"]').value
+                            }
+                        }
+                        break;
+                    case 'REPORT_REQUESTS_CONSOLIDATED':
+                        generateReport = {
+                            reportRequestsConsolidated: {
+                                fromCreateDate: REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="fromCreateDate"]').value,
+                                toCreateDate: REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="toCreateDate"]').value
+                            }
+                        }
+                        break;
+                }
+                //alert('JSON');
+                let json = JSON.stringify(generateReport);
+                let req = new HttpRequestCRUD();
+                req.setFetch(url + '/generateReport', json);
+                req.setForm(form);
+                let request = req.fetchJSON();
+                request.then(
+                    () => {
+                        if (req.getStatus()) {
+                            let popup = new Popup();
+                            popup.show(form);
+                            // modal.remove();
+                            // initForm(parentForm);
+                        }
+                    }
+                );
             },
             false
         )

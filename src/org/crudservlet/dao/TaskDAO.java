@@ -22,10 +22,10 @@ public class TaskDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Task task) throws SQLException {
+    public Integer create(Task task) throws SQLException {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT TASKS (TYPE, CREATE_DATETIME, PLANNED_START_DATETIME, START_DATETIME, FINISH_DATETIME, " +
                 "STATUS, COMMENT, USER_ACCOUNT_ID) " +
@@ -42,7 +42,9 @@ public class TaskDAO {
         st.setString(6, CREATED.name());
         st.setString(7, null);
         st.setInt(8, task.getUserAccountId());
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

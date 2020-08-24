@@ -1,12 +1,10 @@
 package org.crudservlet.dao;
 
 import org.crudservlet.dbConnection.MySQLConnection;
-import org.crudservlet.model.RequestStatusHistory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 public class RequestAuditsDAO {
@@ -24,7 +22,6 @@ public class RequestAuditsDAO {
 
         boolean result = false;
 //        try {
-
         String sql = "INSERT REQUEST_XREF_AUDIT (REQUEST_ID, AUDIT_ID) " +
                 "VALUES (?, ?); ";
 

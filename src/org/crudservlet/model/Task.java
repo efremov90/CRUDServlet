@@ -7,7 +7,6 @@ public class Task {
 
     private int Id;
     private TaskType Type;
-    private int EntityId;
     private Date CreateDateTime;
     private Date PlannedStartDateTime;
     private Date StartDateTime;
@@ -30,14 +29,6 @@ public class Task {
 
     public void setType(TaskType type) {
         Type = type;
-    }
-
-    public int getEntityId() {
-        return EntityId;
-    }
-
-    public void setEntityId(int entityId) {
-        EntityId = entityId;
     }
 
     public Date getCreateDateTime() {

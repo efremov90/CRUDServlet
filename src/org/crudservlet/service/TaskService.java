@@ -21,21 +21,19 @@ public class TaskService {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Task task, int userAccountId, int entityId) throws Exception {
+    public Integer create(Task task, int userAccountId, int entityId) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
 
         task.setStatus(CREATED);
         task.setStartDateTime(new java.util.Date());
         task.setUserAccountId(userAccountId);
 
-        conn.setAutoCommit(false);
+        Integer taskId = new TaskDAO().create(task);
 
-        result = new TaskDAO().create(task);
-
-        Integer taskId = MySQLConnection.getLastInsertId();
+        result = taskId;
 
         new AuditService().create(
                 AuditOperType.CREATE_TASK,
@@ -44,12 +42,10 @@ public class TaskService {
                 String.format("Тип задания: %s \n" +
                                 (task.getType().equals(TaskType.REPORT) ? "Id отчета" : "") + ": %s \n",
                         task.getStatus().getDescription(),
-                        task.getEntityId()),
+                        entityId),
                 taskId
         );
 
-        conn.commit();
-        conn.setAutoCommit(true);
 /*        } catch (Exception e) {
             result=false;
             e.printStackTrace();

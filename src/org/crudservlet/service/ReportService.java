@@ -34,23 +34,25 @@ public class ReportService {
 
         report.setStatus(CREATED);
         report.setUserAccountId(userAccountId);
-        new ReportDAO().create(report);
 
-        Integer reportId = MySQLConnection.getLastInsertId();
+        Integer reportId = new ReportDAO().create(report);
 
         result = reportId;
 
         Task task = new Task();
         task.setType(REPORT);
-        task.setEntityId(reportId);
         task.setCreateDateTime(new java.util.Date());
         task.setStatus(TaskStatusType.CREATED);
         task.setUserAccountId(userAccountId);
 
+        Integer taskId = new TaskService().create(task, userAccountId, reportId);
+
+        new ReportTasksDAO().create(reportId, taskId);
+
         new AuditService().create(
                 AuditOperType.RUN_REPORT,
                 userAccountId,
-                report.getStartDateTime(),
+                task.getCreateDateTime(),
                 String.format("Тип отчета: %s \n" +
                                 "Параметры формирования: %s \n",
                         report.getType().getDescription(),
