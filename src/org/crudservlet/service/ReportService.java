@@ -39,27 +39,27 @@ public class ReportService {
 
         result = reportId;
 
+        new AuditService().create(
+                AuditOperType.RUN_REPORT,
+                userAccountId,
+                new java.util.Date(),
+                String.format("Тип отчета: %s \n" +
+                                "Параметры формирования: %s \n",
+                        report.getType().getDescription(),
+                        report.getParameters()),
+                reportId
+        );
+
         Task task = new Task();
         task.setType(REPORT);
         task.setCreateDateTime(new java.util.Date());
+        task.setPlannedStartDateTime(task.getCreateDateTime());
         task.setStatus(TaskStatusType.CREATED);
         task.setUserAccountId(userAccountId);
 
         Integer taskId = new TaskService().create(task, userAccountId, reportId);
 
         new ReportTasksDAO().create(reportId, taskId);
-
-        new AuditService().create(
-                AuditOperType.RUN_REPORT,
-                userAccountId,
-                task.getCreateDateTime(),
-                String.format("Тип отчета: %s \n" +
-                                "Параметры формирования: %s \n",
-                        report.getType().getDescription(),
-                        report.getTaskId(),
-                        report.getParameters()),
-                reportId
-        );
 
         conn.commit();
         conn.setAutoCommit(true);

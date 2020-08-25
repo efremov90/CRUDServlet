@@ -17,10 +17,10 @@ public class RequestAuditsDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(int requestId, int auditId) throws SQLException {
+    public Integer create(int requestId, int auditId) throws SQLException {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT REQUEST_XREF_AUDIT (REQUEST_ID, AUDIT_ID) " +
                 "VALUES (?, ?); ";
@@ -29,7 +29,9 @@ public class RequestAuditsDAO {
 
         st.setInt(1, requestId);
         st.setInt(2, auditId);
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

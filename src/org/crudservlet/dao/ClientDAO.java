@@ -21,10 +21,10 @@ public class ClientDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Client client) throws Exception {
+    public Integer create(Client client) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
                 "VALUES (?, ?, ?, ?, ?); ";
@@ -41,7 +41,9 @@ public class ClientDAO {
         st.setInt(3, client.getClientType().getCode());
         st.setString(4, client.getAddress());
         st.setDate(5, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

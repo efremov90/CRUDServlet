@@ -17,10 +17,10 @@ public class AccountSessionDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(AccountSession accountSession) throws SQLException {
+    public Integer create(AccountSession accountSession) throws SQLException {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT ACCOUNT_SESSIONS (SESSION_ID, CREATE_DATETIME, LAST_EVENT_DATETIME, USER_ACCOUNT_ID)" +
                 " " +
@@ -31,7 +31,9 @@ public class AccountSessionDAO {
         st.setString(2, new Timestamp(accountSession.getCreateDateTime().getTime()).toString());
         st.setString(3, new Timestamp(accountSession.getLastEventDateTime().getTime()).toString());
         st.setInt(4, accountSession.getUserAccountId());
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }

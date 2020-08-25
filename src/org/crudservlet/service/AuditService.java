@@ -28,10 +28,10 @@ public class AuditService {
         return new MessageFormat(type.getDescription()).format(args);
     }
 
-    public boolean create(AuditOperType type, int userAccountId, Date eventDatetime, String content, Object... args) throws Exception {
+    public Integer create(AuditOperType type, int userAccountId, Date eventDatetime, String content, Object... args) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 
 //        try {
         Audit audit = new Audit();
@@ -40,6 +40,7 @@ public class AuditService {
         audit.setEventDateTime(eventDatetime);
         audit.setDescription(getDescription(type, args));
         audit.setContent(content);
+
         result = new AuditDAO().create(audit);
 /*        } catch (Exception e) {
             result=false;

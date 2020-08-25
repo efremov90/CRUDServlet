@@ -25,10 +25,10 @@ public class ClientATMService {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientATM client, int userAccountId) throws Exception {
+    public Integer create(ClientATM client, int userAccountId) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 
 //        try {
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);

@@ -19,10 +19,10 @@ public class ReportTasksDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(int reportId, int taskId) throws SQLException {
+    public Integer create(int reportId, int taskId) throws SQLException {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT REPORT_XREF_TASK (REPORT_ID, TASK_ID) " +
                 "VALUES (?, ?);";
@@ -31,7 +31,9 @@ public class ReportTasksDAO {
 
         st.setInt(1, reportId);
         st.setInt(2, taskId);
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

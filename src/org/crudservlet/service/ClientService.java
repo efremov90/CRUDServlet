@@ -31,10 +31,10 @@ public class ClientService {
         }*/
     }
 
-    public boolean create(Client client) throws Exception {
+    public Integer create(Client client) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "INSERT CLIENTS (CLIENT_CODE, CLIENT_NAME, CLIENT_TYPE_ID, ADDRESS, CLOSE_DATE) " +
                 "VALUES (?, ?, ?, ?, ?); ";
@@ -47,6 +47,8 @@ public class ClientService {
         st.setString(4, client.getAddress());
         st.setDate(5, client.getCloseDate() != null ? new Date(client.getCloseDate().getTime()) : null);
         st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

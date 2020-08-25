@@ -20,8 +20,9 @@ public class AuditDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(Audit audit) throws SQLException {
-        boolean result = false;
+    public Integer create(Audit audit) throws SQLException {
+
+        Integer result = null;
 //        try {
         String sql = "INSERT AUDIT (AUDIT_OPER_ID, USER_ACCOUNT_ID, EVENT_DATETIME, DESCRIPTION, CONTENT) " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -32,7 +33,9 @@ public class AuditDAO {
         st.setString(3, new Timestamp(audit.getEventDateTime().getTime()).toString());
         st.setString(4, audit.getDescription());
         st.setString(5, audit.getContent());
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }

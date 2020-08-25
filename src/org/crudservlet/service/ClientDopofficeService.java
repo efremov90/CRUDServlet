@@ -26,10 +26,10 @@ public class ClientDopofficeService {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientDopoffice client, int userAccountId) throws Exception {
+    public Integer create(ClientDopoffice client, int userAccountId) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 
 //        try {
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);

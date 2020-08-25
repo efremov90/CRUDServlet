@@ -18,15 +18,14 @@ public class ClientATMDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientATM client) throws Exception {
+    public Integer create(ClientATM client) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         conn.setAutoCommit(false);
 
-        new ClientDAO().create(client);
-        Integer clientId = MySQLConnection.getLastInsertId();
+        Integer clientId = new ClientDAO().create(client);
 
         String sql = "INSERT ATMS (CLIENT_ID, ATM_TYPE) " +
                 "VALUES (?, ?); ";
@@ -34,7 +33,9 @@ public class ClientATMDAO {
         PreparedStatement st = conn.prepareStatement(sql);
         st.setInt(1, clientId);
         st.setString(2, client.getAtmType().name());
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = clientId;
 
         conn.commit();
         conn.setAutoCommit(true);

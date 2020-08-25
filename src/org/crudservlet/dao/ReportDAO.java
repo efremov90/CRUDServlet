@@ -38,6 +38,7 @@ public class ReportDAO {
         st.setString(4, null);
         st.setString(5, report.getParameters());
         st.executeUpdate();
+
         result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();

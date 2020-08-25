@@ -28,7 +28,6 @@ public class TaskService {
 //        try {
 
         task.setStatus(CREATED);
-        task.setStartDateTime(new java.util.Date());
         task.setUserAccountId(userAccountId);
 
         Integer taskId = new TaskDAO().create(task);
@@ -41,7 +40,7 @@ public class TaskService {
                 task.getCreateDateTime(),
                 String.format("Тип задания: %s \n" +
                                 (task.getType().equals(TaskType.REPORT) ? "Id отчета" : "") + ": %s \n",
-                        task.getStatus().getDescription(),
+                        task.getType().getDescription(),
                         entityId),
                 taskId
         );

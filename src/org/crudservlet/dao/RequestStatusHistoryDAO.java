@@ -16,10 +16,10 @@ public class RequestStatusHistoryDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(RequestStatusHistory requestStatusHistory) throws SQLException {
+    public Integer create(RequestStatusHistory requestStatusHistory) throws SQLException {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         String sql = "UPDATE REQUEST_STATUS_HISTORY " +
                 "SET IS_LAST_STATUS = 0 " +
@@ -42,7 +42,9 @@ public class RequestStatusHistoryDAO {
         st.setInt(4, 1);
         st.setString(5, new Timestamp(requestStatusHistory.getEventDateTime().getTime()).toString());
         st.setInt(6, requestStatusHistory.getUserId());
-        result = st.executeUpdate() > 0;
+        st.executeUpdate();
+
+        result = MySQLConnection.getLastInsertId();
 /*        } catch (SQLException e) {
             e.printStackTrace();
         }*/

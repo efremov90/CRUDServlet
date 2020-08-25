@@ -99,10 +99,10 @@ public class RequestService {
         return request;
     }
 
-    public boolean create(Request request, int userAccountId) throws Exception {
+    public Integer create(Request request, int userAccountId) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
         if (!new PermissionService().isPermission(userAccountId, REQUESTS_CREATE))

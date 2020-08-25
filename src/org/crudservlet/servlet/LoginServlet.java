@@ -55,7 +55,8 @@ public class LoginServlet extends HttpServlet {
 
         try {
             AuthHeader authHeader = new AuthHeader(req.getHeader(AUTHENTICATION_HEADER));
-            SecurityContext securityContext = new SecuritySevice().login(authHeader.getAccount(), authHeader.getPassword());
+            SecurityContext securityContext = new SecuritySevice().login(authHeader.getAccount(),
+                    authHeader.getPassword(), req);
             Cookie cookieAuthStatusCode = new Cookie("AUTH_STATUS_CODE", securityContext.getStatusCode().toString());
             cookieAuthStatusCode.setMaxAge(-1);
             cookieAuthStatusCode.setHttpOnly(false);

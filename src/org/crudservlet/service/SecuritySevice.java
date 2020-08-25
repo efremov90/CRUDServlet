@@ -8,6 +8,7 @@ import org.crudservlet.model.AuditOperType;
 import org.crudservlet.model.SecurityContextStatusCodeType;
 import org.crudservlet.model.UserAccount;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class SecuritySevice {
         return result;
     }
 
-    public SecurityContext login(String account, String password) throws Exception {
+    public SecurityContext login(String account, String password, HttpServletRequest request) throws Exception {
         logger.info("start");
 
         String sessionId = null;
@@ -93,7 +94,20 @@ public class SecuritySevice {
                     AuditOperType.LOGIN,
                     userAccount.getId(),
                     accountSession.getCreateDateTime(),
-                    "",
+                    String.format("RemoteAddr: %s \n" +
+                                    "RemoteHost: %s \n" +
+                                    "RemotePort: %s \n" +
+                                    "ServerName: %s \n" +
+                                    "LocalName: %s \n" +
+                                    "ServerPort: %s \n" +
+                                    "host: %s \n",
+                            request.getRemoteAddr(),
+                            request.getRemoteHost(),
+                            request.getRemotePort(),
+                            request.getServerName(),
+                            request.getLocalName(),
+                            request.getServerPort(),
+                            request.getHeader("host")),
                     userAccount.getId()
             );
 

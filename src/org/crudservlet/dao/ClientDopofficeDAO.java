@@ -17,10 +17,10 @@ public class ClientDopofficeDAO {
         conn = MySQLConnection.getConnection();
     }
 
-    public boolean create(ClientDopoffice client) throws Exception {
+    public Integer create(ClientDopoffice client) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        Integer result = null;
 //        try {
         logger.info(client.toString());
 

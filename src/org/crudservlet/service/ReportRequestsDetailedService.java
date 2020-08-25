@@ -39,8 +39,7 @@ public class ReportRequestsDetailedService extends ReportService {
         Report report = new Report();
         report.setType(ReportType.REPORT_REQUESTS_DETAILED);
         report.setParameters(new ObjectMapper().writeValueAsString(parameters));
-        result = new ReportService().create(report, userAccountId);
-        super.create(report, userAccountId);
+        result = super.create(report, userAccountId);
 
         return result;
     }

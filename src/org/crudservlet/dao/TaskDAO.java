@@ -36,8 +36,7 @@ public class TaskDAO {
         st.setString(2, new Timestamp(task.getCreateDateTime().getTime()).toString());
         st.setString(3, task.getPlannedStartDateTime() != null ?
                 new Timestamp(task.getPlannedStartDateTime().getTime()).toString() : null);
-        st.setString(4, task.getStartDateTime() != null ?
-                new Timestamp(task.getStartDateTime().getTime()).toString() : null);
+        st.setString(4, null);
         st.setString(5, null);
         st.setString(6, CREATED.name());
         st.setString(7, null);
