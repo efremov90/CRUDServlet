@@ -26,26 +26,26 @@ public class SecurityFilter implements Filter {
         String sessionId = request.getRequestedSessionId();
         AuthHeader authHeader = new AuthHeader(request.getHeader(AUTHENTICATION_HEADER));
 
-        logger.info("start");
-        logger.info("getRequestURL:" + request.getRequestURL());
-        logger.info("getRequestURI:" + request.getRequestURI());
-        logger.info("getContextPath:" + request.getContextPath());
-        logger.info("getServletPath:" + request.getServletPath());
-        logger.info("getRemoteAddr:" + request.getRemoteAddr());
-        logger.info("getRemoteHost:" + request.getRemoteHost());
-        logger.info("getRemotePort:" + request.getRemotePort());
-        logger.info("getServerName:" + request.getServerName());
-        logger.info("getLocalName:" + request.getLocalName());
-        logger.info("getServerPort:" + request.getServerPort());
-        logger.info("host:" + request.getHeader("host"));
-        logger.info("getRequestedSessionId:" + request.getRequestedSessionId());
-        logger.info("getAuthType:" + request.getAuthType());
-        logger.info("getRemoteUser:" + request.getRemoteUser());
-        logger.info("getUserPrincipal:" + request.getUserPrincipal());
+//        logger.info("start");
+//        logger.info("getRequestURL:" + request.getRequestURL());
+//        logger.info("getRequestURI:" + request.getRequestURI());
+//        logger.info("getContextPath:" + request.getContextPath());
+//        logger.info("getServletPath:" + request.getServletPath());
+//        logger.info("getRemoteAddr:" + request.getRemoteAddr());
+//        logger.info("getRemoteHost:" + request.getRemoteHost());
+//        logger.info("getRemotePort:" + request.getRemotePort());
+//        logger.info("getServerName:" + request.getServerName());
+//        logger.info("getLocalName:" + request.getLocalName());
+//        logger.info("getServerPort:" + request.getServerPort());
+//        logger.info("host:" + request.getHeader("host"));
+//        logger.info("getRequestedSessionId:" + request.getRequestedSessionId());
+//        logger.info("getAuthType:" + request.getAuthType());
+//        logger.info("getRemoteUser:" + request.getRemoteUser());
+//        logger.info("getUserPrincipal:" + request.getUserPrincipal());
         //Arrays.stream(request.getCookies().clone()).forEach(x->logger.info("getCookies:"+x.getName()+";"+x.getValue
         // ()));
-        request.getHeaderNames().asIterator().forEachRemaining(x -> logger.info("getHeaderNames:" + x + ";" + request.getHeader(x)));
-        logger.info(authHeader.toString());
+//        request.getHeaderNames().asIterator().forEachRemaining(x -> logger.info("getHeaderNames:" + x + ";" + request.getHeader(x)));
+//        logger.info(authHeader.toString());
 
         try {
             if (servletPath.indexOf(".") > -1) {

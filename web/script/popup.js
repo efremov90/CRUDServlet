@@ -1,5 +1,8 @@
-class Popup {
+class PopupReport {
     constructor() {
+
+        this.reportId = null;
+
         let modalForm = (new DOMParser()).parseFromString(
             '<div class="popup" id="popup" data-display="none">' +
             '<div class="popup-content">' +
@@ -19,35 +22,98 @@ class Popup {
         modalForm.style.zIndex = z;
         modalForm.style.paddingTop = (z * 25) + 'px';
         this.form = modalForm;
-        let formLet = this.form;
 
         // this.form.querySelector('.popup-content').style.width = '80px';
 
-        let btnInBackground = this.form.querySelector('#inBackground');
-        let btnLoad = this.form.querySelector('#load');
-        btnLoad.setAttribute('data-display', 'none')
+        this.btnInBackground = this.form.querySelector('#inBackground');
+        this.btnLoad = this.form.querySelector('#load');
+        this.btnLoad.setAttribute('data-display', 'none');
 
-        //Инициализация кнопок
-        btnInBackground.addEventListener(
-            'click',
-            function () {
-                formLet.remove();
-            },
-            false
-        );
-        btnLoad.addEventListener(
-            'click',
-            function () {
-                formLet.remove();
-            },
-            false
-        );
+        this.timer = null;
+
         //return this.form;
     }
 
+    init() {
+
+        // let btnInBackground = this.btnInBackground;
+        // let btnLoad = this.btnLoad;
+        // let form = this.form;
+        // let timer = this.timer;
+
+
+    }
+
+    setReportId(reportId) {
+        this.reportId = reportId;
+    }
+
+    setTimer(timer) {
+        this.timer = timer;
+    }
+
+    stopTimer() {
+        clearTimeout(this.timer);
+    }
+
     show(parentForm) {
-        parentForm.appendChild(this.form);
+        let btnInBackground = this.btnInBackground;
+        let btnLoad = this.btnLoad;
+        let form = this.form;
+        parentForm.appendChild(form);
         this.form.setAttribute('data-display', 'block');
+        let checkReport = {
+            reportId: this.reportId
+        }
+        let json = JSON.stringify(checkReport);
+        let req = new HttpRequestCRUD();
+        req.setFetch(url + '/checkReport', json);
+        req.setForm(form);
+        let request = null;
+        let timer = setInterval(
+            function repeat() {
+                request = req.fetchJSON();
+                request.then(
+                    () => {
+                        if (req.getStatus()) {
+                            if (req.getData().status == 'FINISH') {
+                                btnInBackground.remove();
+                                btnLoad.setAttribute('data-display', 'block');
+                                // alert(timer);
+                                stop(timer);
+                            } else {
+                                // this.timer = setTimeout(repeat,3000);
+                                // alert('new:'+this.timer);
+                            }
+                        } else {
+                            stop(timer);
+                        }
+                    }
+                );
+            }
+            , 3000
+        );
+        // alert('new first:'+timer);
+        let stop = (t) => {
+            // alert('btnInBackground:'+t);
+            // this.form.remove();
+            clearInterval(t);
+        }
+        //Инициализация кнопок
+        this.btnInBackground.addEventListener(
+            'click',
+            () => {
+                stop(timer);
+            },
+            false
+        );
+        this.btnLoad.addEventListener(
+            'click',
+            function () {
+                form.remove();
+            },
+            false
+        );
     }
 }
 

@@ -117,7 +117,9 @@ function initFormReports(reportType, parentForm) {
                 request.then(
                     () => {
                         if (req.getStatus()) {
-                            let popup = new Popup();
+                            let popup = new PopupReport();
+                            popup.setReportId(req.getData().reportId);
+                            // popup.init();
                             popup.show(form);
                             // modal.remove();
                             // initForm(parentForm);

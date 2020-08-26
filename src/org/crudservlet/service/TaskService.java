@@ -25,7 +25,6 @@ public class TaskService {
         logger.info("start");
 
         Integer result = null;
-//        try {
 
         task.setStatus(CREATED);
         task.setUserAccountId(userAccountId);
@@ -44,11 +43,6 @@ public class TaskService {
                         entityId),
                 taskId
         );
-
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
 
         return result;
     }
@@ -80,15 +74,8 @@ public class TaskService {
 
         conn.commit();
         conn.setAutoCommit(true);
-/*        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-        logger.info(":" + result);
 
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
+        logger.info(":" + result);
 
         return result;
     }
@@ -97,7 +84,6 @@ public class TaskService {
         logger.info("start");
 
         boolean result = false;
-//        try {
 
         String sql = "UPDATE TASKS " +
                 "SET FINISH_DATETIME = ?, " +
@@ -122,10 +108,6 @@ public class TaskService {
 
         conn.commit();
         conn.setAutoCommit(true);
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
 
         return result;
     }
@@ -134,7 +116,7 @@ public class TaskService {
         logger.info("start");
 
         TaskStatusType taskStatusType = null;
-//        try {
+
         String sql = "SELECT STATUS  " +
                 "FROM REPORTS r " +
                 "WHERE ID = ?";
@@ -146,9 +128,7 @@ public class TaskService {
         if (rs.next()) {
             taskStatusType = TaskStatusType.valueOf(rs.getString("STATUS"));
         }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
         return taskStatusType;
     }
 }

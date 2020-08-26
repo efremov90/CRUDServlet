@@ -34,7 +34,13 @@ public class CheckReportServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             CheckReportRequestDTO checkReportRequestDTO = mapper.readValue(req.getReader(), CheckReportRequestDTO.class);
 
-            ReportStatusType reportStatus = new ReportDAO().getReportStatus(checkReportRequestDTO.getReportId());
+//            ReportStatusType reportStatus = new ReportDAO().getReportStatus(checkReportRequestDTO.getReportId());
+            ReportStatusType reportStatus;
+            if (Math.random() > 0.5) {
+                reportStatus = ReportStatusType.CREATED;
+            } else {
+                reportStatus = ReportStatusType.FINISH;
+            }
 
             CheckReportResponseDTO checkReportResponseDTO = new CheckReportResponseDTO();
             checkReportResponseDTO.setStatus(reportStatus.name());
