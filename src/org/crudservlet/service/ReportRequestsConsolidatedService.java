@@ -10,6 +10,8 @@ import org.crudservlet.model.UserAccount;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import static org.crudservlet.model.Permissions.REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED;
@@ -26,6 +28,7 @@ public class ReportRequestsConsolidatedService extends ReportService {
     }
 
     public Integer create(ReportRequestsConsolidatedDTO parameters, int userAccountId) throws Exception {
+
         logger.info("start");
 
         Integer result = null;
@@ -41,10 +44,15 @@ public class ReportRequestsConsolidatedService extends ReportService {
         report.setParameters(new ObjectMapper().writeValueAsString(parameters));
         result = super.create(report, userAccountId);
 
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(new ReportTaskService(result));
+        executorService.shutdown();
+
+        logger.info(":" + result);
         return result;
     }
 
-    public boolean generate(int userAccountId) throws Exception {
+    public boolean generate() throws Exception {
         logger.info("start");
 
         boolean result = false;
@@ -62,7 +70,11 @@ public class ReportRequestsConsolidatedService extends ReportService {
 //        st.setDate(1, (java.sql.Date) fromCreateDate);
 //        st.setDate(2, (java.sql.Date) toCreateDate);
 //        st.setString(3, clientCode);
-        st.executeQuery();
+//        st.executeQuery();
+
+        Thread.sleep(10000);
+
+        logger.info("finish");
 
         return result;
     }

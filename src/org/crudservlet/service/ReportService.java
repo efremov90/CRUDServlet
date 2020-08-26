@@ -28,7 +28,6 @@ public class ReportService {
         logger.info("start");
 
         Integer result = null;
-//        try {
 
         conn.setAutoCommit(false);
 
@@ -63,10 +62,8 @@ public class ReportService {
 
         conn.commit();
         conn.setAutoCommit(true);
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
+
+        logger.info(":" + result);
 
         return result;
     }
@@ -75,9 +72,10 @@ public class ReportService {
         logger.info("start");
 
         boolean result = false;
-//        try {
 
-        Report report = new Report();
+        int taskId = new ReportTasksDAO().getTaskByReport(reportId);
+
+        conn.setAutoCommit(false);
 
         String sql = "UPDATE REPORTS " +
                 "SET STATUS = ? " +
@@ -85,17 +83,15 @@ public class ReportService {
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, STARTED.name());
-        st.setInt(2, report.getId());
+        st.setInt(2, reportId);
         result = st.executeUpdate() > 0;
-/*        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-        logger.info(":" + result);
 
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
+        result = new TaskService().start(taskId);
+
+        conn.commit();
+        conn.setAutoCommit(true);
+
+        logger.info(":" + result);
 
         return result;
     }
@@ -104,25 +100,28 @@ public class ReportService {
         logger.info("start");
 
         boolean result = false;
-//        try {
+
+        int taskId = new ReportTasksDAO().getTaskByReport(reportId);
+
+        conn.setAutoCommit(false);
 
         String sql = "UPDATE REPORTS " +
-                "SET FINISH_DATETIME = ?, " +
-                "STATUS = ?, " +
-                "CONTENT = ?, " +
+                "SET STATUS = ?, " +
+                "CONTENT = ? " +
                 "WHERE ID = ?";
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, new Timestamp(new java.util.Date().getTime()).toString());
-        st.setString(2, FINISH.name());
-        st.setBlob(3, content);
-        st.setInt(4, reportId);
+        st.setString(1, FINISH.name());
+        st.setBlob(2, content);
+        st.setInt(3, reportId);
         result = st.executeUpdate() > 0;
 
-/*        } catch (Exception e) {
-            result=false;
-            e.printStackTrace();
-        }*/
+        result = new TaskService().finish(taskId);
+
+        conn.commit();
+        conn.setAutoCommit(true);
+
+        logger.info(":" + result);
 
         return result;
     }
@@ -131,7 +130,6 @@ public class ReportService {
         logger.info("start");
 
         Blob content = null;
-//        try {
 
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
 
@@ -163,9 +161,7 @@ public class ReportService {
         if (rs.next()) {
             content = rs.getBlob("CONTENT");
         }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
         return content;
     }
 
@@ -174,7 +170,7 @@ public class ReportService {
         logger.info("start");
 
         ArrayList<Report> reports = new ArrayList<>();
-//        try {
+
         String sql = "SELECT " +
                 "r.ID, r.TYPE, r.START_DATETIME, r.FINISH_DATETIME, r.STATUS, r.PARAMETERS, r.USER_ACCOUNT_ID " +
                 "FROM REPORTS r " +
@@ -198,9 +194,7 @@ public class ReportService {
             report.setUserAccountId(rs.getInt("USER_ACCOUNT_ID"));
             reports.add(report);
         }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
         return reports;
     }
 }

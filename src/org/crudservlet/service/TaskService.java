@@ -51,13 +51,12 @@ public class TaskService {
         logger.info("start");
 
         boolean result = false;
-//        try {
 
         String sql = "UPDATE TASKS " +
                 "SET STATUS = ? " +
                 "WHERE ID = ?";
 
-        conn.setAutoCommit(false);
+//        conn.setAutoCommit(false);
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, STARTED.name());
@@ -72,25 +71,25 @@ public class TaskService {
                 taskId
         );
 
-        conn.commit();
-        conn.setAutoCommit(true);
+//        conn.commit();
+//        conn.setAutoCommit(true);
 
         logger.info(":" + result);
 
         return result;
     }
 
-    public boolean finish(int taskId, Blob content) throws Exception {
+    public boolean finish(int taskId) throws Exception {
         logger.info("start");
 
         boolean result = false;
 
         String sql = "UPDATE TASKS " +
                 "SET FINISH_DATETIME = ?, " +
-                "STATUS = ?, " +
+                "STATUS = ? " +
                 "WHERE ID = ?";
 
-        conn.setAutoCommit(false);
+//        conn.setAutoCommit(false);
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, new Timestamp(new java.util.Date().getTime()).toString());
@@ -106,8 +105,8 @@ public class TaskService {
                 taskId
         );
 
-        conn.commit();
-        conn.setAutoCommit(true);
+//        conn.commit();
+//        conn.setAutoCommit(true);
 
         return result;
     }
