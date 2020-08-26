@@ -165,6 +165,23 @@ function formatDate(milliseconds) {
     return d.getFullYear().toString() + '-' + month + '-' + date;
 }
 
+function formatTime(milliseconds) {
+    let d = new Date(milliseconds);
+    let minutes;
+    if (d.getMinutes() < 10) {
+        minutes = '0' + d.getMinutes().toString();
+    } else {
+        minutes = (d.getMinutes() + 1).toString();
+    }
+    let seconds;
+    if (d.getSeconds() < 10) {
+        seconds = '0' + d.getSeconds().toString();
+    } else {
+        seconds = d.getSeconds().toString();
+    }
+    return minutes + ':' + seconds;
+}
+
 function dateTimeJSONToView(dtString, round) {
     //alert('dateJSONToView');
     let dtJSON = new Date(Date.parse(dtString));

@@ -10,6 +10,7 @@ class PopupReport {
             '<button id="inBackground">В фоне</button>' +
             '<button id="load">Загрузить</button>' +
             '</div>' +
+            '<div class="status"><span id="status">...</span><br><span id="time"></span></div>' +
             '</div>' +
             '</div>', 'text/html')
             .querySelector('div');
@@ -61,10 +62,14 @@ class PopupReport {
         let btnLoad = this.btnLoad;
         let form = this.form;
         parentForm.appendChild(form);
-        this.form.setAttribute('data-display', 'block');
+        let start_dt = new Date().getTime();
         let checkReport = {
             reportId: this.reportId
         }
+        let status = form.querySelector('.popup .status #status');
+        status.innerHTML = 'Идет формирование';
+        let time = form.querySelector('.popup .status #time');
+        time.innerHTML = '00:00';
         let json = JSON.stringify(checkReport);
         let req = new HttpRequestCRUD();
         req.setFetch(url + '/checkReport', json);
@@ -72,20 +77,30 @@ class PopupReport {
         let request = null;
         let timer = setInterval(
             function repeat() {
+                let cur_dt = new Date().getTime();
+                time.innerHTML = formatTime(cur_dt - start_dt);
+            }
+            , 1000
+        );
+        let check_timer = setInterval(
+            function repeat() {
                 request = req.fetchJSON();
                 request.then(
                     () => {
                         if (req.getStatus()) {
                             if (req.getData().status == 'FINISH') {
                                 btnInBackground.remove();
+                                status.innerHTML = 'Сформирован';
                                 btnLoad.setAttribute('data-display', 'block');
                                 // alert(timer);
+                                stop(check_timer);
                                 stop(timer);
                             } else {
                                 // this.timer = setTimeout(repeat,3000);
                                 // alert('new:'+this.timer);
                             }
                         } else {
+                            stop(check_timer);
                             stop(timer);
                         }
                     }
@@ -103,7 +118,9 @@ class PopupReport {
         this.btnInBackground.addEventListener(
             'click',
             () => {
+                stop(check_timer);
                 stop(timer);
+                form.remove();
             },
             false
         );
@@ -114,6 +131,7 @@ class PopupReport {
             },
             false
         );
+        this.form.setAttribute('data-display', 'block');
     }
 }
 
