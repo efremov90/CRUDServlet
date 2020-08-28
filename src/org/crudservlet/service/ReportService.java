@@ -1,11 +1,22 @@
 package org.crudservlet.service;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.crudservlet.dao.*;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.crudservlet.model.Permissions.REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED;
@@ -196,5 +207,42 @@ public class ReportService {
         }
 
         return reports;
+    }
+
+    public /*ByteArrayOutputStream*/ void generate(ReportType reportType, Map<String, Object> parameters,
+                                                   JRBeanCollectionDataSource data) throws JRException, IOException {
+
+        String PROJECT_PATH = "C:\\Users\\NEO\\IdeaProjects\\CRUDServlet";
+        String FILE_NAME = null;
+        String REPORT_pattern = "\\jrxml";
+        String FILE_EXTENSION_PATTERN = ".jrxml";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        File reportPattern = new File(PROJECT_PATH + REPORT_pattern + "\\" + reportType.name() + FILE_EXTENSION_PATTERN);
+        JasperDesign jasperDesign = JRXmlLoader.load(reportPattern);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, data);
+//        JasperPrint jasperPrint = JasperFillManager.fillReportToFile(, parameters, data);
+//        JasperExportManager.exportReportToPdfFile(jasperPrint, PROJECT_PATH +"\\"+ FILE_NAME+".pdf");
+//        baos.write(JasperExportManager.exportReportToPdf(jasperPrint));
+
+
+        // Make sure the output directory exists.
+        File outDir = new File("C:/jasperoutput");
+        outDir.mkdirs();
+
+        // Export to PDF.
+        JasperExportManager.exportReportToHtmlFile(jasperPrint,
+                "C:/jasperoutput/StyledTextReport.html");
+        JRXlsExporter exporterXLS = new JRXlsExporter();
+        exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+        exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "C:/jasperoutput/StyledTextReport.xls");
+        exporterXLS.exportReport();
+
+//        return baos;
     }
 }

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.dto.ReportRequestsDetailedDTO;
-import org.crudservlet.model.Report;
-import org.crudservlet.model.ReportType;
-import org.crudservlet.model.UserAccount;
+import org.crudservlet.model.*;
+import org.crudservlet.reportbean.ReportRequestsDetailedBean;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -51,26 +51,36 @@ public class ReportRequestsDetailedService extends ReportService {
         return result;
     }
 
-    public boolean generate() throws Exception {
+    public ArrayList<ReportRequestsDetailedBean> getData(Date fromCreateDate, Date toCreateDate, String clientCode) throws Exception {
         logger.info("start");
 
-        boolean result = false;
+        ArrayList<ReportRequestsDetailedBean> result = new ArrayList<>();
 
         String sql = "SELECT r.client_code, c.client_name, ct.type, r.create_date, r.status, r.comment " +
                 "FROM REQUESTS r " +
                 "LEFT JOIN CLIENTS c on r.client_code = c.client_code " +
                 "LEFT JOIN client_type ct on c.client_type_id = ct.id " +
-                "WHERE r.create_date BETWEEN ? AND ? " +
-                "AND r.CLIENT_CODE = ? " +
+                "WHERE 1=1 " +
+                (fromCreateDate != null ? " AND r.CREATE_DATE >= " + "'" + fromCreateDate + "'" : "") +
+                (toCreateDate != null ? " AND r.CREATE_DATE <= " + "'" + toCreateDate + "'" : "") +
+                (clientCode != null ? " AND r.CLIENT_CODE = " + "'" + clientCode + "'" : "") +
                 "ORDER BY ct.type, c.client_name, c.client_code, r.create_date, r.id";
 
-        PreparedStatement st = conn.prepareStatement(sql);
-//        st.setDate(1, (java.sql.Date) fromCreateDate);
-//        st.setDate(2, (java.sql.Date) toCreateDate);
-//        st.setString(3, clientCode);
-//        st.executeQuery();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
 
-        Thread.sleep(10000);
+        while (rs.next()) {
+            ReportRequestsDetailedBean reportRequestsDetailedBean = new ReportRequestsDetailedBean();
+            reportRequestsDetailedBean.setClientCode(rs.getNString("client_code"));
+            reportRequestsDetailedBean.setClientName(rs.getNString("client_name"));
+            reportRequestsDetailedBean.setClientType(ClientTypeType.valueOf(rs.getNString("type")).getDescription());
+            reportRequestsDetailedBean.setCreateDate(new java.sql.Date(rs.getDate("create_date").getTime()).toString());
+            reportRequestsDetailedBean.setStatus(RequestStatusType.valueOf(rs.getNString("status")).getDescription());
+            reportRequestsDetailedBean.setComment(rs.getNString("comment"));
+            result.add(reportRequestsDetailedBean);
+        }
+
+//        Thread.sleep(10000);
 
         logger.info("finish");
         return result;
