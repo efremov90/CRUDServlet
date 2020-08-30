@@ -2,6 +2,7 @@ let url = "http://localhost:8081/CRUDServlet";
 
 class HttpRequestCRUD {
     constructor() {
+        this.response = null;
         this.data = null;
         this.status = false;
         this.form = null;
@@ -58,6 +59,47 @@ class HttpRequestCRUD {
 
     getData() {
         return this.data;
+    }
+
+    getResponse() {
+        return this.response;
+    }
+
+    fetchBlob() {
+        return fetch(this.url, this.options).then(
+            response => {
+                this.response = response;
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    let errorForm = new ModalError();
+                    errorForm.setErrorMessage(
+                        "HTTP-статус " + response.status + "\n" +
+                        response.statusText
+                    );
+                    if (this.form) errorForm.show(this.form);
+                }
+            }
+        ).then(r => {
+                if (r.error == null) {
+                    this.status = true;
+                    this.data = r;
+                } else {
+                    let errorForm = new ModalError();
+                    errorForm.setErrorMessage(r.error.errorMessage);
+                    errorForm.setStackTrace(r.error.stackTrace);
+                    errorForm.show(this.form);
+                }
+            }
+        ).catch(e => {
+            let errorForm = new ModalError();
+            errorForm.setErrorMessage(
+                "Сервер не доступен \n" +
+                e
+            );
+            // errorForm.setStackTrace(r.error.stackTrace);
+            errorForm.show(this.form);
+        })
     }
 
     fetchJSON() {
@@ -283,6 +325,7 @@ function cross_download(url, fileName) {
     let __fileName = fileName;
     req.onload = function (event) {
         let blob = req.response;
+        req.getResponseHeader()
         let contentType = req.getResponseHeader("content-type");
         if (window.navigator.msSaveOrOpenBlob) {
             // Internet Explorer

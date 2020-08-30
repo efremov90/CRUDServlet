@@ -72,7 +72,7 @@ public class ReportRequestsConsolidatedService extends ReportService {
 //        st.setString(3, clientCode);
 //        st.executeQuery();
 
-        Thread.sleep(10000);
+        Thread.sleep(2000);
 
         logger.info("finish");
 
