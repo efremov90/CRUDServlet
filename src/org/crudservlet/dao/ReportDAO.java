@@ -4,8 +4,6 @@ import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.Report;
 import org.crudservlet.model.ReportStatusType;
 import org.crudservlet.model.ReportType;
-import org.crudservlet.model.Request;
-import org.h2.command.ddl.CreateDomain;
 
 import java.sql.*;
 import java.util.logging.Logger;
@@ -28,8 +26,8 @@ public class ReportDAO {
 
         Integer result = null;
 //        try {
-        String sql = "INSERT REPORTS (TYPE, STATUS, COMMENT, CONTENT, PARAMETERS) " +
-                "VALUES (?, ?, ?, ?, ?); ";
+        String sql = "INSERT REPORTS (TYPE, STATUS, COMMENT, CONTENT, PARAMETERS, FROM_PERIOD_DATE, TO_PERIOD_DATE) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?); ";
         PreparedStatement st = conn.prepareStatement(sql);
 
         st.setString(1, report.getType().name());
@@ -37,6 +35,8 @@ public class ReportDAO {
         st.setString(3, null);
         st.setString(4, null);
         st.setString(5, report.getParameters());
+        st.setDate(6, report.getFromPeriodDate() != null ? new Date(report.getFromPeriodDate().getTime()) : null);
+        st.setDate(7, report.getToPeriodDate() != null ? new Date(report.getToPeriodDate().getTime()) : null);
         st.executeUpdate();
 
         result = MySQLConnection.getLastInsertId();

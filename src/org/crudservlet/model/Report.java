@@ -15,6 +15,8 @@ public class Report {
     private String Parameters;
     private int UserAccountId;
     private int TaskId;
+    private Date FromPeriodDate;
+    private Date ToPeriodDate;
 
     public int getId() {
         return Id;
@@ -94,5 +96,21 @@ public class Report {
 
     public void setTaskId(int taskId) {
         TaskId = taskId;
+    }
+
+    public Date getFromPeriodDate() {
+        return FromPeriodDate;
+    }
+
+    public void setFromPeriodDate(Date fromPeriodDate) {
+        FromPeriodDate = fromPeriodDate;
+    }
+
+    public Date getToPeriodDate() {
+        return ToPeriodDate;
+    }
+
+    public void setToPeriodDate(Date toPeriodDate) {
+        ToPeriodDate = toPeriodDate;
     }
 }

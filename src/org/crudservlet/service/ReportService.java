@@ -181,18 +181,21 @@ public class ReportService {
         return content;
     }
 
-    public ArrayList<Report> getReports(Date startDateTime, Date finishDateTime,
+    public ArrayList<Report> getReports(Date fromCreateDatetime, Date toCreateDatetime,
                                         ReportStatusType reportStatusType) throws SQLException {
         logger.info("start");
 
         ArrayList<Report> reports = new ArrayList<>();
 
         String sql = "SELECT " +
-                "r.ID, r.TYPE, r.START_DATETIME, r.FINISH_DATETIME, r.STATUS, r.PARAMETERS, r.USER_ACCOUNT_ID " +
+                "r.ID, r.TYPE, r.CREATE_DATETIME, r.START_DATETIME, r.FINISH_DATETIME, r.STATUS, r.PARAMETERS, " +
+                "r.USER_ACCOUNT_ID " +
                 "FROM REPORTS r " +
+                "LEFT JOIN REPORT_XREF_TASK rxt ON r.ID = rxt.REPORT_ID " +
+                "LEFT JOIN TASKS t ON rxt.TASK_ID = t.ID " +
                 "WHERE 1=1 " +
-                (startDateTime != null ? " AND r.START_DATETIME >= " + "'" + startDateTime + "'" : "") +
-                (finishDateTime != null ? " AND r.FINISH_DATETIME <= " + "'" + startDateTime + "'" : "") +
+                (fromCreateDatetime != null ? " AND r.CREATE_DATETIME >= " + "'" + fromCreateDatetime + "'" : "") +
+                (toCreateDatetime != null ? " AND r.CREATE_DATETIME <= " + "'" + toCreateDatetime + "'" : "") +
                 (reportStatusType != null ? " AND r.STATUS = " + "'" + reportStatusType.name() + "'" : "");
 
         Statement st = conn.createStatement();
@@ -214,8 +217,8 @@ public class ReportService {
         return reports;
     }
 
-    public /*ByteArrayOutputStream*/ void generate(ReportType reportType, Map<String, Object> parameters,
-                                                   JRBeanCollectionDataSource data) throws JRException, IOException {
+    public ByteArrayOutputStream generate(ReportType reportType, Map<String, Object> parameters,
+                                          JRBeanCollectionDataSource data) throws JRException, IOException {
 
         String PROJECT_PATH = "C:\\Users\\NEO\\IdeaProjects\\CRUDServlet";
         String FILE_NAME = null;
@@ -228,7 +231,7 @@ public class ReportService {
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, data);
 //        JasperPrint jasperPrint = JasperFillManager.fillReportToFile(, parameters, data);
-        JasperExportManager.exportReportToPdfFile(jasperPrint, PROJECT_PATH + "\\" + FILE_NAME + ".pdf");
+//        JasperExportManager.exportReportToPdfFile(jasperPrint, PROJECT_PATH + "\\" + FILE_NAME + ".pdf");
 //        baos.write(JasperExportManager.exportReportToPdf(jasperPrint));
 
 
@@ -252,16 +255,16 @@ public class ReportService {
         SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
         xlsExporter.setConfiguration(xlsReportConfiguration);
         xlsExporter.exportReport();
-        baos.writeTo(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls").getOutputStream());
+//        baos.writeTo(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls").getOutputStream());
 
         JRXlsxExporter exporterXLSX = new JRXlsxExporter();
         exporterXLSX.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
         exporterXLSX.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "C:/jasperoutput/StyledTextReport.xlsx");
         exporterXLSX.exportReport();
 
-        JasperExportManager.exportReportToPdfFile(jasperPrint,
-                "C:/jasperoutput/StyledTextReport.pdf");
+//        JasperExportManager.exportReportToPdfFile(jasperPrint,
+//                "C:/jasperoutput/StyledTextReport.pdf");
 
-//        return baos;
+        return baos;
     }
 }

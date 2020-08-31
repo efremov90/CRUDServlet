@@ -40,6 +40,10 @@ public class ReportRequestsDetailedService extends ReportService {
 
         Report report = new Report();
         report.setType(ReportType.REPORT_REQUESTS_DETAILED);
+        report.setFromPeriodDate((parameters.getFromCreateDate() != null && parameters.getFromCreateDate() != "") ?
+                java.sql.Date.valueOf(parameters.getFromCreateDate()) : null);
+        report.setToPeriodDate((parameters.getToCreateDate() != null && parameters.getToCreateDate() != "") ?
+                java.sql.Date.valueOf(parameters.getToCreateDate()) : null);
         report.setParameters(new ObjectMapper().writeValueAsString(parameters));
         result = super.create(report, userAccountId);
 

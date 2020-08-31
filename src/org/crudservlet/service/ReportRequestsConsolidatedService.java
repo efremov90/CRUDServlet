@@ -9,6 +9,7 @@ import org.crudservlet.model.ReportType;
 import org.crudservlet.model.UserAccount;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +42,10 @@ public class ReportRequestsConsolidatedService extends ReportService {
 
         Report report = new Report();
         report.setType(ReportType.REPORT_REQUESTS_CONSOLIDATED);
+        report.setFromPeriodDate((parameters.getFromCreateDate() != null && parameters.getFromCreateDate() != "") ?
+                Date.valueOf(parameters.getFromCreateDate()) : null);
+        report.setToPeriodDate((parameters.getToCreateDate() != null && parameters.getToCreateDate() != "") ?
+                Date.valueOf(parameters.getToCreateDate()) : null);
         report.setParameters(new ObjectMapper().writeValueAsString(parameters));
         result = super.create(report, userAccountId);
 
