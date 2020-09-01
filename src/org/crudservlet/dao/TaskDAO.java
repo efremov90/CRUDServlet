@@ -3,10 +3,7 @@ package org.crudservlet.dao;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.Task;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.logging.Logger;
 
 import static org.crudservlet.model.TaskStatusType.CREATED;
@@ -27,20 +24,22 @@ public class TaskDAO {
 
         Integer result = null;
 //        try {
-        String sql = "INSERT TASKS (TYPE, CREATE_DATETIME, PLANNED_START_DATETIME, START_DATETIME, FINISH_DATETIME, " +
+        String sql = "INSERT TASKS (TYPE, CREATE_DATE, CREATE_DATETIME, PLANNED_START_DATETIME, START_DATETIME, " +
+                "FINISH_DATETIME, " +
                 "STATUS, COMMENT, USER_ACCOUNT_ID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?); ";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?); ";
         PreparedStatement st = conn.prepareStatement(sql);
 
         st.setString(1, task.getType().name());
-        st.setString(2, new Timestamp(task.getCreateDateTime().getTime()).toString());
-        st.setString(3, task.getPlannedStartDateTime() != null ?
+        st.setString(2, new Date(task.getCreateDateTime().getTime()).toString());
+        st.setString(3, new Timestamp(task.getCreateDateTime().getTime()).toString());
+        st.setString(4, task.getPlannedStartDateTime() != null ?
                 new Timestamp(task.getPlannedStartDateTime().getTime()).toString() : null);
-        st.setString(4, null);
         st.setString(5, null);
-        st.setString(6, CREATED.name());
-        st.setString(7, null);
-        st.setInt(8, task.getUserAccountId());
+        st.setString(6, null);
+        st.setString(7, CREATED.name());
+        st.setString(8, null);
+        st.setInt(9, task.getUserAccountId());
         st.executeUpdate();
 
         result = MySQLConnection.getLastInsertId();

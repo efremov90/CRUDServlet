@@ -68,6 +68,7 @@ public class ReportService {
         Task task = new Task();
         task.setType(REPORT);
         task.setCreateDateTime(new java.util.Date());
+        task.setCreateDate(task.getCreateDateTime());
         task.setPlannedStartDateTime(task.getCreateDateTime());
         task.setStatus(TaskStatusType.CREATED);
         task.setUserAccountId(userAccountId);
@@ -181,21 +182,21 @@ public class ReportService {
         return content;
     }
 
-    public ArrayList<Report> getReports(Date fromCreateDatetime, Date toCreateDatetime,
+    public ArrayList<Report> getReports(Date fromCreateDate, Date toCreateDate,
                                         ReportStatusType reportStatusType) throws SQLException {
         logger.info("start");
 
         ArrayList<Report> reports = new ArrayList<>();
 
         String sql = "SELECT " +
-                "r.ID, r.TYPE, r.CREATE_DATETIME, r.START_DATETIME, r.FINISH_DATETIME, r.STATUS, r.PARAMETERS, " +
-                "r.USER_ACCOUNT_ID " +
+                "r.ID, r.TYPE, t.CREATE_DATE, t.CREATE_DATETIME, t.START_DATETIME, t.FINISH_DATETIME, r.STATUS, " +
+                "r.PARAMETERS, t.USER_ACCOUNT_ID, r.FROM_PERIOD_DATE, r.TO_PERIOD_DATE " +
                 "FROM REPORTS r " +
                 "LEFT JOIN REPORT_XREF_TASK rxt ON r.ID = rxt.REPORT_ID " +
                 "LEFT JOIN TASKS t ON rxt.TASK_ID = t.ID " +
                 "WHERE 1=1 " +
-                (fromCreateDatetime != null ? " AND r.CREATE_DATETIME >= " + "'" + fromCreateDatetime + "'" : "") +
-                (toCreateDatetime != null ? " AND r.CREATE_DATETIME <= " + "'" + toCreateDatetime + "'" : "") +
+                (fromCreateDate != null ? " AND t.CREATE_DATE >= " + "'" + fromCreateDate + "'" : "") +
+                (toCreateDate != null ? " AND t.CREATE_DATE <= " + "'" + toCreateDate + "'" : "") +
                 (reportStatusType != null ? " AND r.STATUS = " + "'" + reportStatusType.name() + "'" : "");
 
         Statement st = conn.createStatement();
@@ -205,12 +206,19 @@ public class ReportService {
             Report report = new Report();
             report.setId(rs.getInt("id"));
             report.setType(ReportType.valueOf(rs.getNString("type")));
+            report.setCreateDate(rs.getDate("CREATE_DATE") != null ?
+                    new java.util.Date(rs.getDate("CREATE_DATE").getTime()) : null);
+            report.setCreateDatetime(Timestamp.valueOf(rs.getNString("CREATE_DATETIME")));
             report.setStartDateTime(Timestamp.valueOf(rs.getNString("START_DATETIME")));
             report.setFinishDateTime(rs.getNString("FINISH_DATETIME") != null ?
                     Timestamp.valueOf(rs.getNString("FINISH_DATETIME")) : null);
             report.setStatus(ReportStatusType.valueOf(rs.getNString("status")));
             report.setParameters(rs.getNString("PARAMETERS"));
             report.setUserAccountId(rs.getInt("USER_ACCOUNT_ID"));
+            report.setFromPeriodDate(rs.getDate("FROM_PERIOD_DATE") != null ?
+                    new java.util.Date(rs.getDate("FROM_PERIOD_DATE").getTime()) : null);
+            report.setToPeriodDate(rs.getDate("TO_PERIOD_DATE") != null ?
+                    new java.util.Date(rs.getDate("TO_PERIOD_DATE").getTime()) : null);
             reports.add(report);
         }
 

@@ -1,0 +1,89 @@
+<div
+        class="form"
+        id="myReports"
+        style="margin-left:10px; width: 99%; height:80%;" data-display="none"
+>
+    <div class="titleMenuBar">
+        Мои отчеты
+    </div>
+    <div class="buttonBar">
+        <button id="clearFilter">Очистить</button>
+        <button id="search">Поиск</button>
+        <button id="downloadReport">Скачать</button>
+    </div>
+    <div class="buttonBar">
+        Дата запуска с: <input type="date" name="fromRunDate" autofocus/> по:
+        <input type="date" name="toRunDate"/>
+    </div>
+    <div
+            class="content"
+            style="width: 98%; height:100%; overflow:auto;"
+    >
+        <table class="gridTable" id="myReports">
+            <thead>
+            <tr class="filterTable">
+                <td data-field="reportId" data-display="none">
+                    <input type="text"/>
+                </td>
+                <td data-field="runDatetime">
+                    <input type="text"/>
+                </td>
+                <td data-field="reportName">
+                    <input type="text"/>
+                </td>
+                <td data-field="fromPeriodDate">
+                    <input type="text"/>
+                </td>
+                <td data-field="toPeriodDate">
+                    <input type="text"/>
+                </td>
+                <td data-field="parameters">
+                    <input type="text"/>
+                </td>
+                <td data-field="status">
+                    <input type="text"/>
+                </td>
+            </tr>
+            <tr class="headerTable">
+                <td data-field="reportId" data-display="none"></td>
+                <td
+                        data-field="runDatetime"
+                        data-type="dateTime"
+                        style="min-width:130px; max-width:130px;"
+                >
+                    Дата запуска
+                </td>
+                <td data-field="reportName" style="min-width:140px; max-width:140px;">
+                    Наименование отчета
+                </td>
+                <td
+                        data-field="fromPeriodDate"
+                        data-type="date"
+                        style="min-width:90px; max-width:90px;"
+                >
+                    Период С
+                </td>
+                <td
+                        data-field="toPeriodDate"
+                        data-type="date"
+                        style="min-width:90px; max-width:90px;"
+                >
+                    Период По
+                </td>
+                <td data-field="parameters" style="min-width:200px; max-width:200px;">
+                    Параметры
+                </td>
+                <td data-field="status" style="min-width:140px; max-width:140px;">
+                    Статус
+                </td>
+                <td
+                        data-field="lastColumn"
+                        style="width: 100%; background-color: #fff; border: none;cursor: auto;"
+                />
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div></div>
+    </div>
+</div>

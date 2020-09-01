@@ -7,6 +7,8 @@ public class Report {
 
     private int Id;
     private ReportType Type;
+    private Date CreateDate;
+    private Date CreateDatetime;
     private Date StartDateTime;
     private Date FinishDateTime;
     private ReportStatusType Status;
@@ -32,6 +34,22 @@ public class Report {
 
     public void setType(ReportType type) {
         Type = type;
+    }
+
+    public Date getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        CreateDate = createDate;
+    }
+
+    public Date getCreateDatetime() {
+        return CreateDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        CreateDatetime = createDatetime;
     }
 
     public Date getStartDateTime() {

@@ -7,6 +7,7 @@ public class Task {
 
     private int Id;
     private TaskType Type;
+    private Date CreateDate;
     private Date CreateDateTime;
     private Date PlannedStartDateTime;
     private Date StartDateTime;
@@ -29,6 +30,14 @@ public class Task {
 
     public void setType(TaskType type) {
         Type = type;
+    }
+
+    public Date getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        CreateDate = createDate;
     }
 
     public Date getCreateDateTime() {

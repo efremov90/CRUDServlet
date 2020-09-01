@@ -2,28 +2,28 @@
 
 function initFormMyReports(parentForm) {
     //alert('initFormMyReports');
-    let form = parentForm.querySelector('.form#my_reports');
+    let form = parentForm.querySelector('.form#myReports');
     if (form) {
         let btnClearFilter = form.querySelector('.buttonBar #clearFilter');
         let btnSearch = form.querySelector('.buttonBar #search');
-        let btnLoadReport = form.querySelector('.buttonBar #loadReports');
+        let btnDownloadReport = form.querySelector('.buttonBar #downloadReport');
         //alert(permissions);
         if (!permissions.has("REPORTS_LOAD_REPORT")) {
-            btnLoadReport.remove();
+            btnDownloadReport.remove();
         }
-        let btnFromReportDate = form.querySelector(
-            'input[name="fromRequestDate"]'
+        let btnFromRunDate = form.querySelector(
+            'input[name="fromRunDate"]'
         );
-        let btnToReportDate = form.querySelector('input[name="toRequestDate"]');
+        let btnToRunDate = form.querySelector('input[name="toRunDate"]');
 
         //Инициализация периода поиска
         let curDate = Date.now();
-        btnFromReportDate.value = formatDate(curDate);
-        btnFromReportDate.min = '2020-05-01';
-        btnToReportDate.value = formatDate(curDate);
-        btnToReportDate.max = formatDate(curDate);
+        btnFromRunDate.value = formatDate(curDate);
+        btnFromRunDate.min = '2020-05-01';
+        btnToRunDate.value = formatDate(curDate);
+        btnToRunDate.max = formatDate(curDate);
 
-        let reportTable = form.querySelector('.gridTable#my_reports');
+        let reportTable = form.querySelector('.gridTable#myReports');
         reportTable.querySelector(".headerTable TD[data-field='reportId']").setAttribute('data-sort-direction', 'desc');
 
         form.setAttribute('data-display', 'block');
@@ -50,10 +50,10 @@ function initFormMyReports(parentForm) {
             }
             //
             //btnViewRequest
-            if (btnLoadReport && countCheckedItems != 1) {
-                btnLoadReport.setAttribute('disabled', 'disabled');
+            if (btnDownloadReport && countCheckedItems != 1) {
+                btnDownloadReport.setAttribute('disabled', 'disabled');
             } else {
-                btnLoadReport.removeAttribute('disabled');
+                btnDownloadReport.removeAttribute('disabled');
             }
         }
 
@@ -63,17 +63,16 @@ function initFormMyReports(parentForm) {
         btnClearFilter.addEventListener(
             'click',
             function () {
-                GridTable.clearFilter(requestTable);
+                GridTable.clearFilter(reportTable);
             },
             false
         );
         btnSearch.addEventListener('click', function () {
+            // alert('btnSearch');
             let search = {
-                fromReportDatetime: btnFromReportDate.value,
-                toReportDatetime: btnToReportDate.value
+                fromRunDate: btnFromRunDate.value,
+                toRunDate: btnToRunDate.value
             };
-
-            //alert('Сохранение ещё не реализовано');
             let json = JSON.stringify(search);
             //alert(json);
             let req = new HttpRequestCRUD();
@@ -88,18 +87,18 @@ function initFormMyReports(parentForm) {
                 }
             );
         }, false);
-        if (btnLoadReport) btnLoadReport.addEventListener(
+        if (btnDownloadReport) btnDownloadReport.addEventListener(
             'click',
             function () {
-                function getRequest() {
-                    let requestId = form.querySelector('.gridTable tr[data-checked-current="true"]' +
-                        ' td[data-field="requestId"]').innerHTML;
-                    return requestId;
+                function getReport() {
+                    let reportId = form.querySelector('.gridTable tr[data-checked-current="true"]' +
+                        ' td[data-field="reportId"]').innerHTML;
+                    return reportId;
                 }
 
-                let requestId = getRequest();
+                let reportId = getReport();
 
-                showModalView('viewRequest', form, requestId)
+                showModalView('viewReport', form, reportId)
 
             },
             false

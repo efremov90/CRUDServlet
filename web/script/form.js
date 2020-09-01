@@ -27,6 +27,7 @@ function getHTMLFileNameByIdForm(id) {
         case 'cancelRequest':
         case 'clients':
         case 'editClient':
+        case 'myReports':
             return 'view/' + id + '.html';
         case 'createClient':
             return 'view/editClient.html';
@@ -47,6 +48,7 @@ function getJSFileNameByIdForm(id) {
         case 'cancelRequest':
         case 'clients':
         case 'editClient':
+        case 'myReports':
             return 'script/' + id + 'Form' + '.js';
         case 'createClient':
             return 'script/editClientForm.js';
@@ -311,6 +313,9 @@ function showForm(idForm, parentForm, initForm) {
                                 case 'clients':
                                     initFormClients(parentForm);
                                     break;
+                                case 'myReports':
+                                    initFormMyReports(parentForm);
+                                    break;
                                 case 'REPORT_REQUESTS_DETAILED':
                                     initFormReports('REPORT_REQUESTS_DETAILED', parentForm);
                                     break;
@@ -437,6 +442,7 @@ window.addEventListener(
                         //if (itemsMenu[i].id=="home" && !permissions.has("HOME_VIEW")) none=true;
                         if (itemsMenu[i].id == "requests" && !permissions.has("REQUESTS_VIEW")) none = true;
                         if (itemsMenu[i].id == "clients" && !permissions.has("CLIENTS_VIEW")) none = true;
+                        if (itemsMenu[i].id == "myReports" && !permissions.has("REPORTS_VIEW")) none = true;
                         if (itemsMenu[i].id == "REPORT_REQUESTS_DETAILED" && !permissions.has("REPORT_GENERATE_REQUESTS_DETAILED")) none = true;
                         if (itemsMenu[i].id == "REPORT_REQUESTS_CONSOLIDATED" && !permissions.has("REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED")) none = true;
                         if (none) itemsMenu[i].remove();

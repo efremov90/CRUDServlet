@@ -53,14 +53,16 @@ public class TaskService {
         boolean result = false;
 
         String sql = "UPDATE TASKS " +
-                "SET STATUS = ? " +
+                "SET START_DATETIME = ?, " +
+                "STATUS = ? " +
                 "WHERE ID = ?";
 
 //        conn.setAutoCommit(false);
 
         PreparedStatement st = conn.prepareStatement(sql);
-        st.setString(1, STARTED.name());
-        st.setInt(2, taskId);
+        st.setString(1, new Timestamp(new java.util.Date().getTime()).toString());
+        st.setString(2, STARTED.name());
+        st.setInt(3, taskId);
         result = st.executeUpdate() > 0;
 
         new AuditService().create(

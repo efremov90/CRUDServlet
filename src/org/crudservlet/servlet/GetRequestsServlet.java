@@ -75,8 +75,8 @@ public class GetRequestsServlet extends HttpServlet {
                                 requestDTO.setRequestId(x.getId());
                                 requestDTO.setRequestUUID(x.getRequestUUID());
                                 requestDTO.setCreateDate(new Date(x.getCreateDate().getTime()).toString());
-                                requestDTO.setCreateDatetime(new Date(x.getCreateDateTime().getTime()).toString());
-                                requestDTO.setClientCode(x.getClientCode());
+                        requestDTO.setCreateDatetime(x.getCreateDateTime().toString());
+                        requestDTO.setClientCode(x.getClientCode());
                                 requestDTO.setClientName(client.getClientName());
                                 requestDTO.setClientType(client.getClientType().name());
                                 requestDTO.setClientTypeDescription(client.getClientType().getDescription());
