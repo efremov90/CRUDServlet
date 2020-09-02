@@ -18,6 +18,9 @@ function initFormReports(reportType, parentForm) {
             '.buttonBar select#reportType'
         );
         btnSelectReportType.value = reportType;
+        let btnFormatType = form.querySelector(
+            '.buttonBar select#formatType'
+        );
 
         let REPORT_REUESTS_DETAILED_Table = form.querySelector('table#REPORT_REQUESTS_DETAILED');
         let REPORT_REUESTS_CONSOLIDATED_Table = form.querySelector('table#REPORT_REQUESTS_CONSOLIDATED');
@@ -92,6 +95,7 @@ function initFormReports(reportType, parentForm) {
                 switch (btnSelectReportType.value) {
                     case 'REPORT_REQUESTS_DETAILED':
                         generateReport = {
+                            formatType: btnFormatType.value,
                             reportRequestsDetailed: {
                                 fromCreateDate: REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="fromCreateDate"]').value,
                                 toCreateDate: REPORT_REUESTS_DETAILED_Table.querySelector('[data-field="toCreateDate"]').value,
@@ -101,6 +105,7 @@ function initFormReports(reportType, parentForm) {
                         break;
                     case 'REPORT_REQUESTS_CONSOLIDATED':
                         generateReport = {
+                            formatType: btnFormatType.value,
                             reportRequestsConsolidated: {
                                 fromCreateDate: REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="fromCreateDate"]').value,
                                 toCreateDate: REPORT_REUESTS_CONSOLIDATED_Table.querySelector('[data-field="toCreateDate"]').value

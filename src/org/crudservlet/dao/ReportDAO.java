@@ -1,6 +1,7 @@
 package org.crudservlet.dao;
 
 import org.crudservlet.dbConnection.MySQLConnection;
+import org.crudservlet.model.FormatReportType;
 import org.crudservlet.model.Report;
 import org.crudservlet.model.ReportStatusType;
 import org.crudservlet.model.ReportType;
@@ -26,8 +27,9 @@ public class ReportDAO {
 
         Integer result = null;
 //        try {
-        String sql = "INSERT REPORTS (TYPE, STATUS, COMMENT, CONTENT, PARAMETERS, FROM_PERIOD_DATE, TO_PERIOD_DATE) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?); ";
+        String sql = "INSERT REPORTS (TYPE, STATUS, COMMENT, CONTENT, PARAMETERS, FROM_PERIOD_DATE, TO_PERIOD_DATE, " +
+                "FORMAT) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?); ";
         PreparedStatement st = conn.prepareStatement(sql);
 
         st.setString(1, report.getType().name());
@@ -37,6 +39,7 @@ public class ReportDAO {
         st.setString(5, report.getParameters());
         st.setDate(6, report.getFromPeriodDate() != null ? new Date(report.getFromPeriodDate().getTime()) : null);
         st.setDate(7, report.getToPeriodDate() != null ? new Date(report.getToPeriodDate().getTime()) : null);
+        st.setString(8, report.getFormat().name());
         st.executeUpdate();
 
         result = MySQLConnection.getLastInsertId();
@@ -70,6 +73,29 @@ public class ReportDAO {
         return result;
     }
 
+    public FormatReportType getFormat(int reportId) throws SQLException {
+        logger.info("start");
+
+        FormatReportType result = null;
+//        try {
+        String sql = "SELECT FORMAT  " +
+                "FROM REPORTS r " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, reportId);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            result = FormatReportType.valueOf(rs.getString("FORMAT"));
+        }
+/*        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        logger.info(":" + result);
+        return result;
+    }
+
     public ReportStatusType getReportStatus(int reportId) throws SQLException {
         logger.info("start");
 
@@ -90,5 +116,28 @@ public class ReportDAO {
 //            e.printStackTrace();
 //        }
         return reportStatusType;
+    }
+
+    public String getParameters(int reportId) throws SQLException {
+        logger.info("start");
+
+        String result = null;
+//        try {
+        String sql = "SELECT PARAMETERS  " +
+                "FROM REPORTS r " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setInt(1, reportId);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            result = rs.getString("PARAMETERS");
+        }
+/*        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        logger.info(":" + result);
+        return result;
     }
 }

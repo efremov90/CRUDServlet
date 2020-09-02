@@ -2,8 +2,10 @@ package org.crudservlet.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.crudservlet.dao.ReportDAO;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dto.*;
+import org.crudservlet.model.FormatReportType;
 import org.crudservlet.model.ReportType;
 import org.crudservlet.model.UserAccount;
 import org.crudservlet.service.*;
@@ -16,8 +18,11 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Blob;
-import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -46,45 +51,24 @@ public class GetReportServlet extends HttpServlet {
 
             UserAccount userAccount = new UserAccountDAO().getUserAccountBySessionId(req.getRequestedSessionId());
 
-            GetReportResponseDTO getReportResponseDTO = new GetReportResponseDTO();
+            ReportType reportType = new ReportDAO().getType(getReportRequestDTO.getReportId());
+            FormatReportType formatReportType = new ReportDAO().getFormat(getReportRequestDTO.getReportId());
 
-//            getReportResponseDTO.setReport(
-//                    new ReportService().getContent(
-//                            getReportRequestDTO.getReportId(),
-//                            getReportRequestDTO.getFormat(),
-//                            userAccount.getId()
-//                    )
-//            );
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] b = new ReportService().getContent(
+                    getReportRequestDTO.getReportId(),
+                    userAccount.getId()
+            );
 
-//            getReportResponseDTO.setReport(new SerialBlob(text.getBytes()));
-//            getReportResponseDTO.setReport(new SerialBlob(text.getBytes()));
-
-//            resp.setContentType("application/json;charset=UTF-8");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("fromCreateDate", Date.valueOf("2020-08-01").toString());
-            parameters.put("toCreateDate", Date.valueOf("2020-09-01").toString());
-
-            baos = new ReportService().generate(
-                    ReportType.REPORT_REQUESTS_DETAILED,
-                    parameters,
-                    new JRBeanCollectionDataSource(
-                            new ReportRequestsDetailedService().getData(
-                                    Date.valueOf("2020-08-01"),
-                                    Date.valueOf("2020-09-01"),
-                                    "1001"
-                            )
-                    ));
-
-//            resp.setContentType("application/vnd.oasis.opendocument.text;charset=UTF-8");
             resp.setContentType("application/vnd.ms-excel;charset=UTF-8");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"file.xls\"");
-            resp.setContentLength(baos.toByteArray().length);
-//            PrintWriter out = resp.getWriter();
-//            out.println(mapper.writeValueAsString(getReportResponseDTO));
-//            out.close();
-            resp.getOutputStream().write(baos.toByteArray());
+            String fileName = URLEncoder.encode(
+                    reportType.getDescription() + " ",
+                    "UTF-8"
+            ) + (new Timestamp(new Date().getTime()).toString()) + "." + formatReportType.name();
+            resp.setHeader("Content-Disposition",
+                    "attachment; filename=\"" + fileName + "\"");
+            resp.setContentLength(b.length);
+            resp.getOutputStream().write(b);
         } catch (Exception e) {
             e.printStackTrace();
             ErrorDTOService.writer(resp, e);

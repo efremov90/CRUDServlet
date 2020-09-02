@@ -6,10 +6,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.*;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsExporterConfiguration;
-import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
+import net.sf.jasperreports.export.*;
 import org.crudservlet.dao.*;
 import org.crudservlet.dbConnection.MySQLConnection;
 import org.crudservlet.model.*;
@@ -113,7 +110,7 @@ public class ReportService {
         return result;
     }
 
-    public boolean finish(int reportId, Blob content) throws Exception {
+    public boolean finish(int reportId, byte[] content) throws Exception {
         logger.info("start");
 
         boolean result = false;
@@ -129,7 +126,7 @@ public class ReportService {
 
         PreparedStatement st = conn.prepareStatement(sql);
         st.setString(1, FINISH.name());
-        st.setBlob(2, content);
+        st.setBytes(2, content);
         st.setInt(3, reportId);
         result = st.executeUpdate() > 0;
 
@@ -143,10 +140,10 @@ public class ReportService {
         return result;
     }
 
-    public Blob getContent(int reportId, String type, int userAccountId) throws Exception {
+    public byte[] getContent(int reportId, int userAccountId) throws Exception {
         logger.info("start");
 
-        Blob content = null;
+        byte[] content = null;
 
         UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
 
@@ -176,7 +173,7 @@ public class ReportService {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            content = rs.getBlob("CONTENT");
+            content = rs.getBytes("CONTENT");
         }
 
         return content;
@@ -225,7 +222,8 @@ public class ReportService {
         return reports;
     }
 
-    public ByteArrayOutputStream generate(ReportType reportType, Map<String, Object> parameters,
+    public ByteArrayOutputStream generate(ReportType reportType, FormatReportType formatReportType,
+                                          Map<String, Object> parameters,
                                           JRBeanCollectionDataSource data) throws JRException, IOException {
 
         String PROJECT_PATH = "C:\\Users\\NEO\\IdeaProjects\\CRUDServlet";
@@ -256,22 +254,31 @@ public class ReportService {
 //        exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "C:/jasperoutput/StyledTextReport.xls");
 //        exporterXLS.exportReport();
 
-        JRXlsExporter xlsExporter = new JRXlsExporter();
-        xlsExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls"));
-        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
-        SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
-        xlsExporter.setConfiguration(xlsReportConfiguration);
-        xlsExporter.exportReport();
-//        baos.writeTo(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls").getOutputStream());
-
-        JRXlsxExporter exporterXLSX = new JRXlsxExporter();
-        exporterXLSX.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-        exporterXLSX.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "C:/jasperoutput/StyledTextReport.xlsx");
-        exporterXLSX.exportReport();
 
 //        JasperExportManager.exportReportToPdfFile(jasperPrint,
 //                "C:/jasperoutput/StyledTextReport.pdf");
+
+        switch (formatReportType) {
+            case XLS:
+                JRXlsExporter xlsExporter = new JRXlsExporter();
+                xlsExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+//        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls"));
+                xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+                SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
+                xlsExporter.setConfiguration(xlsReportConfiguration);
+                xlsExporter.exportReport();
+//        baos.writeTo(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls").getOutputStream());
+                break;
+            case XLSX:
+                JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+                xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+//        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls"));
+                xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+                SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
+                xlsxExporter.setConfiguration(xlsxReportConfiguration);
+                xlsxExporter.exportReport();
+                break;
+        }
 
         return baos;
     }

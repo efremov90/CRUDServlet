@@ -19,6 +19,7 @@ public class Report {
     private int TaskId;
     private Date FromPeriodDate;
     private Date ToPeriodDate;
+    private FormatReportType Format;
 
     public int getId() {
         return Id;
@@ -130,5 +131,13 @@ public class Report {
 
     public void setToPeriodDate(Date toPeriodDate) {
         ToPeriodDate = toPeriodDate;
+    }
+
+    public FormatReportType getFormat() {
+        return Format;
+    }
+
+    public void setFormat(FormatReportType format) {
+        Format = format;
     }
 }

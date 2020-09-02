@@ -43,7 +43,7 @@ public class DemoTest {
 
 //        Request r = ;
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
+        /*Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("fromCreateDate", Date.valueOf("2020-08-01").toString());
         parameters.put("toCreateDate", Date.valueOf("2020-09-01").toString());
 
@@ -56,6 +56,6 @@ public class DemoTest {
                                 Date.valueOf("2020-09-01"),
                                 "1001"
                         )
-                ));
+                ));*/
     }
 }

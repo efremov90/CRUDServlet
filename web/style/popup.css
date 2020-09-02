@@ -19,17 +19,49 @@
 
 .popup .container {
     position: relative;
-    top: 10px;
+    top: -25px;
     left: 35px;
 }
 
 .popup .status {
     position: relative;
-    top: 15px;
+    top: -20px;
     text-align: center;
     font-size: 12px;
 }
 
 .popup button {
     border-radius: 4px;
+}
+
+.popupTopBar {
+    height: 30px;
+    width: 100%;
+    display: inline-block;
+}
+
+.popupTopBar .button {
+    float: right;
+    display: inline-block;
+}
+
+.popupTopBar .button button {
+    /*position:relative;*/
+    /*top:-5px;*/
+    /*left:120px;*/
+    background-color: #f1f1f100;
+    border: 0px;
+    height: 100%;
+    min-width: 30px;
+    float: left;
+    font-size: 30px;
+}
+
+.popupTopBar .button button:hover {
+    color: red;
+    /*cursor: pointer;*/
+}
+
+.popupTopBar .button button:focus {
+    outline: none;
 }

@@ -3,6 +3,7 @@ package org.crudservlet.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.AccountSessionDAO;
 import org.crudservlet.dto.*;
+import org.crudservlet.model.FormatReportType;
 import org.crudservlet.service.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -38,6 +39,7 @@ public class GenerateReportServlet extends HttpServlet {
                 Integer reportId =
                         new ReportRequestsDetailedService().create(
                                 reportRequestsDetailedDTO,
+                                FormatReportType.valueOf(generateReportRequestDTO.getFormatType()),
                                 new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId()
                         );
                 generateReportResponseDTO.setReportId(reportId);
@@ -46,6 +48,7 @@ public class GenerateReportServlet extends HttpServlet {
                 Integer reportId =
                         new ReportRequestsConsolidatedService().create(
                                 reportRequestsConsolidatedDTO,
+                                FormatReportType.valueOf(generateReportRequestDTO.getFormatType()),
                                 new AccountSessionDAO().getAccountSessionBySessionId(req.getRequestedSessionId()).getUserAccountId()
                         );
                 generateReportResponseDTO.setReportId(reportId);

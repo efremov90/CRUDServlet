@@ -3,6 +3,7 @@ package org.crudservlet.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
+import org.crudservlet.dto.ReportRequestsConsolidatedDTO;
 import org.crudservlet.dto.ReportRequestsDetailedDTO;
 import org.crudservlet.model.*;
 import org.crudservlet.reportbean.ReportRequestsDetailedBean;
@@ -10,6 +11,8 @@ import org.crudservlet.reportbean.ReportRequestsDetailedBean;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -27,7 +30,18 @@ public class ReportRequestsDetailedService extends ReportService {
         conn = MySQLConnection.getConnection();
     }
 
-    public Integer create(ReportRequestsDetailedDTO parameters, int userAccountId) throws Exception {
+    public Map<String, Object> getParametersJR(ReportRequestsDetailedDTO parameters) {
+        Map<String, Object> parametersJR = new HashMap<String, Object>();
+        parametersJR.put("fromCreateDate",
+                (parameters.getFromCreateDate() != null && parameters.getFromCreateDate() != "") ?
+                        java.sql.Date.valueOf(parameters.getFromCreateDate()) : "");
+        parametersJR.put("toCreateDate",
+                (parameters.getToCreateDate() != null && parameters.getToCreateDate() != "") ?
+                        java.sql.Date.valueOf(parameters.getToCreateDate()) : "");
+        return parametersJR;
+    }
+
+    public Integer create(ReportRequestsDetailedDTO parameters, FormatReportType formatReportType, int userAccountId) throws Exception {
         logger.info("start");
 
         Integer result = null;
@@ -40,6 +54,7 @@ public class ReportRequestsDetailedService extends ReportService {
 
         Report report = new Report();
         report.setType(ReportType.REPORT_REQUESTS_DETAILED);
+        report.setFormat(formatReportType);
         report.setFromPeriodDate((parameters.getFromCreateDate() != null && parameters.getFromCreateDate() != "") ?
                 java.sql.Date.valueOf(parameters.getFromCreateDate()) : null);
         report.setToPeriodDate((parameters.getToCreateDate() != null && parameters.getToCreateDate() != "") ?

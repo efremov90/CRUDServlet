@@ -6,6 +6,9 @@ class PopupReport {
         let modalForm = (new DOMParser()).parseFromString(
             '<div class="popup" id="popup" data-display="none">' +
             '<div class="popup-content">' +
+            '<div class="popupTopBar">' +
+            '<div class="button"><button id="close" title="Закрыть">×</button></div>' +
+            '</div>' +
             '<div class="container">' +
             '<button id="inBackground">В фоне</button>' +
             '<button id="load">Загрузить</button>' +
@@ -27,6 +30,7 @@ class PopupReport {
         // this.form.querySelector('.popup-content').style.width = '80px';
 
         this.btnInBackground = this.form.querySelector('#inBackground');
+        this.btnClose = this.form.querySelector("#close");
         this.btnLoad = this.form.querySelector('#load');
         this.btnLoad.setAttribute('data-display', 'none');
 
@@ -59,12 +63,14 @@ class PopupReport {
 
     show(parentForm) {
         let btnInBackground = this.btnInBackground;
+        let btnClose = this.btnClose;
         let btnLoad = this.btnLoad;
         let form = this.form;
         parentForm.appendChild(form);
         let start_dt = new Date().getTime();
+        let reportId = this.reportId;
         let checkReport = {
-            reportId: this.reportId
+            reportId: reportId
         }
         let status = form.querySelector('.popup .status #status');
         status.innerHTML = 'Идет формирование';
@@ -124,12 +130,21 @@ class PopupReport {
             },
             false
         );
+        this.btnClose.addEventListener(
+            'click',
+            () => {
+                stop(check_timer);
+                stop(timer);
+                form.remove();
+            },
+            false
+        );
         this.btnLoad.addEventListener(
             'click',
             function () {
                 // alert("btnLoad");
                 let getReport = {
-                    reportId: 2
+                    reportId: reportId
                 }
                 let json = JSON.stringify(getReport);
                 let req = new HttpRequestCRUD();
@@ -143,9 +158,9 @@ class PopupReport {
                         if (req.getStatus()) {
                             let link = document.createElement('a');
                             document.body.appendChild(link);
-                            link.download = req.getResponse()
+                            link.download = (decodeURI(req.getResponse()
                                 .headers.get('Content-Disposition')
-                                .match("(?<=(filename=\")).*?(?=(\"))")[0];
+                                .match("(?<=(filename=\")).*?(?=(\"))")[0])).replace(/\+/g, " ");
                             link.href = window.URL.createObjectURL(req.getData());
                             link.click();
                             document.body.removeChild(link); //remove the link when done
