@@ -341,3 +341,30 @@ function cross_download(url, fileName) {
     };
     req.send();
 }
+
+function downloadReport(reportId, form) {
+    let getReport = {
+        reportId: reportId
+    }
+    let json = JSON.stringify(getReport);
+    let req = new HttpRequestCRUD();
+    req.setFetch(url + '/getReport', json);
+    // req.setContentType("application/json;charset=UTF-8")
+    req.setContentType("application/vnd.oasis.opendocument.text;charset=UTF-8")
+    req.setForm(form);
+    let request = req.fetchBlob();
+    request.then(
+        () => {
+            if (req.getStatus()) {
+                let link = document.createElement('a');
+                document.body.appendChild(link);
+                link.download = (decodeURI(req.getResponse()
+                    .headers.get('Content-Disposition')
+                    .match("(?<=(filename=\")).*?(?=(\"))")[0])).replace(/\+/g, " ");
+                link.href = window.URL.createObjectURL(req.getData());
+                link.click();
+                document.body.removeChild(link); //remove the link when done
+            }
+        }
+    );
+}

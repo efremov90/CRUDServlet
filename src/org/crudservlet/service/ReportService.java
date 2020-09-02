@@ -187,7 +187,7 @@ public class ReportService {
 
         String sql = "SELECT " +
                 "r.ID, r.TYPE, t.CREATE_DATE, t.CREATE_DATETIME, t.START_DATETIME, t.FINISH_DATETIME, r.STATUS, " +
-                "r.PARAMETERS, t.USER_ACCOUNT_ID, r.FROM_PERIOD_DATE, r.TO_PERIOD_DATE " +
+                "r.PARAMETERS, t.USER_ACCOUNT_ID, r.FROM_PERIOD_DATE, r.TO_PERIOD_DATE, FORMAT " +
                 "FROM REPORTS r " +
                 "LEFT JOIN REPORT_XREF_TASK rxt ON r.ID = rxt.REPORT_ID " +
                 "LEFT JOIN TASKS t ON rxt.TASK_ID = t.ID " +
@@ -216,6 +216,7 @@ public class ReportService {
                     new java.util.Date(rs.getDate("FROM_PERIOD_DATE").getTime()) : null);
             report.setToPeriodDate(rs.getDate("TO_PERIOD_DATE") != null ?
                     new java.util.Date(rs.getDate("TO_PERIOD_DATE").getTime()) : null);
+            report.setFormat(FormatReportType.valueOf(rs.getNString("FORMAT")));
             reports.add(report);
         }
 

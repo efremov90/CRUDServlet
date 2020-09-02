@@ -98,7 +98,7 @@ function initFormMyReports(parentForm) {
 
                 let reportId = getReport();
 
-                showModalView('viewReport', form, reportId)
+                downloadReport(reportId, form);
 
             },
             false

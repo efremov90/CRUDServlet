@@ -72,6 +72,7 @@ public class GetReportsServlet extends HttpServlet {
                                         null);
                                 reportDTO.setParameters(x.getParameters());
                                 reportDTO.setStatus(x.getStatus().getDescription());
+                        reportDTO.setFormat(x.getFormat().getDescription());
                                 return reportDTO;
                             }
                     ).collect(Collectors.toCollection(() -> new ArrayList<ReportDTO>()));

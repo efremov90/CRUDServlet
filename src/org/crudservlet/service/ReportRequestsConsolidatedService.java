@@ -97,6 +97,7 @@ public class ReportRequestsConsolidatedService extends ReportService {
             reportRequestsDetailedBean.setComment(rs.getNString("comment"));
             result.add(reportRequestsDetailedBean);
         }
+        if (result.isEmpty()) result.add(null);
 
 //        Thread.sleep(10000);
 

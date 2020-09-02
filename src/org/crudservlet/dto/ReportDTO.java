@@ -10,6 +10,7 @@ public class ReportDTO {
     private String ToPeriodDate;
     private String Parameters;
     private String Status;
+    private String Format;
 
     public ReportDTO() {
     }
@@ -76,5 +77,13 @@ public class ReportDTO {
 
     public void setStatus(String status) {
         Status = status;
+    }
+
+    public String getFormat() {
+        return Format;
+    }
+
+    public void setFormat(String format) {
+        Format = format;
     }
 }
