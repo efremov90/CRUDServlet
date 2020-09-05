@@ -7,14 +7,14 @@ import org.crudservlet.dto.ReportRequestsConsolidatedDTO;
 import org.crudservlet.dto.ReportRequestsDetailedDTO;
 import org.crudservlet.model.FormatReportType;
 import org.crudservlet.model.ReportType;
+import org.crudservlet.reportbean.ReportRequestsDetailedBean;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
 import java.sql.Date;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ReportTaskService implements Runnable {
 
@@ -50,25 +50,73 @@ public class ReportTaskService implements Runnable {
                                     Date.valueOf(parameters.getToCreateDate()) : null,
                             parameters.getClientCode()
                     );
+                    if (bean.isEmpty()) bean.add(null);
                     parametersJR = new ReportRequestsDetailedService().getParametersJR(parameters);
                 }
                 break;
                 case REPORT_REQUESTS_CONSOLIDATED: {
                     ReportRequestsConsolidatedDTO parameters = mapper.readValue(parametersDTO,
                             ReportRequestsConsolidatedDTO.class);
-                    bean = new ReportRequestsConsolidatedService().getData(
+                    ArrayList<ReportRequestsDetailedBean> requests = new ReportRequestsConsolidatedService().getData(
                             (parameters.getFromCreateDate() != null && parameters.getFromCreateDate() != "") ?
                                     Date.valueOf(parameters.getFromCreateDate()) : null,
                             (parameters.getToCreateDate() != null && parameters.getToCreateDate() != "") ?
                                     Date.valueOf(parameters.getToCreateDate()) : null
                     );
+                    Integer all_count = requests.size();
+                    if (!requests.isEmpty()) {
+                        Map<Map<String, Object>, Long> countByGenderAndLastName = requests.stream()
+                                .collect(Collectors.groupingBy(r -> {
+                                            Map<String, Object> x = new HashMap<>();
+                                            x.put("clientCode", r.getClientCode());
+                                            x.put("createDate", r.getCreateDate());
+                                            return x;
+                                        },
+                                        Collectors.counting()));
+                        countByGenderAndLastName.entrySet().stream()
+                                .forEach(x -> {
+                                    ReportRequestsDetailedBean reportRequestsDetailedBean = new ReportRequestsDetailedBean();
+                                    reportRequestsDetailedBean.setRankSorted(1);
+                                    reportRequestsDetailedBean.setClientCode(x.getKey().get("clientCode").toString());
+                                    reportRequestsDetailedBean.setCreateDate(x.getKey().get("createDate").toString());
+                                    reportRequestsDetailedBean.setStatus("Итого:");
+                                    reportRequestsDetailedBean.setComment(x.getValue().toString());
+                                    requests.add(reportRequestsDetailedBean);
+                                });
+                    /*Collections.sort(requests,
+                            (o1, o2) -> (o1.getClientCode().compareTo(o2.getClientCode())
+//                                    +Date.valueOf(o1.getCreateDate()).compareTo(Date.valueOf(o2.getCreateDate()))
+                                    +o1.getCreateDate().compareTo(o2.getCreateDate())
+                                    +((Integer)o1.getRankSorted()).compareTo((Integer)o2.getRankSorted())
+                            )
+                    );*/
+                        Collections.sort(requests,
+                                Comparator.comparing(ReportRequestsDetailedBean::getClientCode)
+                                        .thenComparing(ReportRequestsDetailedBean::getCreateDate)
+                                        .thenComparing(ReportRequestsDetailedBean::getRankSorted)
+                        );
+                        requests.stream()
+                                .filter(x -> ((Integer) x.getRankSorted()).equals(1))
+                                .map(x -> {
+                                    x.setClientCode("");
+                                    x.setCreateDate("");
+                                    return x;
+                                })
+                                .collect(Collectors.toList());
+                    }
+                    ReportRequestsDetailedBean reportRequestsDetailedBean = new ReportRequestsDetailedBean();
+                    reportRequestsDetailedBean.setRankSorted(2);
+                    reportRequestsDetailedBean.setStatus("Всего:");
+                    reportRequestsDetailedBean.setComment(all_count.toString());
+                    requests.add(reportRequestsDetailedBean);
+                    bean = requests;
                     parametersJR = new ReportRequestsConsolidatedService().getParametersJR(parameters);
+                    break;
                 }
-                break;
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             baos = new ReportService().generate(
-                    ReportType.REPORT_REQUESTS_DETAILED,
+                    reportType,
                     formatType,
                     parametersJR,
                     new JRBeanCollectionDataSource(

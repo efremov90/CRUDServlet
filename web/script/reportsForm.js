@@ -31,6 +31,18 @@ function initFormReports(reportType, parentForm) {
         if (!permissions.has("REPORT_GENERATE_REQUESTS_DETAILED")) {
             REPORT_REUESTS_DETAILED_Table.remove();
             btnSelectReportType.querySelector('[value="REPORT_REQUESTS_DETAILED"]').remove();
+        } else {
+            let btnChoiceObject = form.querySelector('#choiceObject');
+            btnChoiceObject.addEventListener(
+                'click',
+                function () {
+                    showModalChoice('clients', form, (form, chosenObject) => {
+                            form.querySelector('input[data-field="clientCode"]').value = chosenObject;
+                        }
+                    );
+                },
+                false
+            );
         }
         if (!permissions.has("REPORT_GENERATE_REPORT_REQUESTS_CONSOLIDATED")) {
             REPORT_REUESTS_CONSOLIDATED_Table.remove();

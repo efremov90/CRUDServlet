@@ -96,9 +96,9 @@ public class ReportRequestsDetailedService extends ReportService {
             reportRequestsDetailedBean.setCreateDate(new java.sql.Date(rs.getDate("create_date").getTime()).toString());
             reportRequestsDetailedBean.setStatus(RequestStatusType.valueOf(rs.getNString("status")).getDescription());
             reportRequestsDetailedBean.setComment(rs.getNString("comment"));
+            reportRequestsDetailedBean.setRankSorted(0);
             result.add(reportRequestsDetailedBean);
         }
-        if (result.isEmpty()) result.add(null);
 
 //        Thread.sleep(10000);
 
