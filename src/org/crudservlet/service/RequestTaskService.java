@@ -38,7 +38,7 @@ public class RequestTaskService implements Runnable {
             new RequestService().cancel(
                     new RequestService().getRequestById(requestId).getRequestUUID(),
                     -1,
-                    "Отменено автоматичеки"
+                    "Отменено автоматически"
             );
             new TaskService().finish(taskId);
         } catch (Exception e) {
