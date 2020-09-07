@@ -30,7 +30,7 @@ public class PermissionService {
         boolean result = false;
 
         switch (userAccountId) {
-            case 4: //system
+            case -1: //system
                 return result = true;
         }
 

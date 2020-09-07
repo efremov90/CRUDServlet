@@ -83,13 +83,6 @@ public class ReportTaskService implements Runnable {
                                     reportRequestsDetailedBean.setComment(x.getValue().toString());
                                     requests.add(reportRequestsDetailedBean);
                                 });
-                    /*Collections.sort(requests,
-                            (o1, o2) -> (o1.getClientCode().compareTo(o2.getClientCode())
-//                                    +Date.valueOf(o1.getCreateDate()).compareTo(Date.valueOf(o2.getCreateDate()))
-                                    +o1.getCreateDate().compareTo(o2.getCreateDate())
-                                    +((Integer)o1.getRankSorted()).compareTo((Integer)o2.getRankSorted())
-                            )
-                    );*/
                         Collections.sort(requests,
                                 Comparator.comparing(ReportRequestsDetailedBean::getClientCode)
                                         .thenComparing(ReportRequestsDetailedBean::getCreateDate)
@@ -125,6 +118,15 @@ public class ReportTaskService implements Runnable {
             new ReportService().finish(reportId, baos.toByteArray());
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                new ReportService().error(reportId,
+                        e.getMessage() + "\n" +
+                                e.toString() + "\n" +
+                                Arrays.stream(e.getStackTrace()).map(x -> x.toString()).collect(Collectors.joining("\n"))
+                );
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
         logger.info("finish");
     }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -50,13 +51,13 @@ public class GetRequestHistoryServlet extends HttpServlet {
             ArrayList<RequestStatusHistoryDTO> requestStatusHistory =
                     new RequestStatusHistoryService().getRequestStatusesHistory(getRequestStatusHistoryRequestDTO.getRequestId()).stream()
                             .map(x -> {
-                                RequestStatusHistoryDTO requestStatusHistoryDTO = new RequestStatusHistoryDTO();
-                                requestStatusHistoryDTO.setId(x.getId());
-                                requestStatusHistoryDTO.setStatus(x.getStatus().name());
-                                requestStatusHistoryDTO.setStatusDescription(x.getStatus().getDescription());
-                                requestStatusHistoryDTO.setUser(x.getUserName());
-                                requestStatusHistoryDTO.setEventDateTime(x.getEventDateTime().toString());
-                                requestStatusHistoryDTO.setComment(x.getComment());
+                                        RequestStatusHistoryDTO requestStatusHistoryDTO = new RequestStatusHistoryDTO();
+                                        requestStatusHistoryDTO.setId(x.getId());
+                                        requestStatusHistoryDTO.setStatus(x.getStatus().name());
+                                        requestStatusHistoryDTO.setStatusDescription(x.getStatus().getDescription());
+                                        requestStatusHistoryDTO.setUser(x.getUserName());
+                                        requestStatusHistoryDTO.setEventDateTime(x.getEventDateTime().toString());
+                                        requestStatusHistoryDTO.setComment(x.getComment());
                                         return requestStatusHistoryDTO;
                                     }
                             ).collect(Collectors.toCollection(() -> new ArrayList<RequestStatusHistoryDTO>()));

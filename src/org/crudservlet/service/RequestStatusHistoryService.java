@@ -32,7 +32,7 @@ public class RequestStatusHistoryService {
         ArrayList<RequestStatusHistory> requestStatusesHistory = new ArrayList<>();
 //        try {
         String sql = "SELECT " +
-                "rsh.*, concat(ua.FIRST_NAME,' ',ua.LAST_NAME) user_name " +
+                "rsh.*, concat(ua.FIRST_NAME,IF(ua.LAST_NAME IS NULL,'',CONCAT(' ',ua.LAST_NAME))) user_name " +
                 "FROM REQUEST_STATUS_HISTORY rsh " +
                 "INNER JOIN USER_ACCOUNT ua ON rsh.USER_ACCOUNT_ID = ua.ID " +
                 "WHERE rsh.REQUEST_ID = " + requestId;

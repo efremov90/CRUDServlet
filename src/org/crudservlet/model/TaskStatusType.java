@@ -4,6 +4,7 @@ public enum TaskStatusType {
 
     CREATED("Создано"),
     STARTED("Начато"),
+    ERROR("Ошибка"),
     FINISH("Завершено");
 
     private final String Description;

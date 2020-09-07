@@ -6,11 +6,17 @@ import org.crudservlet.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static org.crudservlet.model.Permissions.*;
 import static org.crudservlet.model.RequestStatusType.CANCELED;
 import static org.crudservlet.model.RequestStatusType.CREATED;
+import static org.crudservlet.model.TaskType.CANCEL_REQUEST;
+import static org.crudservlet.model.TaskType.REPORT;
 
 public class RequestService {
 
@@ -151,6 +157,24 @@ public class RequestService {
         Integer auditId = MySQLConnection.getLastInsertId();
 
         new RequestAuditsDAO().create(requestId, auditId);
+
+        Task task = new Task();
+        task.setType(CANCEL_REQUEST);
+        task.setCreateDateTime(new java.util.Date());
+        task.setCreateDate(task.getCreateDateTime());
+        task.setPlannedStartDateTime(task.getCreateDateTime());
+        task.setStatus(TaskStatusType.CREATED);
+        task.setUserAccountId(userAccountId);
+
+        if (request.getClientCode().equals("1001")) {
+            Integer taskId = new TaskService().create(task, userAccountId, requestId);
+
+            new RequestTasksDAO().create(requestId, taskId);
+
+            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+            scheduledExecutorService.schedule(new RequestTaskService(result), 5, TimeUnit.SECONDS);
+            scheduledExecutorService.shutdown();
+        }
 
         conn.commit();
         conn.setAutoCommit(true);

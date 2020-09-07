@@ -38,7 +38,9 @@ public class TaskService {
                 userAccountId,
                 task.getCreateDateTime(),
                 String.format("Тип задания: %s \n" +
-                                (task.getType().equals(TaskType.REPORT) ? "Id отчета" : "") + ": %s \n",
+                                (task.getType().equals(TaskType.REPORT) ? "Id отчета" :
+                                        task.getType().equals(TaskType.CANCEL_REQUEST) ? "Id заявки"
+                                                : "") + ": %s \n",
                         task.getType().getDescription(),
                         entityId),
                 taskId
@@ -131,5 +133,36 @@ public class TaskService {
         }
 
         return taskStatusType;
+    }
+
+    public boolean error(int taskId, String comment) throws Exception {
+        logger.info("start");
+
+        boolean result = false;
+
+        String sql = "UPDATE TASKS " +
+                "SET FINISH_DATETIME = ?, " +
+                "STATUS = ?, " +
+                "COMMENT = ? " +
+                "WHERE ID = ?";
+
+//        conn.setAutoCommit(false);
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, new Timestamp(new java.util.Date().getTime()).toString());
+        st.setString(2, ERROR.name());
+        st.setString(3, comment);
+        st.setInt(4, taskId);
+        result = st.executeUpdate() > 0;
+
+        new AuditService().create(
+                AuditOperType.ERROR_TASK,
+                -1,
+                new Date(),
+                "",
+                taskId
+        );
+
+        return result;
     }
 }

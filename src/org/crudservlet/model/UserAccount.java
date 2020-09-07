@@ -59,7 +59,7 @@ public class UserAccount {
     }
 
     public String getFullName() {
-        return FirstName + " " + LastName;
+        return FirstName + " " + (LastName != null ? LastName : "");
     }
 
     @Override

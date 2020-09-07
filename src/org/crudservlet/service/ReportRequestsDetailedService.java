@@ -3,7 +3,6 @@ package org.crudservlet.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.crudservlet.dao.UserAccountDAO;
 import org.crudservlet.dbConnection.MySQLConnection;
-import org.crudservlet.dto.ReportRequestsConsolidatedDTO;
 import org.crudservlet.dto.ReportRequestsDetailedDTO;
 import org.crudservlet.model.*;
 import org.crudservlet.reportbean.ReportRequestsDetailedBean;

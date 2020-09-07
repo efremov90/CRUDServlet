@@ -14,10 +14,8 @@ import org.crudservlet.model.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -101,6 +99,34 @@ public class ReportService {
         result = st.executeUpdate() > 0;
 
         result = new TaskService().start(taskId);
+
+        conn.commit();
+        conn.setAutoCommit(true);
+
+        logger.info(":" + result);
+
+        return result;
+    }
+
+    public boolean error(int reportId, String comment) throws Exception {
+        logger.info("start");
+
+        boolean result = false;
+
+        int taskId = new ReportTasksDAO().getTaskByReport(reportId);
+
+        conn.setAutoCommit(false);
+
+        String sql = "UPDATE REPORTS " +
+                "SET STATUS = ? " +
+                "WHERE ID = ?";
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, ERROR.name());
+        st.setInt(2, reportId);
+        result = st.executeUpdate() > 0;
+
+        result = new TaskService().error(taskId, comment);
 
         conn.commit();
         conn.setAutoCommit(true);
@@ -237,10 +263,6 @@ public class ReportService {
         JasperDesign jasperDesign = JRXmlLoader.load(reportPattern);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, data);
-//        JasperPrint jasperPrint = JasperFillManager.fillReportToFile(, parameters, data);
-//        JasperExportManager.exportReportToPdfFile(jasperPrint, PROJECT_PATH + "\\" + FILE_NAME + ".pdf");
-//        baos.write(JasperExportManager.exportReportToPdf(jasperPrint));
-
 
         // Make sure the output directory exists.
         File outDir = new File("C:/jasperoutput");
@@ -250,30 +272,18 @@ public class ReportService {
         JasperExportManager.exportReportToHtmlFile(jasperPrint,
                 "C:/jasperoutput/StyledTextReport.html");
 
-//        JRXlsExporter exporterXLS = new JRXlsExporter();
-//        exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-//        exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_FILE_NAME, "C:/jasperoutput/StyledTextReport.xls");
-//        exporterXLS.exportReport();
-
-
-//        JasperExportManager.exportReportToPdfFile(jasperPrint,
-//                "C:/jasperoutput/StyledTextReport.pdf");
-
         switch (formatReportType) {
             case XLS:
                 JRXlsExporter xlsExporter = new JRXlsExporter();
                 xlsExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls"));
                 xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
                 SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
                 xlsExporter.setConfiguration(xlsReportConfiguration);
                 xlsExporter.exportReport();
-//        baos.writeTo(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls").getOutputStream());
                 break;
             case XLSX:
                 JRXlsxExporter xlsxExporter = new JRXlsxExporter();
                 xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        xlsExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("C:/jasperoutput/StyledTextReport.xls"));
                 xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
                 SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
                 xlsxExporter.setConfiguration(xlsxReportConfiguration);

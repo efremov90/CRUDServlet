@@ -56,7 +56,7 @@ public class AuditService {
         ArrayList<Audit> audits = new ArrayList<>();
 
         String sql = "SELECT " +
-                "a.ID, ao.TYPE, concat(ua.FIRST_NAME,' ',ua.LAST_NAME) user_name, " +
+                "a.ID, ao.TYPE, concat(ua.FIRST_NAME,IF(ua.LAST_NAME IS NULL,'',CONCAT(' ',ua.LAST_NAME))) user_name, " +
                 "a.EVENT_DATETIME, a.DESCRIPTION, a.CONTENT " +
                 "FROM AUDIT a " +
                 "INNER JOIN AUDIT_OPER ao ON a.AUDIT_OPER_ID = ao.id " +
