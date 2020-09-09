@@ -265,15 +265,13 @@ public class RequestService {
         requestStatusHistory.setUserId(userAccountId);
         new RequestStatusHistoryDAO().create(requestStatusHistory);
 
-        new AuditService().create(
+        Integer auditId = new AuditService().create(
                 AuditOperType.CLOSE_REQUEST,
                 userAccountId,
                 requestStatusHistory.getEventDateTime(),
                 "",
                 request.getId()
         );
-
-        Integer auditId = MySQLConnection.getLastInsertId();
 
         new RequestAuditsDAO().create(request.getId(), auditId);
 

@@ -34,7 +34,7 @@ public class CloseRequestTaskService implements Runnable {
             new TaskService().start(taskId);
 
             ArrayList<Request> requests = new RequestService().getRequests(
-                    new java.sql.Date(new Date().getTime()),
+                    new java.sql.Date(new Date().getTime() - (1000 * 60 * 60 * 24)),
                     new java.sql.Date(new Date().getTime()),
                     null,
                     RequestStatusType.CANCELED
@@ -46,7 +46,7 @@ public class CloseRequestTaskService implements Runnable {
                     .forEach(x -> {
                         try {
                             new RequestService().close(
-                                    new RequestService().getRequestById(x.getId()).getRequestUUID(),
+                                    x.getRequestUUID(),
                                     -1
                             );
                             count_requests[0] = count_requests[0] + 1;
