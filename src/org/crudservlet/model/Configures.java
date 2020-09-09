@@ -7,7 +7,11 @@ import java.sql.SQLException;
 public enum Configures {
 
     /*Максимальное время неактивной сессии в секундах*/
-    MAX_INACTIVE_SESSION_INTERVAL("maxInactiveSessionInterval", "45");
+    MAX_INACTIVE_SESSION_INTERVAL("maxInactiveSessionInterval", "45"),
+    /*Период закрытия заявки в секундах*/
+    CLOSE_REQUEST_INTERVAL("closeRequestInterval", "5"),
+    /*Период отмены заявки в секундах*/
+    CANCEL_REQUEST_INTERVAL("cancelRequestInterval", "5");
 
     private String name;
     private String value;
@@ -21,7 +25,7 @@ public enum Configures {
         return name;
     }
 
-    public String getValue() throws ClassNotFoundException, SQLException {
+    public String getValue() throws SQLException {
         String value = ConfigureService.getConfigureValueByName(this.name);
         if (value != null) {
             return value;

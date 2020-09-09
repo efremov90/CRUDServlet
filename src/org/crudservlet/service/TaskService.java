@@ -37,7 +37,10 @@ public class TaskService {
                 AuditOperType.CREATE_TASK,
                 userAccountId,
                 task.getCreateDateTime(),
-                String.format("Тип задания: %s \n" +
+                task.getType().equals(TaskType.CLOSE_REQUEST) ?
+                        String.format("Тип задания: %s \n",
+                                task.getType().getDescription())
+                        : String.format("Тип задания: %s \n" +
                                 (task.getType().equals(TaskType.REPORT) ? "Id отчета" :
                                         task.getType().equals(TaskType.CANCEL_REQUEST) ? "Id заявки"
                                                 : "") + ": %s \n",

@@ -15,6 +15,8 @@ public enum AuditOperType {
             "Id заявки {0}"),
     CANCEL_REQUEST("Отмена заявки",
             "Id заявки {0}"),
+    CLOSE_REQUEST("Закрытие заявки",
+            "Id заявки {0}"),
     RUN_REPORT("Формирование отчета",
             "Id отчета {0}"),
     CREATE_TASK("Создание задания",

@@ -6,17 +6,15 @@ import org.crudservlet.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import static org.crudservlet.model.Configures.CANCEL_REQUEST_INTERVAL;
 import static org.crudservlet.model.Permissions.*;
-import static org.crudservlet.model.RequestStatusType.CANCELED;
-import static org.crudservlet.model.RequestStatusType.CREATED;
+import static org.crudservlet.model.RequestStatusType.*;
 import static org.crudservlet.model.TaskType.CANCEL_REQUEST;
-import static org.crudservlet.model.TaskType.REPORT;
 
 public class RequestService {
 
@@ -130,7 +128,7 @@ public class RequestService {
         request.setLastDateTimeChangeRequestStatus(new java.util.Date());
         result = new RequestDAO().create(request);
 
-        Integer requestId = MySQLConnection.getLastInsertId();
+        Integer requestId = result;
 
         RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
         requestStatusHistory.setRequestId(requestId);
@@ -139,7 +137,7 @@ public class RequestService {
         requestStatusHistory.setUserId(userAccountId);
         new RequestStatusHistoryDAO().create(requestStatusHistory);
 
-        new AuditService().create(
+        Integer auditId = new AuditService().create(
                 AuditOperType.CREATE_REQUEST,
                 userAccountId,
                 request.getCreateDateTime(),
@@ -154,25 +152,25 @@ public class RequestService {
                 requestId
         );
 
-        Integer auditId = MySQLConnection.getLastInsertId();
-
         new RequestAuditsDAO().create(requestId, auditId);
 
-        Task task = new Task();
-        task.setType(CANCEL_REQUEST);
-        task.setCreateDateTime(new java.util.Date());
-        task.setCreateDate(task.getCreateDateTime());
-        task.setPlannedStartDateTime(task.getCreateDateTime());
-        task.setStatus(TaskStatusType.CREATED);
-        task.setUserAccountId(userAccountId);
-
         if (request.getClientCode().equals("1001")) {
+            Task task = new Task();
+            task.setType(CANCEL_REQUEST);
+            task.setCreateDateTime(new java.util.Date());
+            task.setCreateDate(task.getCreateDateTime());
+            task.setPlannedStartDateTime(task.getCreateDateTime());
+            task.setStatus(TaskStatusType.CREATED);
+            task.setUserAccountId(userAccountId);
+
             Integer taskId = new TaskService().create(task, userAccountId, requestId);
 
             new RequestTasksDAO().create(requestId, taskId);
 
             ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-            scheduledExecutorService.schedule(new RequestTaskService(result), 5, TimeUnit.SECONDS);
+            scheduledExecutorService.schedule(new RequestTaskService(result),
+                    Integer.valueOf(CANCEL_REQUEST_INTERVAL.getValue()),
+                    TimeUnit.SECONDS);
             scheduledExecutorService.shutdown();
         }
 
@@ -235,6 +233,52 @@ public class RequestService {
             result=false;
             e.printStackTrace();
         }*/
+
+        return result;
+    }
+
+    public boolean close(String requestUUID, int userAccountId) throws Exception {
+        logger.info("start");
+
+        boolean result = false;
+
+        UserAccount userAccount = new UserAccountDAO().getUserAccountById(userAccountId);
+        if (!new PermissionService().isPermission(userAccountId, REQUESTS_CLOSE))
+            throw new Exception(String.format("У пользователя %s отсутствует разрешение %s.",
+                    userAccount.getAccount(),
+                    REQUESTS_CLOSE.name()));
+        if (getRequestIdByUUID(requestUUID) == null)
+            throw new Exception(String.format("Заявка с UUID %s отсутствует.",
+                    requestUUID));
+
+        Request request = new RequestService().getRequestByUUID(requestUUID);
+
+        conn.setAutoCommit(false);
+        request.setRequestStatus(CLOSE);
+        request.setLastDateTimeChangeRequestStatus(new java.util.Date());
+        result = new RequestDAO().edit(request);
+
+        RequestStatusHistory requestStatusHistory = new RequestStatusHistory();
+        requestStatusHistory.setRequestId(request.getId());
+        requestStatusHistory.setStatus(CLOSE);
+        requestStatusHistory.setEventDateTime(request.getLastDateTimeChangeRequestStatus());
+        requestStatusHistory.setUserId(userAccountId);
+        new RequestStatusHistoryDAO().create(requestStatusHistory);
+
+        new AuditService().create(
+                AuditOperType.CLOSE_REQUEST,
+                userAccountId,
+                requestStatusHistory.getEventDateTime(),
+                "",
+                request.getId()
+        );
+
+        Integer auditId = MySQLConnection.getLastInsertId();
+
+        new RequestAuditsDAO().create(request.getId(), auditId);
+
+        conn.commit();
+        conn.setAutoCommit(true);
 
         return result;
     }

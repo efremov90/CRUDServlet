@@ -2,7 +2,8 @@ package org.crudservlet.model;
 
 public enum RequestStatusType {
     CREATED("Создана"),
-    CANCELED("Отменена");
+    CANCELED("Отменена"),
+    CLOSE("Закрыта");
 
     private final String Description;
 
