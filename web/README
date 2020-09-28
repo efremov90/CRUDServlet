@@ -25,6 +25,7 @@ deployment->application context: /module-web, иначе если оставит
 7. При ошибке Error configuring application listener of class org.springframework.web.context.ContextLoaderListener
 помогло https://fooobar.com/questions/26844/javalangclassnotfoundexception-orgspringframeworkwebcontextcontextloaderlistener
 ctrl+f idea
+8. В WEB-INF необходимо добавить lib также совсеми jar
 
 1. JRE в настройке запуска Tomcat должна совпадать с JDK проекта, иначе будет ошибка
 Error instantiating servlet class...
