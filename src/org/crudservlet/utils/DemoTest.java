@@ -2,6 +2,7 @@ package org.crudservlet.utils;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.crudservlet.dao.AccountSessionDAO;
+import org.crudservlet.integration.requests.CancelRequestRqType;
 import org.crudservlet.model.ATMTypeType;
 import org.crudservlet.model.ClientATM;
 import org.crudservlet.model.ReportType;
@@ -11,6 +12,14 @@ import org.crudservlet.service.ReportRequestsDetailedService;
 import org.crudservlet.service.ReportService;
 import org.crudservlet.service.RequestService;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -57,5 +66,37 @@ public class DemoTest {
                                 "1001"
                         )
                 ));*/
+
+        CancelRequestRqType cancelRequestRq = new CancelRequestRqType();
+        cancelRequestRq.setRequestUUID(UUID.randomUUID().toString());
+        cancelRequestRq.setComment("Comment");
+
+        JAXBContext context = JAXBContext.newInstance(CancelRequestRqType.class);
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        m.marshal(cancelRequestRq, baos);
+
+        System.out.println(baos.toString());
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+        Unmarshaller um = context.createUnmarshaller();
+        CancelRequestRqType cancelRequestRqRead = (CancelRequestRqType) um.unmarshal(bais);
+        String str = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                "<ns2:CancelRequestRq xmlns:ns2=\"http://ru.crud.requests\">\n" +
+                "    <RequestUUID>d6faad1f-bdb1-4738-a548-90fc18d745201</RequestUUID>\n" +
+                "    <Comment>Comment</Comment>\n" +
+                "</ns2:CancelRequestRq>";
+
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = sf.newSchema(new File("src\\org\\crudservlet\\integration\\requests\\schema\\CRUDRequests" +
+                ".xsd"));
+
+        JAXBContext jc = JAXBContext.newInstance(CancelRequestRqType.class);
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        unmarshaller.setSchema(schema);
+        cancelRequestRqRead = (CancelRequestRqType) unmarshaller.unmarshal(new ByteArrayInputStream(str.getBytes()));
+        System.out.println("");
     }
 }

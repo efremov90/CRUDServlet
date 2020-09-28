@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by EAA (EMBRACE) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ru.crud.requests"
+		   targetNamespace="http://ru.crud.requests" version="1.0">
+	<xs:element name="CreateRequestRq" type="CreateRequestRqType"/>
+	<xs:element name="CreateRequestRs" type="ResultType"/>
+	<xs:element name="CancelRequestRq" type="CancelRequestRqType"/>
+	<xs:element name="CancelRequestRs" type="ResultType"/>
+	<xs:complexType name="ResultType">
+		<xs:sequence>
+			<xs:element name="Code" type="xs:int"/>
+			<xs:element name="Description" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="255"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CreateRequestRqType">
+		<xs:sequence>
+			<xs:element name="RequestUUID" type="UUID36Type"/>
+			<xs:element name="CreateDate" type="xs:date"/>
+			<xs:element name="ClientCode" type="ClientCodeType"/>
+			<xs:element name="Comment"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CancelRequestRqType">
+		<xs:sequence>
+			<xs:element name="RequestUUID" type="UUID36Type"/>
+			<xs:element name="Comment" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="UUID36Type">
+		<xs:restriction base="xs:string">
+			<xs:length value="36"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ClientCodeType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
